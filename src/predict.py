@@ -18,7 +18,7 @@ def predict_track_a(
     model_path = MODEL_DIR / "track_a_ann_final.joblib"
     model = joblib.load(model_path)
 
-    # Must match Track A feature order from features.py
+    
     X = np.array(
         [[
             solar_irradiance,
@@ -44,7 +44,6 @@ def predict_track_b(
     model_path = MODEL_DIR / "track_b_ann_final.joblib"
     model = joblib.load(model_path)
 
-    # Must match Track B feature order from features.py
     X = np.array(
         [[
             solar_irradiance,
