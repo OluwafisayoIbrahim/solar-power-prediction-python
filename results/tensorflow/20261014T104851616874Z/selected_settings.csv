@@ -1,0 +1,127 @@
+track,seed,fold,model,hidden,alpha,convergence_warnings,epochs,inner_mae
+A,0,1,Sklearn untuned,10,0.0001,1.0,,
+A,0,1,Sklearn tuned,3,0.1,0.0,,
+A,0,1,TensorFlow selected,"(16, 8)",,,300.0,1.7217363635404632
+A,0,2,Sklearn untuned,10,0.0001,1.0,,
+A,0,2,Sklearn tuned,10,0.1,1.0,,
+A,0,2,TensorFlow selected,"(16, 8)",,,300.0,1.7990931946554323
+A,0,3,Sklearn untuned,10,0.0001,0.0,,
+A,0,3,Sklearn tuned,10,1.0,0.0,,
+A,0,3,TensorFlow selected,"(16, 8)",,,300.0,2.019980201250242
+A,0,4,Sklearn untuned,10,0.0001,1.0,,
+A,0,4,Sklearn tuned,10,0.1,1.0,,
+A,0,4,TensorFlow selected,"(16, 8)",,,300.0,2.2503599491825823
+A,0,5,Sklearn untuned,10,0.0001,0.0,,
+A,0,5,Sklearn tuned,10,0.1,1.0,,
+A,0,5,TensorFlow selected,"(16, 8)",,,300.0,1.9344180335527608
+A,0,6,Sklearn untuned,10,0.0001,0.0,,
+A,0,6,Sklearn tuned,10,0.1,1.0,,
+A,0,6,TensorFlow selected,"(16, 8)",,,300.0,1.372129105932921
+A,0,7,Sklearn untuned,10,0.0001,1.0,,
+A,0,7,Sklearn tuned,3,0.1,0.0,,
+A,0,7,TensorFlow selected,"(16, 8)",,,300.0,1.6879472595968383
+A,1,1,Sklearn untuned,10,0.0001,1.0,,
+A,1,1,Sklearn tuned,3,0.1,1.0,,
+A,1,1,TensorFlow selected,"(10,)",,,300.0,1.9952356710551709
+A,1,2,Sklearn untuned,10,0.0001,1.0,,
+A,1,2,Sklearn tuned,3,0.1,1.0,,
+A,1,2,TensorFlow selected,"(16, 8)",,,300.0,2.066915249294707
+A,1,3,Sklearn untuned,10,0.0001,1.0,,
+A,1,3,Sklearn tuned,3,0.1,0.0,,
+A,1,3,TensorFlow selected,"(10,)",,,300.0,2.120541634265288
+A,1,4,Sklearn untuned,10,0.0001,0.0,,
+A,1,4,Sklearn tuned,10,0.1,1.0,,
+A,1,4,TensorFlow selected,"(10,)",,,300.0,2.223584850923516
+A,1,5,Sklearn untuned,10,0.0001,1.0,,
+A,1,5,Sklearn tuned,3,0.1,0.0,,
+A,1,5,TensorFlow selected,"(10,)",,,300.0,2.0968824221764097
+A,1,6,Sklearn untuned,10,0.0001,1.0,,
+A,1,6,Sklearn tuned,10,1.0,0.0,,
+A,1,6,TensorFlow selected,"(16, 8)",,,300.0,1.6445575026523942
+A,1,7,Sklearn untuned,10,0.0001,1.0,,
+A,1,7,Sklearn tuned,10,0.1,1.0,,
+A,1,7,TensorFlow selected,"(16, 8)",,,300.0,2.0091544784734294
+A,2,1,Sklearn untuned,10,0.0001,1.0,,
+A,2,1,Sklearn tuned,10,0.1,1.0,,
+A,2,1,TensorFlow selected,"(10,)",,,300.0,2.0664512314031165
+A,2,2,Sklearn untuned,10,0.0001,1.0,,
+A,2,2,Sklearn tuned,10,0.1,1.0,,
+A,2,2,TensorFlow selected,"(10,)",,,300.0,2.133316186975551
+A,2,3,Sklearn untuned,10,0.0001,0.0,,
+A,2,3,Sklearn tuned,10,0.1,1.0,,
+A,2,3,TensorFlow selected,"(10,)",,,300.0,2.3341922901294843
+A,2,4,Sklearn untuned,10,0.0001,1.0,,
+A,2,4,Sklearn tuned,10,0.1,1.0,,
+A,2,4,TensorFlow selected,"(10,)",,,300.0,2.3599470501181528
+A,2,5,Sklearn untuned,10,0.0001,0.0,,
+A,2,5,Sklearn tuned,3,0.1,1.0,,
+A,2,5,TensorFlow selected,"(10,)",,,300.0,2.2544310694565026
+A,2,6,Sklearn untuned,10,0.0001,0.0,,
+A,2,6,Sklearn tuned,3,0.1,0.0,,
+A,2,6,TensorFlow selected,"(16, 8)",,,300.0,1.6852641390576792
+A,2,7,Sklearn untuned,10,0.0001,0.0,,
+A,2,7,Sklearn tuned,3,0.1,1.0,,
+A,2,7,TensorFlow selected,"(16, 8)",,,300.0,2.013908860948352
+B,0,1,Sklearn untuned,10,0.0001,0.0,,
+B,0,1,Sklearn tuned,3,0.1,0.0,,
+B,0,1,TensorFlow selected,"(10,)",,,249.0,11.71715323742525
+B,0,2,Sklearn untuned,10,0.0001,0.0,,
+B,0,2,Sklearn tuned,3,1.0,0.0,,
+B,0,2,TensorFlow selected,"(10,)",,,210.0,11.877335838035302
+B,0,3,Sklearn untuned,10,0.0001,1.0,,
+B,0,3,Sklearn tuned,3,0.1,0.0,,
+B,0,3,TensorFlow selected,"(10,)",,,227.0,11.533901318208672
+B,0,4,Sklearn untuned,10,0.0001,0.0,,
+B,0,4,Sklearn tuned,3,0.1,0.0,,
+B,0,4,TensorFlow selected,"(10,)",,,278.0,11.660149140534578
+B,0,5,Sklearn untuned,10,0.0001,0.0,,
+B,0,5,Sklearn tuned,3,1.0,0.0,,
+B,0,5,TensorFlow selected,"(10,)",,,250.0,11.222815118483554
+B,0,6,Sklearn untuned,10,0.0001,0.0,,
+B,0,6,Sklearn tuned,3,0.1,0.0,,
+B,0,6,TensorFlow selected,"(16, 8)",,,300.0,11.042590188862368
+B,0,7,Sklearn untuned,10,0.0001,1.0,,
+B,0,7,Sklearn tuned,3,0.1,0.0,,
+B,0,7,TensorFlow selected,"(10,)",,,273.0,11.362139542191118
+B,1,1,Sklearn untuned,10,0.0001,0.0,,
+B,1,1,Sklearn tuned,10,10.0,0.0,,
+B,1,1,TensorFlow selected,"(16, 8)",,,245.0,11.060372860755452
+B,1,2,Sklearn untuned,10,0.0001,0.0,,
+B,1,2,Sklearn tuned,3,10.0,0.0,,
+B,1,2,TensorFlow selected,"(16, 8)",,,52.0,11.65088144938151
+B,1,3,Sklearn untuned,10,0.0001,1.0,,
+B,1,3,Sklearn tuned,3,10.0,0.0,,
+B,1,3,TensorFlow selected,"(16, 8)",,,49.0,11.896779235086322
+B,1,4,Sklearn untuned,10,0.0001,0.0,,
+B,1,4,Sklearn tuned,3,10.0,0.0,,
+B,1,4,TensorFlow selected,"(16, 8)",,,287.0,11.288101682309753
+B,1,5,Sklearn untuned,10,0.0001,0.0,,
+B,1,5,Sklearn tuned,3,10.0,0.0,,
+B,1,5,TensorFlow selected,"(16, 8)",,,45.0,10.97181116551529
+B,1,6,Sklearn untuned,10,0.0001,0.0,,
+B,1,6,Sklearn tuned,10,1.0,0.0,,
+B,1,6,TensorFlow selected,"(16, 8)",,,237.0,10.532190163694784
+B,1,7,Sklearn untuned,10,0.0001,0.0,,
+B,1,7,Sklearn tuned,10,10.0,0.0,,
+B,1,7,TensorFlow selected,"(16, 8)",,,259.0,10.771274372618876
+B,2,1,Sklearn untuned,10,0.0001,0.0,,
+B,2,1,Sklearn tuned,10,10.0,0.0,,
+B,2,1,TensorFlow selected,"(10,)",,,279.0,11.275118491090375
+B,2,2,Sklearn untuned,10,0.0001,0.0,,
+B,2,2,Sklearn tuned,3,10.0,0.0,,
+B,2,2,TensorFlow selected,"(16, 8)",,,35.0,11.77379995463807
+B,2,3,Sklearn untuned,10,0.0001,0.0,,
+B,2,3,Sklearn tuned,10,10.0,0.0,,
+B,2,3,TensorFlow selected,"(16, 8)",,,167.0,11.60065163318022
+B,2,4,Sklearn untuned,10,0.0001,0.0,,
+B,2,4,Sklearn tuned,3,1.0,0.0,,
+B,2,4,TensorFlow selected,"(16, 8)",,,82.0,11.377941461256993
+B,2,5,Sklearn untuned,10,0.0001,0.0,,
+B,2,5,Sklearn tuned,10,1.0,0.0,,
+B,2,5,TensorFlow selected,"(16, 8)",,,65.0,11.057841698917343
+B,2,6,Sklearn untuned,10,0.0001,0.0,,
+B,2,6,Sklearn tuned,3,10.0,0.0,,
+B,2,6,TensorFlow selected,"(10,)",,,300.0,11.026594645182293
+B,2,7,Sklearn untuned,10,0.0001,0.0,,
+B,2,7,Sklearn tuned,3,10.0,0.0,,
+B,2,7,TensorFlow selected,"(16, 8)",,,66.0,11.17540826868128
