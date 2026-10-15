@@ -1,0 +1,757 @@
+track,seed,model,row,day_id,fold,measured,predicted
+B,0,Linear,0,solar_data_fri_10th.csv,1,250.48,219.92836316371518
+B,0,Linear,1,solar_data_fri_10th.csv,1,272.8,235.00248553508087
+B,0,Linear,2,solar_data_fri_10th.csv,1,286.86,257.5787931134638
+B,0,Linear,3,solar_data_fri_10th.csv,1,294.66,270.7670886110742
+B,0,Linear,4,solar_data_fri_10th.csv,1,296.45,279.3061199566734
+B,0,Linear,5,solar_data_fri_10th.csv,1,293.65,290.6938493735926
+B,0,Linear,6,solar_data_fri_10th.csv,1,291.5,279.61464044278136
+B,0,Linear,7,solar_data_fri_10th.csv,1,272.91,265.9549945114143
+B,0,Linear,8,solar_data_fri_10th.csv,1,236.14,253.44674298656793
+B,0,Linear,9,solar_data_fri_17th.csv,2,250.44,223.61407417837773
+B,0,Linear,10,solar_data_fri_17th.csv,2,272.75,227.89780675517585
+B,0,Linear,11,solar_data_fri_17th.csv,2,286.82,252.90764461226775
+B,0,Linear,12,solar_data_fri_17th.csv,2,294.63,288.5360932213212
+B,0,Linear,13,solar_data_fri_17th.csv,2,296.01,308.44490188775114
+B,0,Linear,14,solar_data_fri_17th.csv,2,293.62,301.8600783467123
+B,0,Linear,15,solar_data_fri_17th.csv,2,291.37,284.61181158861166
+B,0,Linear,16,solar_data_fri_17th.csv,2,272.88,277.81654839949647
+B,0,Linear,17,solar_data_fri_17th.csv,2,236.11,266.2613113069281
+B,0,Linear,18,solar_data_fri_24th.csv,1,251.5,227.16263233045163
+B,0,Linear,19,solar_data_fri_24th.csv,1,273.8,240.93941028623158
+B,0,Linear,20,solar_data_fri_24th.csv,1,287.86,265.4385465026113
+B,0,Linear,21,solar_data_fri_24th.csv,1,295.66,276.29706359509106
+B,0,Linear,22,solar_data_fri_24th.csv,1,297.01,284.55641777009333
+B,0,Linear,23,solar_data_fri_24th.csv,1,294.65,294.0918456755439
+B,0,Linear,24,solar_data_fri_24th.csv,1,292.5,288.52729944044864
+B,0,Linear,25,solar_data_fri_24th.csv,1,273.91,277.09733689000916
+B,0,Linear,26,solar_data_fri_24th.csv,1,237.14,261.61853554377154
+B,0,Linear,27,solar_data_fri_31st.csv,2,220.76,223.5695554724732
+B,0,Linear,28,solar_data_fri_31st.csv,2,231.59,230.06226478280766
+B,0,Linear,29,solar_data_fri_31st.csv,2,244.87,250.76891511861632
+B,0,Linear,30,solar_data_fri_31st.csv,2,251.73,271.5938863248149
+B,0,Linear,31,solar_data_fri_31st.csv,2,268.67,287.5401367861427
+B,0,Linear,32,solar_data_fri_31st.csv,2,272.94,289.0901312379215
+B,0,Linear,33,solar_data_fri_31st.csv,2,267.82,283.35129880881817
+B,0,Linear,34,solar_data_fri_31st.csv,2,257.85,270.54971718301204
+B,0,Linear,35,solar_data_fri_31st.csv,2,255.83,263.5908755593879
+B,0,Linear,36,solar_data_mon_13th.csv,1,213.69,220.68998012576685
+B,0,Linear,37,solar_data_mon_13th.csv,1,221.04,234.3574449874892
+B,0,Linear,38,solar_data_mon_13th.csv,1,263.8,259.9367768335957
+B,0,Linear,39,solar_data_mon_13th.csv,1,267.24,271.0149822796298
+B,0,Linear,40,solar_data_mon_13th.csv,1,279.26,279.17834322261837
+B,0,Linear,41,solar_data_mon_13th.csv,1,284.97,291.2924117271525
+B,0,Linear,42,solar_data_mon_13th.csv,1,291.06,282.46218212084585
+B,0,Linear,43,solar_data_mon_13th.csv,1,281.33,269.3144141650182
+B,0,Linear,44,solar_data_mon_13th.csv,1,261.17,256.7640389874836
+B,0,Linear,45,solar_data_mon_20th.csv,2,212.72,232.0761421885722
+B,0,Linear,46,solar_data_mon_20th.csv,2,219.63,243.65267243626923
+B,0,Linear,47,solar_data_mon_20th.csv,2,262.63,249.33283768033326
+B,0,Linear,48,solar_data_mon_20th.csv,2,265.65,260.2796884053313
+B,0,Linear,49,solar_data_mon_20th.csv,2,277.78,294.9654537146872
+B,0,Linear,50,solar_data_mon_20th.csv,2,282.98,292.0262435146823
+B,0,Linear,51,solar_data_mon_20th.csv,2,288.83,285.02160643744025
+B,0,Linear,52,solar_data_mon_20th.csv,2,280.01,277.6478178366446
+B,0,Linear,53,solar_data_mon_20th.csv,2,262.9,267.1119192427597
+B,0,Linear,54,solar_data_mon_27th.csv,1,246.02,228.16488703645047
+B,0,Linear,55,solar_data_mon_27th.csv,1,252.85,244.33470938455147
+B,0,Linear,56,solar_data_mon_27th.csv,1,270.98,259.78598015836394
+B,0,Linear,57,solar_data_mon_27th.csv,1,278.05,280.62817366833065
+B,0,Linear,58,solar_data_mon_27th.csv,1,281.79,283.9054582123017
+B,0,Linear,59,solar_data_mon_27th.csv,1,282.32,281.1960212465989
+B,0,Linear,60,solar_data_mon_27th.csv,1,277.64,279.0405865087814
+B,0,Linear,61,solar_data_mon_27th.csv,1,268.12,272.2752957345667
+B,0,Linear,62,solar_data_mon_27th.csv,1,249.02,266.3002004802208
+B,0,Linear,63,solar_data_mon_6th.csv,2,213.68,234.03953120536104
+B,0,Linear,64,solar_data_mon_6th.csv,2,221.03,245.57682712241694
+B,0,Linear,65,solar_data_mon_6th.csv,2,263.79,247.5298116171945
+B,0,Linear,66,solar_data_mon_6th.csv,2,267.23,258.53511885394556
+B,0,Linear,67,solar_data_mon_6th.csv,2,279.25,286.8465774158215
+B,0,Linear,68,solar_data_mon_6th.csv,2,284.96,289.8100387823272
+B,0,Linear,69,solar_data_mon_6th.csv,2,291.05,288.6476200063254
+B,0,Linear,70,solar_data_mon_6th.csv,2,281.32,278.68894396187034
+B,0,Linear,71,solar_data_mon_6th.csv,2,261.16,265.958514271851
+B,0,Linear,72,solar_data_thu_16th.csv,1,233.52,216.92762098915284
+B,0,Linear,73,solar_data_thu_16th.csv,1,240.31,221.32954109481645
+B,0,Linear,74,solar_data_thu_16th.csv,1,257.31,246.56189689953897
+B,0,Linear,75,solar_data_thu_16th.csv,1,261.81,267.0203657772565
+B,0,Linear,76,solar_data_thu_16th.csv,1,283.89,293.0725951409843
+B,0,Linear,77,solar_data_thu_16th.csv,1,289.46,300.0187899596412
+B,0,Linear,78,solar_data_thu_16th.csv,1,296.53,284.63856772223255
+B,0,Linear,79,solar_data_thu_16th.csv,1,293.58,279.747569313244
+B,0,Linear,80,solar_data_thu_16th.csv,1,246.04,279.50931783013567
+B,0,Linear,81,solar_data_thu_23rd.csv,2,189.28,220.58006171510254
+B,0,Linear,82,solar_data_thu_23rd.csv,2,202.24,230.66901872984477
+B,0,Linear,83,solar_data_thu_23rd.csv,2,237.42,248.34379476701903
+B,0,Linear,84,solar_data_thu_23rd.csv,2,266.1,268.31144163389735
+B,0,Linear,85,solar_data_thu_23rd.csv,2,288.97,283.250218175107
+B,0,Linear,86,solar_data_thu_23rd.csv,2,297.74,294.98048253077525
+B,0,Linear,87,solar_data_thu_23rd.csv,2,288.21,294.15497285710774
+B,0,Linear,88,solar_data_thu_23rd.csv,2,277.65,275.0082475933942
+B,0,Linear,89,solar_data_thu_23rd.csv,2,271.11,258.41402793614236
+B,0,Linear,90,solar_data_thu_30th.csv,1,228.76,215.95369166759482
+B,0,Linear,91,solar_data_thu_30th.csv,1,238.82,232.33125515608802
+B,0,Linear,92,solar_data_thu_30th.csv,1,248.15,247.35391584785762
+B,0,Linear,93,solar_data_thu_30th.csv,1,261.72,260.6266770384467
+B,0,Linear,94,solar_data_thu_30th.csv,1,274.45,279.9432934304409
+B,0,Linear,95,solar_data_thu_30th.csv,1,279.57,279.990877093537
+B,0,Linear,96,solar_data_thu_30th.csv,1,281.72,274.10767340328454
+B,0,Linear,97,solar_data_thu_30th.csv,1,273.83,269.7850894064061
+B,0,Linear,98,solar_data_thu_30th.csv,1,258.93,264.7827406390818
+B,0,Linear,99,solar_data_thu_9th.csv,2,189.01,221.82598185931855
+B,0,Linear,100,solar_data_thu_9th.csv,2,202.22,229.38827748033037
+B,0,Linear,101,solar_data_thu_9th.csv,2,237.4,246.04035566932686
+B,0,Linear,102,solar_data_thu_9th.csv,2,266.08,264.4509716901393
+B,0,Linear,103,solar_data_thu_9th.csv,2,288.95,283.81008365964453
+B,0,Linear,104,solar_data_thu_9th.csv,2,297.72,297.16650755299577
+B,0,Linear,105,solar_data_thu_9th.csv,2,288.18,296.32782080767777
+B,0,Linear,106,solar_data_thu_9th.csv,2,277.69,277.42994169652127
+B,0,Linear,107,solar_data_thu_9th.csv,2,271.14,258.87119768938777
+B,0,Linear,108,solar_data_tue_14th.csv,1,230.96,210.44719393075349
+B,0,Linear,109,solar_data_tue_14th.csv,1,241.98,216.3438551245518
+B,0,Linear,110,solar_data_tue_14th.csv,1,254.39,233.37552030452127
+B,0,Linear,111,solar_data_tue_14th.csv,1,267.99,270.6771921296909
+B,0,Linear,112,solar_data_tue_14th.csv,1,284.72,281.81115109851123
+B,0,Linear,113,solar_data_tue_14th.csv,1,292.61,292.6799245923685
+B,0,Linear,114,solar_data_tue_14th.csv,1,290.38,278.1983044295984
+B,0,Linear,115,solar_data_tue_14th.csv,1,286.38,270.39059649324344
+B,0,Linear,116,solar_data_tue_14th.csv,1,244.19,260.97243228017174
+B,0,Linear,117,solar_data_tue_21st.csv,2,196.87,227.34087332172334
+B,0,Linear,118,solar_data_tue_21st.csv,2,212.89,230.4714003591081
+B,0,Linear,119,solar_data_tue_21st.csv,2,234.55,241.1032793845285
+B,0,Linear,120,solar_data_tue_21st.csv,2,268.33,263.8970589594557
+B,0,Linear,121,solar_data_tue_21st.csv,2,282.41,270.0705506194032
+B,0,Linear,122,solar_data_tue_21st.csv,2,288.15,277.99182810434684
+B,0,Linear,123,solar_data_tue_21st.csv,2,291.26,282.1249976308051
+B,0,Linear,124,solar_data_tue_21st.csv,2,288.36,281.8776375084441
+B,0,Linear,125,solar_data_tue_21st.csv,2,269.96,268.44194048697807
+B,0,Linear,126,solar_data_tue_28st.csv,1,196.87,219.91472158270452
+B,0,Linear,127,solar_data_tue_28st.csv,1,212.89,222.1249401956058
+B,0,Linear,128,solar_data_tue_28st.csv,1,234.55,232.24888515743325
+B,0,Linear,129,solar_data_tue_28st.csv,1,268.33,255.3956886645288
+B,0,Linear,130,solar_data_tue_28st.csv,1,282.41,261.2189657111669
+B,0,Linear,131,solar_data_tue_28st.csv,1,288.15,266.93592037401316
+B,0,Linear,132,solar_data_tue_28st.csv,1,291.26,274.91067032940185
+B,0,Linear,133,solar_data_tue_28st.csv,1,288.36,277.45996454817674
+B,0,Linear,134,solar_data_tue_28st.csv,1,269.96,266.25799981110197
+B,0,Linear,135,solar_data_tue_28th.csv,2,218.79,216.28643624259794
+B,0,Linear,136,solar_data_tue_28th.csv,2,223.86,232.47495132579925
+B,0,Linear,137,solar_data_tue_28th.csv,2,239.58,255.11267609517338
+B,0,Linear,138,solar_data_tue_28th.csv,2,252.78,283.9536362372478
+B,0,Linear,139,solar_data_tue_28th.csv,2,270.53,292.6679516781854
+B,0,Linear,140,solar_data_tue_28th.csv,2,278.81,288.4029983107586
+B,0,Linear,141,solar_data_tue_28th.csv,2,287.93,286.38562947059114
+B,0,Linear,142,solar_data_tue_28th.csv,2,273.94,274.29945599156036
+B,0,Linear,143,solar_data_tue_28th.csv,2,231.92,261.6396230907791
+B,0,Linear,144,solar_data_tue_7th.csv,1,196.84,229.17634726507816
+B,0,Linear,145,solar_data_tue_7th.csv,1,212.86,231.69515053358748
+B,0,Linear,146,solar_data_tue_7th.csv,1,234.52,234.8879361450851
+B,0,Linear,147,solar_data_tue_7th.csv,1,268.3,254.31718213883266
+B,0,Linear,148,solar_data_tue_7th.csv,1,282.41,258.9509826400958
+B,0,Linear,149,solar_data_tue_7th.csv,1,288.15,271.2411536469188
+B,0,Linear,150,solar_data_tue_7th.csv,1,291.26,277.04760942424815
+B,0,Linear,151,solar_data_tue_7th.csv,1,288.33,278.2028383819209
+B,0,Linear,152,solar_data_tue_7th.csv,1,269.96,268.1346616099505
+B,0,Linear,153,solar_data_wed_15th.csv,2,247.69,228.43375697077803
+B,0,Linear,154,solar_data_wed_15th.csv,2,255.36,251.34934752311648
+B,0,Linear,155,solar_data_wed_15th.csv,2,258.9,264.0365724280724
+B,0,Linear,156,solar_data_wed_15th.csv,2,276.14,285.2827483117905
+B,0,Linear,157,solar_data_wed_15th.csv,2,295.31,305.4541123984514
+B,0,Linear,158,solar_data_wed_15th.csv,2,285.37,301.6935950441481
+B,0,Linear,159,solar_data_wed_15th.csv,2,276.27,286.94802249453323
+B,0,Linear,160,solar_data_wed_15th.csv,2,267.45,270.4655642283381
+B,0,Linear,161,solar_data_wed_15th.csv,2,258.04,253.94259254350274
+B,0,Linear,162,solar_data_wed_22nd.csv,1,193.15,223.562822006146
+B,0,Linear,163,solar_data_wed_22nd.csv,1,201.93,228.4457369260391
+B,0,Linear,164,solar_data_wed_22nd.csv,1,236.78,238.0890228861086
+B,0,Linear,165,solar_data_wed_22nd.csv,1,253.94,247.2445573300819
+B,0,Linear,166,solar_data_wed_22nd.csv,1,283.96,266.9833959666521
+B,0,Linear,167,solar_data_wed_22nd.csv,1,293.97,283.76099897482277
+B,0,Linear,168,solar_data_wed_22nd.csv,1,300.38,293.698100016133
+B,0,Linear,169,solar_data_wed_22nd.csv,1,292.01,273.21424884524885
+B,0,Linear,170,solar_data_wed_22nd.csv,1,270.34,266.97935588646334
+B,0,Linear,171,solar_data_wed_29th.csv,2,233.73,233.62071187672598
+B,0,Linear,172,solar_data_wed_29th.csv,2,238.84,254.91823302062176
+B,0,Linear,173,solar_data_wed_29th.csv,2,244.39,266.3161306131817
+B,0,Linear,174,solar_data_wed_29th.csv,2,262.63,288.40260356483054
+B,0,Linear,175,solar_data_wed_29th.csv,2,274.84,294.1303884301853
+B,0,Linear,176,solar_data_wed_29th.csv,2,278.76,290.0623786303154
+B,0,Linear,177,solar_data_wed_29th.csv,2,271.85,283.3497966693224
+B,0,Linear,178,solar_data_wed_29th.csv,2,263.52,273.5936985681488
+B,0,Linear,179,solar_data_wed_29th.csv,2,256.6,257.40759824163376
+B,0,Linear,180,solar_data_wed_8th.csv,1,193.15,223.99530928233668
+B,0,Linear,181,solar_data_wed_8th.csv,1,201.93,222.88950374194596
+B,0,Linear,182,solar_data_wed_8th.csv,1,236.78,232.80657607474475
+B,0,Linear,183,solar_data_wed_8th.csv,1,253.94,242.6471750071825
+B,0,Linear,184,solar_data_wed_8th.csv,1,283.96,263.69376694522015
+B,0,Linear,185,solar_data_wed_8th.csv,1,293.97,280.46458935431053
+B,0,Linear,186,solar_data_wed_8th.csv,1,296.38,289.21317137469674
+B,0,Linear,187,solar_data_wed_8th.csv,1,292.01,268.7838849182785
+B,0,Linear,188,solar_data_wed_8th.csv,1,270.34,257.00793863460206
+B,0,Sklearn untuned,0,solar_data_fri_10th.csv,1,250.48,220.4106221366854
+B,0,Sklearn untuned,1,solar_data_fri_10th.csv,1,272.8,238.58660290161396
+B,0,Sklearn untuned,2,solar_data_fri_10th.csv,1,286.86,256.9256141642275
+B,0,Sklearn untuned,3,solar_data_fri_10th.csv,1,294.66,270.42729188232414
+B,0,Sklearn untuned,4,solar_data_fri_10th.csv,1,296.45,271.1937146219096
+B,0,Sklearn untuned,5,solar_data_fri_10th.csv,1,293.65,291.2084021902157
+B,0,Sklearn untuned,6,solar_data_fri_10th.csv,1,291.5,290.90696041779427
+B,0,Sklearn untuned,7,solar_data_fri_10th.csv,1,272.91,271.1408472076117
+B,0,Sklearn untuned,8,solar_data_fri_10th.csv,1,236.14,266.95882349502114
+B,0,Sklearn untuned,9,solar_data_fri_17th.csv,2,250.44,219.53695042658754
+B,0,Sklearn untuned,10,solar_data_fri_17th.csv,2,272.75,140.9186268672252
+B,0,Sklearn untuned,11,solar_data_fri_17th.csv,2,286.82,252.34251128738595
+B,0,Sklearn untuned,12,solar_data_fri_17th.csv,2,294.63,284.8393078986917
+B,0,Sklearn untuned,13,solar_data_fri_17th.csv,2,296.01,289.80056462619723
+B,0,Sklearn untuned,14,solar_data_fri_17th.csv,2,293.62,289.9038996847895
+B,0,Sklearn untuned,15,solar_data_fri_17th.csv,2,291.37,288.76668861674466
+B,0,Sklearn untuned,16,solar_data_fri_17th.csv,2,272.88,287.78325158377004
+B,0,Sklearn untuned,17,solar_data_fri_17th.csv,2,236.11,195.57881674247255
+B,0,Sklearn untuned,18,solar_data_fri_24th.csv,1,251.5,196.9175218066116
+B,0,Sklearn untuned,19,solar_data_fri_24th.csv,1,273.8,249.28543956466052
+B,0,Sklearn untuned,20,solar_data_fri_24th.csv,1,287.86,236.75890561027882
+B,0,Sklearn untuned,21,solar_data_fri_24th.csv,1,295.66,240.85325000059754
+B,0,Sklearn untuned,22,solar_data_fri_24th.csv,1,297.01,270.6121709475163
+B,0,Sklearn untuned,23,solar_data_fri_24th.csv,1,294.65,291.187296355184
+B,0,Sklearn untuned,24,solar_data_fri_24th.csv,1,292.5,277.0501475122081
+B,0,Sklearn untuned,25,solar_data_fri_24th.csv,1,273.91,237.21810632675653
+B,0,Sklearn untuned,26,solar_data_fri_24th.csv,1,237.14,236.76187202307494
+B,0,Sklearn untuned,27,solar_data_fri_31st.csv,2,220.76,219.8268045819533
+B,0,Sklearn untuned,28,solar_data_fri_31st.csv,2,231.59,201.35048624594083
+B,0,Sklearn untuned,29,solar_data_fri_31st.csv,2,244.87,254.20738290508496
+B,0,Sklearn untuned,30,solar_data_fri_31st.csv,2,251.73,274.3595869652794
+B,0,Sklearn untuned,31,solar_data_fri_31st.csv,2,268.67,287.60372552898866
+B,0,Sklearn untuned,32,solar_data_fri_31st.csv,2,272.94,288.27666643627936
+B,0,Sklearn untuned,33,solar_data_fri_31st.csv,2,267.82,287.4896952394696
+B,0,Sklearn untuned,34,solar_data_fri_31st.csv,2,257.85,284.5229776266783
+B,0,Sklearn untuned,35,solar_data_fri_31st.csv,2,255.83,280.1365783711909
+B,0,Sklearn untuned,36,solar_data_mon_13th.csv,1,213.69,212.8896594451951
+B,0,Sklearn untuned,37,solar_data_mon_13th.csv,1,221.04,227.4954415028655
+B,0,Sklearn untuned,38,solar_data_mon_13th.csv,1,263.8,239.56999137446996
+B,0,Sklearn untuned,39,solar_data_mon_13th.csv,1,267.24,270.61522793899036
+B,0,Sklearn untuned,40,solar_data_mon_13th.csv,1,279.26,271.75536125620545
+B,0,Sklearn untuned,41,solar_data_mon_13th.csv,1,284.97,291.20746202232004
+B,0,Sklearn untuned,42,solar_data_mon_13th.csv,1,291.06,291.201036039498
+B,0,Sklearn untuned,43,solar_data_mon_13th.csv,1,281.33,285.4045305688503
+B,0,Sklearn untuned,44,solar_data_mon_13th.csv,1,261.17,268.20975686702354
+B,0,Sklearn untuned,45,solar_data_mon_20th.csv,2,212.72,219.7299290765705
+B,0,Sklearn untuned,46,solar_data_mon_20th.csv,2,219.63,262.71565099131396
+B,0,Sklearn untuned,47,solar_data_mon_20th.csv,2,262.63,252.03664371198943
+B,0,Sklearn untuned,48,solar_data_mon_20th.csv,2,265.65,263.32377043006403
+B,0,Sklearn untuned,49,solar_data_mon_20th.csv,2,277.78,288.825449442332
+B,0,Sklearn untuned,50,solar_data_mon_20th.csv,2,282.98,288.9837000036978
+B,0,Sklearn untuned,51,solar_data_mon_20th.csv,2,288.83,288.27928445260034
+B,0,Sklearn untuned,52,solar_data_mon_20th.csv,2,280.01,287.2202707110723
+B,0,Sklearn untuned,53,solar_data_mon_20th.csv,2,262.9,276.7577041761608
+B,0,Sklearn untuned,54,solar_data_mon_27th.csv,1,246.02,175.48951976745636
+B,0,Sklearn untuned,55,solar_data_mon_27th.csv,1,252.85,249.2875179423939
+B,0,Sklearn untuned,56,solar_data_mon_27th.csv,1,270.98,223.34305948420877
+B,0,Sklearn untuned,57,solar_data_mon_27th.csv,1,278.05,237.72168269734283
+B,0,Sklearn untuned,58,solar_data_mon_27th.csv,1,281.79,271.15303804985456
+B,0,Sklearn untuned,59,solar_data_mon_27th.csv,1,282.32,270.9318174084275
+B,0,Sklearn untuned,60,solar_data_mon_27th.csv,1,277.64,267.2018719311354
+B,0,Sklearn untuned,61,solar_data_mon_27th.csv,1,268.12,271.17895582562403
+B,0,Sklearn untuned,62,solar_data_mon_27th.csv,1,249.02,262.85671311576414
+B,0,Sklearn untuned,63,solar_data_mon_6th.csv,2,213.68,221.66015269025485
+B,0,Sklearn untuned,64,solar_data_mon_6th.csv,2,221.03,265.35203615617615
+B,0,Sklearn untuned,65,solar_data_mon_6th.csv,2,263.79,284.6437128856177
+B,0,Sklearn untuned,66,solar_data_mon_6th.csv,2,267.23,264.1638127761657
+B,0,Sklearn untuned,67,solar_data_mon_6th.csv,2,279.25,287.9442679807986
+B,0,Sklearn untuned,68,solar_data_mon_6th.csv,2,284.96,288.80580121224443
+B,0,Sklearn untuned,69,solar_data_mon_6th.csv,2,291.05,289.13994471303795
+B,0,Sklearn untuned,70,solar_data_mon_6th.csv,2,281.32,287.45657150552097
+B,0,Sklearn untuned,71,solar_data_mon_6th.csv,2,261.16,261.8357009381152
+B,0,Sklearn untuned,72,solar_data_thu_16th.csv,1,233.52,173.25248942593583
+B,0,Sklearn untuned,73,solar_data_thu_16th.csv,1,240.31,228.25182688527048
+B,0,Sklearn untuned,74,solar_data_thu_16th.csv,1,257.31,262.6804237993291
+B,0,Sklearn untuned,75,solar_data_thu_16th.csv,1,261.81,287.8377339024713
+B,0,Sklearn untuned,76,solar_data_thu_16th.csv,1,283.89,272.9422596558949
+B,0,Sklearn untuned,77,solar_data_thu_16th.csv,1,289.46,291.2056190692607
+B,0,Sklearn untuned,78,solar_data_thu_16th.csv,1,296.53,281.642115542147
+B,0,Sklearn untuned,79,solar_data_thu_16th.csv,1,293.58,265.4011901330611
+B,0,Sklearn untuned,80,solar_data_thu_16th.csv,1,246.04,237.95351723193318
+B,0,Sklearn untuned,81,solar_data_thu_23rd.csv,2,189.28,219.44787073370722
+B,0,Sklearn untuned,82,solar_data_thu_23rd.csv,2,202.24,202.85397758395965
+B,0,Sklearn untuned,83,solar_data_thu_23rd.csv,2,237.42,252.68298285984565
+B,0,Sklearn untuned,84,solar_data_thu_23rd.csv,2,266.1,273.89409226368934
+B,0,Sklearn untuned,85,solar_data_thu_23rd.csv,2,288.97,286.06302899511707
+B,0,Sklearn untuned,86,solar_data_thu_23rd.csv,2,297.74,289.3901414749435
+B,0,Sklearn untuned,87,solar_data_thu_23rd.csv,2,288.21,289.68372573843396
+B,0,Sklearn untuned,88,solar_data_thu_23rd.csv,2,277.65,266.2104194465991
+B,0,Sklearn untuned,89,solar_data_thu_23rd.csv,2,271.11,258.05356782257576
+B,0,Sklearn untuned,90,solar_data_thu_30th.csv,1,228.76,212.83439801404873
+B,0,Sklearn untuned,91,solar_data_thu_30th.csv,1,238.82,215.97426414472744
+B,0,Sklearn untuned,92,solar_data_thu_30th.csv,1,248.15,262.3831565628609
+B,0,Sklearn untuned,93,solar_data_thu_30th.csv,1,261.72,267.42208824840304
+B,0,Sklearn untuned,94,solar_data_thu_30th.csv,1,274.45,272.2783999401213
+B,0,Sklearn untuned,95,solar_data_thu_30th.csv,1,279.57,279.25297417840164
+B,0,Sklearn untuned,96,solar_data_thu_30th.csv,1,281.72,287.65579550088756
+B,0,Sklearn untuned,97,solar_data_thu_30th.csv,1,273.83,282.12071829658925
+B,0,Sklearn untuned,98,solar_data_thu_30th.csv,1,258.93,270.75023928814534
+B,0,Sklearn untuned,99,solar_data_thu_9th.csv,2,189.01,219.8077708667248
+B,0,Sklearn untuned,100,solar_data_thu_9th.csv,2,202.22,230.1398583588462
+B,0,Sklearn untuned,101,solar_data_thu_9th.csv,2,237.4,250.70417657254202
+B,0,Sklearn untuned,102,solar_data_thu_9th.csv,2,266.08,269.7588624545682
+B,0,Sklearn untuned,103,solar_data_thu_9th.csv,2,288.95,286.93966886881856
+B,0,Sklearn untuned,104,solar_data_thu_9th.csv,2,297.72,289.54047517603635
+B,0,Sklearn untuned,105,solar_data_thu_9th.csv,2,288.18,289.9509680583877
+B,0,Sklearn untuned,106,solar_data_thu_9th.csv,2,277.69,286.86560764317636
+B,0,Sklearn untuned,107,solar_data_thu_9th.csv,2,271.14,256.321847439415
+B,0,Sklearn untuned,108,solar_data_tue_14th.csv,1,230.96,139.83312705195738
+B,0,Sklearn untuned,109,solar_data_tue_14th.csv,1,241.98,212.9327749196829
+B,0,Sklearn untuned,110,solar_data_tue_14th.csv,1,254.39,257.79061513841197
+B,0,Sklearn untuned,111,solar_data_tue_14th.csv,1,267.99,270.5692178304511
+B,0,Sklearn untuned,112,solar_data_tue_14th.csv,1,284.72,273.45379306310826
+B,0,Sklearn untuned,113,solar_data_tue_14th.csv,1,292.61,291.2082369801895
+B,0,Sklearn untuned,114,solar_data_tue_14th.csv,1,290.38,289.57917155684396
+B,0,Sklearn untuned,115,solar_data_tue_14th.csv,1,286.38,273.5844002589281
+B,0,Sklearn untuned,116,solar_data_tue_14th.csv,1,244.19,271.02642721390464
+B,0,Sklearn untuned,117,solar_data_tue_21st.csv,2,196.87,220.13958803736296
+B,0,Sklearn untuned,118,solar_data_tue_21st.csv,2,212.89,212.64625927642078
+B,0,Sklearn untuned,119,solar_data_tue_21st.csv,2,234.55,234.60838976037044
+B,0,Sklearn untuned,120,solar_data_tue_21st.csv,2,268.33,271.64088627589126
+B,0,Sklearn untuned,121,solar_data_tue_21st.csv,2,282.41,280.39355734495416
+B,0,Sklearn untuned,122,solar_data_tue_21st.csv,2,288.15,285.8578400581754
+B,0,Sklearn untuned,123,solar_data_tue_21st.csv,2,291.26,287.9126510624227
+B,0,Sklearn untuned,124,solar_data_tue_21st.csv,2,288.36,288.12208346905163
+B,0,Sklearn untuned,125,solar_data_tue_21st.csv,2,269.96,263.3322648210059
+B,0,Sklearn untuned,126,solar_data_tue_28st.csv,1,196.87,212.9585737206188
+B,0,Sklearn untuned,127,solar_data_tue_28st.csv,1,212.89,213.74034542184552
+B,0,Sklearn untuned,128,solar_data_tue_28st.csv,1,234.55,234.92752808652097
+B,0,Sklearn untuned,129,solar_data_tue_28st.csv,1,268.33,268.88361268696565
+B,0,Sklearn untuned,130,solar_data_tue_28st.csv,1,282.41,269.65309528545833
+B,0,Sklearn untuned,131,solar_data_tue_28st.csv,1,288.15,270.95500080617524
+B,0,Sklearn untuned,132,solar_data_tue_28st.csv,1,291.26,278.8158890682294
+B,0,Sklearn untuned,133,solar_data_tue_28st.csv,1,288.36,289.2319077977889
+B,0,Sklearn untuned,134,solar_data_tue_28st.csv,1,269.96,265.08461257475597
+B,0,Sklearn untuned,135,solar_data_tue_28th.csv,2,218.79,219.57861386028864
+B,0,Sklearn untuned,136,solar_data_tue_28th.csv,2,223.86,203.75497972230346
+B,0,Sklearn untuned,137,solar_data_tue_28th.csv,2,239.58,257.05424490993653
+B,0,Sklearn untuned,138,solar_data_tue_28th.csv,2,252.78,285.8802893042888
+B,0,Sklearn untuned,139,solar_data_tue_28th.csv,2,270.53,288.86377604071197
+B,0,Sklearn untuned,140,solar_data_tue_28th.csv,2,278.81,288.6265110221402
+B,0,Sklearn untuned,141,solar_data_tue_28th.csv,2,287.93,288.86557614237097
+B,0,Sklearn untuned,142,solar_data_tue_28th.csv,2,273.94,285.9767741205558
+B,0,Sklearn untuned,143,solar_data_tue_28th.csv,2,231.92,258.6946083702452
+B,0,Sklearn untuned,144,solar_data_tue_7th.csv,1,196.84,248.3831161091747
+B,0,Sklearn untuned,145,solar_data_tue_7th.csv,1,212.86,244.58595222889585
+B,0,Sklearn untuned,146,solar_data_tue_7th.csv,1,234.52,256.60778334697574
+B,0,Sklearn untuned,147,solar_data_tue_7th.csv,1,268.3,286.79832825690573
+B,0,Sklearn untuned,148,solar_data_tue_7th.csv,1,282.41,270.3565394595587
+B,0,Sklearn untuned,149,solar_data_tue_7th.csv,1,288.15,270.95038971809595
+B,0,Sklearn untuned,150,solar_data_tue_7th.csv,1,291.26,284.97266431348487
+B,0,Sklearn untuned,151,solar_data_tue_7th.csv,1,288.33,291.05903503283764
+B,0,Sklearn untuned,152,solar_data_tue_7th.csv,1,269.96,276.9865973084472
+B,0,Sklearn untuned,153,solar_data_wed_15th.csv,2,247.69,219.70208933514255
+B,0,Sklearn untuned,154,solar_data_wed_15th.csv,2,255.36,379.2921913132674
+B,0,Sklearn untuned,155,solar_data_wed_15th.csv,2,258.9,265.50367460148306
+B,0,Sklearn untuned,156,solar_data_wed_15th.csv,2,276.14,285.41256030734843
+B,0,Sklearn untuned,157,solar_data_wed_15th.csv,2,295.31,289.8658817379545
+B,0,Sklearn untuned,158,solar_data_wed_15th.csv,2,285.37,289.9786360488364
+B,0,Sklearn untuned,159,solar_data_wed_15th.csv,2,276.27,289.1640965235654
+B,0,Sklearn untuned,160,solar_data_wed_15th.csv,2,267.45,285.8145457893256
+B,0,Sklearn untuned,161,solar_data_wed_15th.csv,2,258.04,188.6002085109738
+B,0,Sklearn untuned,162,solar_data_wed_22nd.csv,1,193.15,175.3529693718817
+B,0,Sklearn untuned,163,solar_data_wed_22nd.csv,1,201.93,176.8295447042713
+B,0,Sklearn untuned,164,solar_data_wed_22nd.csv,1,236.78,249.28752114441005
+B,0,Sklearn untuned,165,solar_data_wed_22nd.csv,1,253.94,262.8386151547046
+B,0,Sklearn untuned,166,solar_data_wed_22nd.csv,1,283.96,267.0341020440437
+B,0,Sklearn untuned,167,solar_data_wed_22nd.csv,1,293.97,272.2501350147317
+B,0,Sklearn untuned,168,solar_data_wed_22nd.csv,1,300.38,290.61717824240253
+B,0,Sklearn untuned,169,solar_data_wed_22nd.csv,1,292.01,252.40880904754732
+B,0,Sklearn untuned,170,solar_data_wed_22nd.csv,1,270.34,263.23510895953746
+B,0,Sklearn untuned,171,solar_data_wed_29th.csv,2,233.73,229.87616025429708
+B,0,Sklearn untuned,172,solar_data_wed_29th.csv,2,238.84,289.04248993938495
+B,0,Sklearn untuned,173,solar_data_wed_29th.csv,2,244.39,269.8439994400707
+B,0,Sklearn untuned,174,solar_data_wed_29th.csv,2,262.63,287.72375190419893
+B,0,Sklearn untuned,175,solar_data_wed_29th.csv,2,274.84,289.11002447964063
+B,0,Sklearn untuned,176,solar_data_wed_29th.csv,2,278.76,288.85063205786
+B,0,Sklearn untuned,177,solar_data_wed_29th.csv,2,271.85,288.11257163784023
+B,0,Sklearn untuned,178,solar_data_wed_29th.csv,2,263.52,285.8611219858747
+B,0,Sklearn untuned,179,solar_data_wed_29th.csv,2,256.6,255.25725027112597
+B,0,Sklearn untuned,180,solar_data_wed_8th.csv,1,193.15,175.4221721703724
+B,0,Sklearn untuned,181,solar_data_wed_8th.csv,1,201.93,214.14221710447845
+B,0,Sklearn untuned,182,solar_data_wed_8th.csv,1,236.78,252.82666162797346
+B,0,Sklearn untuned,183,solar_data_wed_8th.csv,1,253.94,263.50562877617614
+B,0,Sklearn untuned,184,solar_data_wed_8th.csv,1,283.96,270.77901561473243
+B,0,Sklearn untuned,185,solar_data_wed_8th.csv,1,293.97,285.673443200862
+B,0,Sklearn untuned,186,solar_data_wed_8th.csv,1,296.38,291.20881562022635
+B,0,Sklearn untuned,187,solar_data_wed_8th.csv,1,292.01,288.32394603204466
+B,0,Sklearn untuned,188,solar_data_wed_8th.csv,1,270.34,273.5622521550618
+B,0,Sklearn tuned,0,solar_data_fri_10th.csv,1,250.48,215.98709970419802
+B,0,Sklearn tuned,1,solar_data_fri_10th.csv,1,272.8,232.87165480957043
+B,0,Sklearn tuned,2,solar_data_fri_10th.csv,1,286.86,260.1550603674276
+B,0,Sklearn tuned,3,solar_data_fri_10th.csv,1,294.66,264.75296673931524
+B,0,Sklearn tuned,4,solar_data_fri_10th.csv,1,296.45,281.57262279175893
+B,0,Sklearn tuned,5,solar_data_fri_10th.csv,1,293.65,283.1654550493997
+B,0,Sklearn tuned,6,solar_data_fri_10th.csv,1,291.5,283.0551531960858
+B,0,Sklearn tuned,7,solar_data_fri_10th.csv,1,272.91,265.63096897905876
+B,0,Sklearn tuned,8,solar_data_fri_10th.csv,1,236.14,259.0600830967077
+B,0,Sklearn tuned,9,solar_data_fri_17th.csv,2,250.44,221.5808696807455
+B,0,Sklearn tuned,10,solar_data_fri_17th.csv,2,272.75,223.20284983143895
+B,0,Sklearn tuned,11,solar_data_fri_17th.csv,2,286.82,261.27308275521744
+B,0,Sklearn tuned,12,solar_data_fri_17th.csv,2,294.63,287.7810474184371
+B,0,Sklearn tuned,13,solar_data_fri_17th.csv,2,296.01,288.69673669447303
+B,0,Sklearn tuned,14,solar_data_fri_17th.csv,2,293.62,288.4136186244872
+B,0,Sklearn tuned,15,solar_data_fri_17th.csv,2,291.37,284.8451014017141
+B,0,Sklearn tuned,16,solar_data_fri_17th.csv,2,272.88,279.84934170458484
+B,0,Sklearn tuned,17,solar_data_fri_17th.csv,2,236.11,259.29013001180067
+B,0,Sklearn tuned,18,solar_data_fri_24th.csv,1,251.5,216.98079409202745
+B,0,Sklearn tuned,19,solar_data_fri_24th.csv,1,273.8,239.6583612822209
+B,0,Sklearn tuned,20,solar_data_fri_24th.csv,1,287.86,264.6608824538927
+B,0,Sklearn tuned,21,solar_data_fri_24th.csv,1,295.66,279.13601406823625
+B,0,Sklearn tuned,22,solar_data_fri_24th.csv,1,297.01,283.2452387660784
+B,0,Sklearn tuned,23,solar_data_fri_24th.csv,1,294.65,283.6458721336726
+B,0,Sklearn tuned,24,solar_data_fri_24th.csv,1,292.5,283.579136006124
+B,0,Sklearn tuned,25,solar_data_fri_24th.csv,1,273.91,269.484541871583
+B,0,Sklearn tuned,26,solar_data_fri_24th.csv,1,237.14,259.14133950766893
+B,0,Sklearn tuned,27,solar_data_fri_31st.csv,2,220.76,221.14765185380662
+B,0,Sklearn tuned,28,solar_data_fri_31st.csv,2,231.59,224.8966351684283
+B,0,Sklearn tuned,29,solar_data_fri_31st.csv,2,244.87,256.7933752059615
+B,0,Sklearn tuned,30,solar_data_fri_31st.csv,2,251.73,282.78588224814433
+B,0,Sklearn tuned,31,solar_data_fri_31st.csv,2,268.67,287.3680537932109
+B,0,Sklearn tuned,32,solar_data_fri_31st.csv,2,272.94,287.35966958854715
+B,0,Sklearn tuned,33,solar_data_fri_31st.csv,2,267.82,285.4441451221661
+B,0,Sklearn tuned,34,solar_data_fri_31st.csv,2,257.85,273.4450044692937
+B,0,Sklearn tuned,35,solar_data_fri_31st.csv,2,255.83,260.6392150108289
+B,0,Sklearn tuned,36,solar_data_mon_13th.csv,1,213.69,216.18338129552308
+B,0,Sklearn tuned,37,solar_data_mon_13th.csv,1,221.04,225.50047007759082
+B,0,Sklearn tuned,38,solar_data_mon_13th.csv,1,263.8,260.31899890000426
+B,0,Sklearn tuned,39,solar_data_mon_13th.csv,1,267.24,261.54181079101033
+B,0,Sklearn tuned,40,solar_data_mon_13th.csv,1,279.26,268.57215694185743
+B,0,Sklearn tuned,41,solar_data_mon_13th.csv,1,284.97,280.62116773795844
+B,0,Sklearn tuned,42,solar_data_mon_13th.csv,1,291.06,283.4103210365689
+B,0,Sklearn tuned,43,solar_data_mon_13th.csv,1,281.33,274.8692720406005
+B,0,Sklearn tuned,44,solar_data_mon_13th.csv,1,261.17,259.2235089201549
+B,0,Sklearn tuned,45,solar_data_mon_20th.csv,2,212.72,232.26364446343658
+B,0,Sklearn tuned,46,solar_data_mon_20th.csv,2,219.63,250.04279395117692
+B,0,Sklearn tuned,47,solar_data_mon_20th.csv,2,262.63,253.6533457016234
+B,0,Sklearn tuned,48,solar_data_mon_20th.csv,2,265.65,270.56780098439975
+B,0,Sklearn tuned,49,solar_data_mon_20th.csv,2,277.78,288.1937572095935
+B,0,Sklearn tuned,50,solar_data_mon_20th.csv,2,282.98,287.711396349287
+B,0,Sklearn tuned,51,solar_data_mon_20th.csv,2,288.83,285.94573598188833
+B,0,Sklearn tuned,52,solar_data_mon_20th.csv,2,280.01,281.0929835068218
+B,0,Sklearn tuned,53,solar_data_mon_20th.csv,2,262.9,265.9069665020829
+B,0,Sklearn tuned,54,solar_data_mon_27th.csv,1,246.02,217.3848362070274
+B,0,Sklearn tuned,55,solar_data_mon_27th.csv,1,252.85,237.11585950873143
+B,0,Sklearn tuned,56,solar_data_mon_27th.csv,1,270.98,259.9595374242507
+B,0,Sklearn tuned,57,solar_data_mon_27th.csv,1,278.05,262.6877560547459
+B,0,Sklearn tuned,58,solar_data_mon_27th.csv,1,281.79,273.5390639221993
+B,0,Sklearn tuned,59,solar_data_mon_27th.csv,1,282.32,282.00758544883473
+B,0,Sklearn tuned,60,solar_data_mon_27th.csv,1,277.64,282.78515565610735
+B,0,Sklearn tuned,61,solar_data_mon_27th.csv,1,268.12,277.39981094641325
+B,0,Sklearn tuned,62,solar_data_mon_27th.csv,1,249.02,262.57532593770907
+B,0,Sklearn tuned,63,solar_data_mon_6th.csv,2,213.68,233.37911082337357
+B,0,Sklearn tuned,64,solar_data_mon_6th.csv,2,221.03,252.0977524240908
+B,0,Sklearn tuned,65,solar_data_mon_6th.csv,2,263.79,251.2089591301051
+B,0,Sklearn tuned,66,solar_data_mon_6th.csv,2,267.23,266.903301996196
+B,0,Sklearn tuned,67,solar_data_mon_6th.csv,2,279.25,287.06744389275997
+B,0,Sklearn tuned,68,solar_data_mon_6th.csv,2,284.96,287.36080581877576
+B,0,Sklearn tuned,69,solar_data_mon_6th.csv,2,291.05,286.8168727405713
+B,0,Sklearn tuned,70,solar_data_mon_6th.csv,2,281.32,281.7350625674493
+B,0,Sklearn tuned,71,solar_data_mon_6th.csv,2,261.16,265.3990936117064
+B,0,Sklearn tuned,72,solar_data_thu_16th.csv,1,233.52,215.56670744123522
+B,0,Sklearn tuned,73,solar_data_thu_16th.csv,1,240.31,218.0513824610536
+B,0,Sklearn tuned,74,solar_data_thu_16th.csv,1,257.31,256.7302112489456
+B,0,Sklearn tuned,75,solar_data_thu_16th.csv,1,261.81,281.66058662611874
+B,0,Sklearn tuned,76,solar_data_thu_16th.csv,1,283.89,283.8160566436224
+B,0,Sklearn tuned,77,solar_data_thu_16th.csv,1,289.46,283.82676785417334
+B,0,Sklearn tuned,78,solar_data_thu_16th.csv,1,296.53,282.6667940809778
+B,0,Sklearn tuned,79,solar_data_thu_16th.csv,1,293.58,269.4562144211072
+B,0,Sklearn tuned,80,solar_data_thu_16th.csv,1,246.04,261.0846051566974
+B,0,Sklearn tuned,81,solar_data_thu_23rd.csv,2,189.28,219.5308573511428
+B,0,Sklearn tuned,82,solar_data_thu_23rd.csv,2,202.24,225.5967304428953
+B,0,Sklearn tuned,83,solar_data_thu_23rd.csv,2,237.42,250.499188867373
+B,0,Sklearn tuned,84,solar_data_thu_23rd.csv,2,266.1,279.58195317581755
+B,0,Sklearn tuned,85,solar_data_thu_23rd.csv,2,288.97,286.5653702778877
+B,0,Sklearn tuned,86,solar_data_thu_23rd.csv,2,297.74,288.0388706136238
+B,0,Sklearn tuned,87,solar_data_thu_23rd.csv,2,288.21,287.7448550146753
+B,0,Sklearn tuned,88,solar_data_thu_23rd.csv,2,277.65,279.40537458583185
+B,0,Sklearn tuned,89,solar_data_thu_23rd.csv,2,271.11,249.02982849764294
+B,0,Sklearn tuned,90,solar_data_thu_30th.csv,1,228.76,215.61735262633385
+B,0,Sklearn tuned,91,solar_data_thu_30th.csv,1,238.82,238.5227919294375
+B,0,Sklearn tuned,92,solar_data_thu_30th.csv,1,248.15,261.26758473357074
+B,0,Sklearn tuned,93,solar_data_thu_30th.csv,1,261.72,269.65746000608533
+B,0,Sklearn tuned,94,solar_data_thu_30th.csv,1,274.45,271.37787698431526
+B,0,Sklearn tuned,95,solar_data_thu_30th.csv,1,279.57,281.21966865210277
+B,0,Sklearn tuned,96,solar_data_thu_30th.csv,1,281.72,281.99611655021715
+B,0,Sklearn tuned,97,solar_data_thu_30th.csv,1,273.83,276.2034992611837
+B,0,Sklearn tuned,98,solar_data_thu_30th.csv,1,258.93,262.4740650101634
+B,0,Sklearn tuned,99,solar_data_thu_9th.csv,2,189.01,219.8066673559029
+B,0,Sklearn tuned,100,solar_data_thu_9th.csv,2,202.22,224.0312664643011
+B,0,Sklearn tuned,101,solar_data_thu_9th.csv,2,237.4,246.75570086057175
+B,0,Sklearn tuned,102,solar_data_thu_9th.csv,2,266.08,275.883561502375
+B,0,Sklearn tuned,103,solar_data_thu_9th.csv,2,288.95,286.5261347719603
+B,0,Sklearn tuned,104,solar_data_thu_9th.csv,2,297.72,288.20851355291154
+B,0,Sklearn tuned,105,solar_data_thu_9th.csv,2,288.18,287.8778527527836
+B,0,Sklearn tuned,106,solar_data_thu_9th.csv,2,277.69,281.23873261903793
+B,0,Sklearn tuned,107,solar_data_thu_9th.csv,2,271.14,250.86252271672993
+B,0,Sklearn tuned,108,solar_data_tue_14th.csv,1,230.96,215.422195949867
+B,0,Sklearn tuned,109,solar_data_tue_14th.csv,1,241.98,215.65935083409502
+B,0,Sklearn tuned,110,solar_data_tue_14th.csv,1,254.39,234.115263212487
+B,0,Sklearn tuned,111,solar_data_tue_14th.csv,1,267.99,271.49438975131585
+B,0,Sklearn tuned,112,solar_data_tue_14th.csv,1,284.72,282.10739125788933
+B,0,Sklearn tuned,113,solar_data_tue_14th.csv,1,292.61,283.42623967453113
+B,0,Sklearn tuned,114,solar_data_tue_14th.csv,1,290.38,282.5049576331703
+B,0,Sklearn tuned,115,solar_data_tue_14th.csv,1,286.38,267.3849139580667
+B,0,Sklearn tuned,116,solar_data_tue_14th.csv,1,244.19,259.9240526863774
+B,0,Sklearn tuned,117,solar_data_tue_21st.csv,2,196.87,224.34610129595666
+B,0,Sklearn tuned,118,solar_data_tue_21st.csv,2,212.89,225.6918976947005
+B,0,Sklearn tuned,119,solar_data_tue_21st.csv,2,234.55,235.61276441475226
+B,0,Sklearn tuned,120,solar_data_tue_21st.csv,2,268.33,273.8718426099725
+B,0,Sklearn tuned,121,solar_data_tue_21st.csv,2,282.41,278.78861545164796
+B,0,Sklearn tuned,122,solar_data_tue_21st.csv,2,288.15,283.89655234418615
+B,0,Sklearn tuned,123,solar_data_tue_21st.csv,2,291.26,284.7734325002986
+B,0,Sklearn tuned,124,solar_data_tue_21st.csv,2,288.36,284.11605390272575
+B,0,Sklearn tuned,125,solar_data_tue_21st.csv,2,269.96,270.1311503334139
+B,0,Sklearn tuned,126,solar_data_tue_28st.csv,1,196.87,216.0238783293871
+B,0,Sklearn tuned,127,solar_data_tue_28st.csv,1,212.89,216.30151942639756
+B,0,Sklearn tuned,128,solar_data_tue_28st.csv,1,234.55,238.41064957333435
+B,0,Sklearn tuned,129,solar_data_tue_28st.csv,1,268.33,268.06192846931964
+B,0,Sklearn tuned,130,solar_data_tue_28st.csv,1,282.41,276.60199797319734
+B,0,Sklearn tuned,131,solar_data_tue_28st.csv,1,288.15,276.10459717554045
+B,0,Sklearn tuned,132,solar_data_tue_28st.csv,1,291.26,281.81977023463355
+B,0,Sklearn tuned,133,solar_data_tue_28st.csv,1,288.36,280.82217749942254
+B,0,Sklearn tuned,134,solar_data_tue_28st.csv,1,269.96,263.94156213354046
+B,0,Sklearn tuned,135,solar_data_tue_28th.csv,2,218.79,217.03146310126363
+B,0,Sklearn tuned,136,solar_data_tue_28th.csv,2,223.86,227.95954513145642
+B,0,Sklearn tuned,137,solar_data_tue_28th.csv,2,239.58,265.1873792039037
+B,0,Sklearn tuned,138,solar_data_tue_28th.csv,2,252.78,286.98237762720123
+B,0,Sklearn tuned,139,solar_data_tue_28th.csv,2,270.53,287.98934603206993
+B,0,Sklearn tuned,140,solar_data_tue_28th.csv,2,278.81,287.1488119778076
+B,0,Sklearn tuned,141,solar_data_tue_28th.csv,2,287.93,286.21532591700594
+B,0,Sklearn tuned,142,solar_data_tue_28th.csv,2,273.94,278.19371655155504
+B,0,Sklearn tuned,143,solar_data_tue_28th.csv,2,231.92,256.5496642603456
+B,0,Sklearn tuned,144,solar_data_tue_7th.csv,1,196.84,219.96404868518448
+B,0,Sklearn tuned,145,solar_data_tue_7th.csv,1,212.86,244.2469895555704
+B,0,Sklearn tuned,146,solar_data_tue_7th.csv,1,234.52,251.23902857264653
+B,0,Sklearn tuned,147,solar_data_tue_7th.csv,1,268.3,266.0624232660401
+B,0,Sklearn tuned,148,solar_data_tue_7th.csv,1,282.41,273.9535670065657
+B,0,Sklearn tuned,149,solar_data_tue_7th.csv,1,288.15,281.6528180359653
+B,0,Sklearn tuned,150,solar_data_tue_7th.csv,1,291.26,282.0161266516752
+B,0,Sklearn tuned,151,solar_data_tue_7th.csv,1,288.33,280.01003997969894
+B,0,Sklearn tuned,152,solar_data_tue_7th.csv,1,269.96,264.888304493946
+B,0,Sklearn tuned,153,solar_data_wed_15th.csv,2,247.69,226.16171989020367
+B,0,Sklearn tuned,154,solar_data_wed_15th.csv,2,255.36,265.07037517562077
+B,0,Sklearn tuned,155,solar_data_wed_15th.csv,2,258.9,277.80081460690485
+B,0,Sklearn tuned,156,solar_data_wed_15th.csv,2,276.14,287.4532127673906
+B,0,Sklearn tuned,157,solar_data_wed_15th.csv,2,295.31,288.65007465423565
+B,0,Sklearn tuned,158,solar_data_wed_15th.csv,2,285.37,288.4137724258195
+B,0,Sklearn tuned,159,solar_data_wed_15th.csv,2,276.27,285.9988464609876
+B,0,Sklearn tuned,160,solar_data_wed_15th.csv,2,267.45,271.926372600798
+B,0,Sklearn tuned,161,solar_data_wed_15th.csv,2,258.04,235.7194120155718
+B,0,Sklearn tuned,162,solar_data_wed_22nd.csv,1,193.15,216.11616661564182
+B,0,Sklearn tuned,163,solar_data_wed_22nd.csv,1,201.93,217.85559438801
+B,0,Sklearn tuned,164,solar_data_wed_22nd.csv,1,236.78,230.52430793601837
+B,0,Sklearn tuned,165,solar_data_wed_22nd.csv,1,253.94,255.87225837090398
+B,0,Sklearn tuned,166,solar_data_wed_22nd.csv,1,283.96,280.1344138554233
+B,0,Sklearn tuned,167,solar_data_wed_22nd.csv,1,293.97,283.41011058327354
+B,0,Sklearn tuned,168,solar_data_wed_22nd.csv,1,300.38,283.79080443704834
+B,0,Sklearn tuned,169,solar_data_wed_22nd.csv,1,292.01,274.64266081280914
+B,0,Sklearn tuned,170,solar_data_wed_22nd.csv,1,270.34,262.92273382297645
+B,0,Sklearn tuned,171,solar_data_wed_29th.csv,2,233.73,232.2960984644386
+B,0,Sklearn tuned,172,solar_data_wed_29th.csv,2,238.84,268.4219459288367
+B,0,Sklearn tuned,173,solar_data_wed_29th.csv,2,244.39,279.71430686545034
+B,0,Sklearn tuned,174,solar_data_wed_29th.csv,2,262.63,287.7220113213411
+B,0,Sklearn tuned,175,solar_data_wed_29th.csv,2,274.84,288.09512096933054
+B,0,Sklearn tuned,176,solar_data_wed_29th.csv,2,278.76,287.45433632875006
+B,0,Sklearn tuned,177,solar_data_wed_29th.csv,2,271.85,285.321884859961
+B,0,Sklearn tuned,178,solar_data_wed_29th.csv,2,263.52,277.7111651289562
+B,0,Sklearn tuned,179,solar_data_wed_29th.csv,2,256.6,248.00396231076718
+B,0,Sklearn tuned,180,solar_data_wed_8th.csv,1,193.15,216.25279331052118
+B,0,Sklearn tuned,181,solar_data_wed_8th.csv,1,201.93,219.31041376521696
+B,0,Sklearn tuned,182,solar_data_wed_8th.csv,1,236.78,237.29365119233637
+B,0,Sklearn tuned,183,solar_data_wed_8th.csv,1,253.94,246.52606532542094
+B,0,Sklearn tuned,184,solar_data_wed_8th.csv,1,283.96,272.2262060730959
+B,0,Sklearn tuned,185,solar_data_wed_8th.csv,1,293.97,281.1956459316039
+B,0,Sklearn tuned,186,solar_data_wed_8th.csv,1,296.38,283.4254629582348
+B,0,Sklearn tuned,187,solar_data_wed_8th.csv,1,292.01,271.1217577906962
+B,0,Sklearn tuned,188,solar_data_wed_8th.csv,1,270.34,260.3996026068779
+B,0,TensorFlow selected,0,solar_data_fri_10th.csv,1,250.48,230.58029174804688
+B,0,TensorFlow selected,1,solar_data_fri_10th.csv,1,272.8,236.00564575195312
+B,0,TensorFlow selected,2,solar_data_fri_10th.csv,1,286.86,244.83531188964844
+B,0,TensorFlow selected,3,solar_data_fri_10th.csv,1,294.66,256.9767761230469
+B,0,TensorFlow selected,4,solar_data_fri_10th.csv,1,296.45,277.80487060546875
+B,0,TensorFlow selected,5,solar_data_fri_10th.csv,1,293.65,281.28802490234375
+B,0,TensorFlow selected,6,solar_data_fri_10th.csv,1,291.5,279.47491455078125
+B,0,TensorFlow selected,7,solar_data_fri_10th.csv,1,272.91,276.5587158203125
+B,0,TensorFlow selected,8,solar_data_fri_10th.csv,1,236.14,264.0869140625
+B,0,TensorFlow selected,9,solar_data_fri_17th.csv,2,250.44,246.9103240966797
+B,0,TensorFlow selected,10,solar_data_fri_17th.csv,2,272.75,251.85250854492188
+B,0,TensorFlow selected,11,solar_data_fri_17th.csv,2,286.82,269.6620788574219
+B,0,TensorFlow selected,12,solar_data_fri_17th.csv,2,294.63,281.2813415527344
+B,0,TensorFlow selected,13,solar_data_fri_17th.csv,2,296.01,280.1763916015625
+B,0,TensorFlow selected,14,solar_data_fri_17th.csv,2,293.62,296.8412780761719
+B,0,TensorFlow selected,15,solar_data_fri_17th.csv,2,291.37,303.12518310546875
+B,0,TensorFlow selected,16,solar_data_fri_17th.csv,2,272.88,303.3144836425781
+B,0,TensorFlow selected,17,solar_data_fri_17th.csv,2,236.11,306.3902587890625
+B,0,TensorFlow selected,18,solar_data_fri_24th.csv,1,251.5,226.8642578125
+B,0,TensorFlow selected,19,solar_data_fri_24th.csv,1,273.8,227.60861206054688
+B,0,TensorFlow selected,20,solar_data_fri_24th.csv,1,287.86,228.63429260253906
+B,0,TensorFlow selected,21,solar_data_fri_24th.csv,1,295.66,242.73330688476562
+B,0,TensorFlow selected,22,solar_data_fri_24th.csv,1,297.01,260.7832946777344
+B,0,TensorFlow selected,23,solar_data_fri_24th.csv,1,294.65,267.3742980957031
+B,0,TensorFlow selected,24,solar_data_fri_24th.csv,1,292.5,262.9184265136719
+B,0,TensorFlow selected,25,solar_data_fri_24th.csv,1,273.91,253.82908630371094
+B,0,TensorFlow selected,26,solar_data_fri_24th.csv,1,237.14,233.56578063964844
+B,0,TensorFlow selected,27,solar_data_fri_31st.csv,2,220.76,244.3605499267578
+B,0,TensorFlow selected,28,solar_data_fri_31st.csv,2,231.59,247.2659912109375
+B,0,TensorFlow selected,29,solar_data_fri_31st.csv,2,244.87,256.8171081542969
+B,0,TensorFlow selected,30,solar_data_fri_31st.csv,2,251.73,267.73687744140625
+B,0,TensorFlow selected,31,solar_data_fri_31st.csv,2,268.67,274.7412414550781
+B,0,TensorFlow selected,32,solar_data_fri_31st.csv,2,272.94,278.26123046875
+B,0,TensorFlow selected,33,solar_data_fri_31st.csv,2,267.82,278.7414245605469
+B,0,TensorFlow selected,34,solar_data_fri_31st.csv,2,257.85,284.49481201171875
+B,0,TensorFlow selected,35,solar_data_fri_31st.csv,2,255.83,272.5626220703125
+B,0,TensorFlow selected,36,solar_data_mon_13th.csv,1,213.69,235.21517944335938
+B,0,TensorFlow selected,37,solar_data_mon_13th.csv,1,221.04,234.0694580078125
+B,0,TensorFlow selected,38,solar_data_mon_13th.csv,1,263.8,233.2763671875
+B,0,TensorFlow selected,39,solar_data_mon_13th.csv,1,267.24,250.64773559570312
+B,0,TensorFlow selected,40,solar_data_mon_13th.csv,1,279.26,257.2877502441406
+B,0,TensorFlow selected,41,solar_data_mon_13th.csv,1,284.97,270.3442077636719
+B,0,TensorFlow selected,42,solar_data_mon_13th.csv,1,291.06,276.216064453125
+B,0,TensorFlow selected,43,solar_data_mon_13th.csv,1,281.33,283.0539245605469
+B,0,TensorFlow selected,44,solar_data_mon_13th.csv,1,261.17,268.149169921875
+B,0,TensorFlow selected,45,solar_data_mon_20th.csv,2,212.72,232.67706298828125
+B,0,TensorFlow selected,46,solar_data_mon_20th.csv,2,219.63,232.75643920898438
+B,0,TensorFlow selected,47,solar_data_mon_20th.csv,2,262.63,260.7798156738281
+B,0,TensorFlow selected,48,solar_data_mon_20th.csv,2,265.65,268.147216796875
+B,0,TensorFlow selected,49,solar_data_mon_20th.csv,2,277.78,283.1866455078125
+B,0,TensorFlow selected,50,solar_data_mon_20th.csv,2,282.98,288.6078186035156
+B,0,TensorFlow selected,51,solar_data_mon_20th.csv,2,288.83,284.13934326171875
+B,0,TensorFlow selected,52,solar_data_mon_20th.csv,2,280.01,280.3584289550781
+B,0,TensorFlow selected,53,solar_data_mon_20th.csv,2,262.9,277.68731689453125
+B,0,TensorFlow selected,54,solar_data_mon_27th.csv,1,246.02,223.00559997558594
+B,0,TensorFlow selected,55,solar_data_mon_27th.csv,1,252.85,221.8815155029297
+B,0,TensorFlow selected,56,solar_data_mon_27th.csv,1,270.98,220.7318572998047
+B,0,TensorFlow selected,57,solar_data_mon_27th.csv,1,278.05,225.75111389160156
+B,0,TensorFlow selected,58,solar_data_mon_27th.csv,1,281.79,252.7054901123047
+B,0,TensorFlow selected,59,solar_data_mon_27th.csv,1,282.32,248.7124786376953
+B,0,TensorFlow selected,60,solar_data_mon_27th.csv,1,277.64,248.94036865234375
+B,0,TensorFlow selected,61,solar_data_mon_27th.csv,1,268.12,251.29690551757812
+B,0,TensorFlow selected,62,solar_data_mon_27th.csv,1,249.02,252.45401000976562
+B,0,TensorFlow selected,63,solar_data_mon_6th.csv,2,213.68,242.17677307128906
+B,0,TensorFlow selected,64,solar_data_mon_6th.csv,2,221.03,242.99337768554688
+B,0,TensorFlow selected,65,solar_data_mon_6th.csv,2,263.79,246.53590393066406
+B,0,TensorFlow selected,66,solar_data_mon_6th.csv,2,267.23,269.5207214355469
+B,0,TensorFlow selected,67,solar_data_mon_6th.csv,2,279.25,287.239501953125
+B,0,TensorFlow selected,68,solar_data_mon_6th.csv,2,284.96,284.5467834472656
+B,0,TensorFlow selected,69,solar_data_mon_6th.csv,2,291.05,289.2203369140625
+B,0,TensorFlow selected,70,solar_data_mon_6th.csv,2,281.32,283.8260192871094
+B,0,TensorFlow selected,71,solar_data_mon_6th.csv,2,261.16,262.64190673828125
+B,0,TensorFlow selected,72,solar_data_thu_16th.csv,1,233.52,228.32925415039062
+B,0,TensorFlow selected,73,solar_data_thu_16th.csv,1,240.31,235.65821838378906
+B,0,TensorFlow selected,74,solar_data_thu_16th.csv,1,257.31,247.93283081054688
+B,0,TensorFlow selected,75,solar_data_thu_16th.csv,1,261.81,273.2560729980469
+B,0,TensorFlow selected,76,solar_data_thu_16th.csv,1,283.89,278.36187744140625
+B,0,TensorFlow selected,77,solar_data_thu_16th.csv,1,289.46,282.4947204589844
+B,0,TensorFlow selected,78,solar_data_thu_16th.csv,1,296.53,291.1587829589844
+B,0,TensorFlow selected,79,solar_data_thu_16th.csv,1,293.58,281.3071594238281
+B,0,TensorFlow selected,80,solar_data_thu_16th.csv,1,246.04,276.6634521484375
+B,0,TensorFlow selected,81,solar_data_thu_23rd.csv,2,189.28,239.3990478515625
+B,0,TensorFlow selected,82,solar_data_thu_23rd.csv,2,202.24,247.2205047607422
+B,0,TensorFlow selected,83,solar_data_thu_23rd.csv,2,237.42,267.3241271972656
+B,0,TensorFlow selected,84,solar_data_thu_23rd.csv,2,266.1,273.94476318359375
+B,0,TensorFlow selected,85,solar_data_thu_23rd.csv,2,288.97,279.7420654296875
+B,0,TensorFlow selected,86,solar_data_thu_23rd.csv,2,297.74,283.469482421875
+B,0,TensorFlow selected,87,solar_data_thu_23rd.csv,2,288.21,285.6962890625
+B,0,TensorFlow selected,88,solar_data_thu_23rd.csv,2,277.65,267.4255676269531
+B,0,TensorFlow selected,89,solar_data_thu_23rd.csv,2,271.11,269.2752380371094
+B,0,TensorFlow selected,90,solar_data_thu_30th.csv,1,228.76,236.6632843017578
+B,0,TensorFlow selected,91,solar_data_thu_30th.csv,1,238.82,243.521728515625
+B,0,TensorFlow selected,92,solar_data_thu_30th.csv,1,248.15,251.83181762695312
+B,0,TensorFlow selected,93,solar_data_thu_30th.csv,1,261.72,261.23028564453125
+B,0,TensorFlow selected,94,solar_data_thu_30th.csv,1,274.45,273.73394775390625
+B,0,TensorFlow selected,95,solar_data_thu_30th.csv,1,279.57,271.3656311035156
+B,0,TensorFlow selected,96,solar_data_thu_30th.csv,1,281.72,273.8384704589844
+B,0,TensorFlow selected,97,solar_data_thu_30th.csv,1,273.83,270.41400146484375
+B,0,TensorFlow selected,98,solar_data_thu_30th.csv,1,258.93,258.78173828125
+B,0,TensorFlow selected,99,solar_data_thu_9th.csv,2,189.01,244.38693237304688
+B,0,TensorFlow selected,100,solar_data_thu_9th.csv,2,202.22,250.8506622314453
+B,0,TensorFlow selected,101,solar_data_thu_9th.csv,2,237.4,255.5435333251953
+B,0,TensorFlow selected,102,solar_data_thu_9th.csv,2,266.08,272.5063171386719
+B,0,TensorFlow selected,103,solar_data_thu_9th.csv,2,288.95,289.1340026855469
+B,0,TensorFlow selected,104,solar_data_thu_9th.csv,2,297.72,286.8983154296875
+B,0,TensorFlow selected,105,solar_data_thu_9th.csv,2,288.18,293.3699951171875
+B,0,TensorFlow selected,106,solar_data_thu_9th.csv,2,277.69,285.42779541015625
+B,0,TensorFlow selected,107,solar_data_thu_9th.csv,2,271.14,268.5758056640625
+B,0,TensorFlow selected,108,solar_data_tue_14th.csv,1,230.96,233.2439422607422
+B,0,TensorFlow selected,109,solar_data_tue_14th.csv,1,241.98,238.48541259765625
+B,0,TensorFlow selected,110,solar_data_tue_14th.csv,1,254.39,239.0197296142578
+B,0,TensorFlow selected,111,solar_data_tue_14th.csv,1,267.99,272.3736877441406
+B,0,TensorFlow selected,112,solar_data_tue_14th.csv,1,284.72,288.0799560546875
+B,0,TensorFlow selected,113,solar_data_tue_14th.csv,1,292.61,283.5245666503906
+B,0,TensorFlow selected,114,solar_data_tue_14th.csv,1,290.38,291.69842529296875
+B,0,TensorFlow selected,115,solar_data_tue_14th.csv,1,286.38,291.7515869140625
+B,0,TensorFlow selected,116,solar_data_tue_14th.csv,1,244.19,285.75115966796875
+B,0,TensorFlow selected,117,solar_data_tue_21st.csv,2,196.87,242.46128845214844
+B,0,TensorFlow selected,118,solar_data_tue_21st.csv,2,212.89,244.9265594482422
+B,0,TensorFlow selected,119,solar_data_tue_21st.csv,2,234.55,273.89385986328125
+B,0,TensorFlow selected,120,solar_data_tue_21st.csv,2,268.33,284.3701477050781
+B,0,TensorFlow selected,121,solar_data_tue_21st.csv,2,282.41,290.5600280761719
+B,0,TensorFlow selected,122,solar_data_tue_21st.csv,2,288.15,277.6340637207031
+B,0,TensorFlow selected,123,solar_data_tue_21st.csv,2,291.26,275.8966064453125
+B,0,TensorFlow selected,124,solar_data_tue_21st.csv,2,288.36,277.7791748046875
+B,0,TensorFlow selected,125,solar_data_tue_21st.csv,2,269.96,256.4999084472656
+B,0,TensorFlow selected,126,solar_data_tue_28st.csv,1,196.87,234.79019165039062
+B,0,TensorFlow selected,127,solar_data_tue_28st.csv,1,212.89,237.01724243164062
+B,0,TensorFlow selected,128,solar_data_tue_28st.csv,1,234.55,262.61773681640625
+B,0,TensorFlow selected,129,solar_data_tue_28st.csv,1,268.33,273.1059875488281
+B,0,TensorFlow selected,130,solar_data_tue_28st.csv,1,282.41,280.66192626953125
+B,0,TensorFlow selected,131,solar_data_tue_28st.csv,1,288.15,267.4329528808594
+B,0,TensorFlow selected,132,solar_data_tue_28st.csv,1,291.26,265.5371398925781
+B,0,TensorFlow selected,133,solar_data_tue_28st.csv,1,288.36,267.335693359375
+B,0,TensorFlow selected,134,solar_data_tue_28st.csv,1,269.96,247.20584106445312
+B,0,TensorFlow selected,135,solar_data_tue_28th.csv,2,218.79,245.0850830078125
+B,0,TensorFlow selected,136,solar_data_tue_28th.csv,2,223.86,247.1840362548828
+B,0,TensorFlow selected,137,solar_data_tue_28th.csv,2,239.58,261.3428039550781
+B,0,TensorFlow selected,138,solar_data_tue_28th.csv,2,252.78,277.9879455566406
+B,0,TensorFlow selected,139,solar_data_tue_28th.csv,2,270.53,284.4019470214844
+B,0,TensorFlow selected,140,solar_data_tue_28th.csv,2,278.81,280.226806640625
+B,0,TensorFlow selected,141,solar_data_tue_28th.csv,2,287.93,289.39288330078125
+B,0,TensorFlow selected,142,solar_data_tue_28th.csv,2,273.94,284.40496826171875
+B,0,TensorFlow selected,143,solar_data_tue_28th.csv,2,231.92,268.1856689453125
+B,0,TensorFlow selected,144,solar_data_tue_7th.csv,1,196.84,229.83055114746094
+B,0,TensorFlow selected,145,solar_data_tue_7th.csv,1,212.86,239.66879272460938
+B,0,TensorFlow selected,146,solar_data_tue_7th.csv,1,234.52,249.02552795410156
+B,0,TensorFlow selected,147,solar_data_tue_7th.csv,1,268.3,263.23968505859375
+B,0,TensorFlow selected,148,solar_data_tue_7th.csv,1,282.41,270.3869323730469
+B,0,TensorFlow selected,149,solar_data_tue_7th.csv,1,288.15,279.1492004394531
+B,0,TensorFlow selected,150,solar_data_tue_7th.csv,1,291.26,282.4720153808594
+B,0,TensorFlow selected,151,solar_data_tue_7th.csv,1,288.33,278.65203857421875
+B,0,TensorFlow selected,152,solar_data_tue_7th.csv,1,269.96,273.6292419433594
+B,0,TensorFlow selected,153,solar_data_wed_15th.csv,2,247.69,237.0247344970703
+B,0,TensorFlow selected,154,solar_data_wed_15th.csv,2,255.36,235.80072021484375
+B,0,TensorFlow selected,155,solar_data_wed_15th.csv,2,258.9,260.03826904296875
+B,0,TensorFlow selected,156,solar_data_wed_15th.csv,2,276.14,262.0877990722656
+B,0,TensorFlow selected,157,solar_data_wed_15th.csv,2,295.31,276.1082763671875
+B,0,TensorFlow selected,158,solar_data_wed_15th.csv,2,285.37,292.52777099609375
+B,0,TensorFlow selected,159,solar_data_wed_15th.csv,2,276.27,299.9696044921875
+B,0,TensorFlow selected,160,solar_data_wed_15th.csv,2,267.45,301.68658447265625
+B,0,TensorFlow selected,161,solar_data_wed_15th.csv,2,258.04,305.902587890625
+B,0,TensorFlow selected,162,solar_data_wed_22nd.csv,1,193.15,227.71890258789062
+B,0,TensorFlow selected,163,solar_data_wed_22nd.csv,1,201.93,224.94032287597656
+B,0,TensorFlow selected,164,solar_data_wed_22nd.csv,1,236.78,223.46658325195312
+B,0,TensorFlow selected,165,solar_data_wed_22nd.csv,1,253.94,240.890380859375
+B,0,TensorFlow selected,166,solar_data_wed_22nd.csv,1,283.96,257.4102783203125
+B,0,TensorFlow selected,167,solar_data_wed_22nd.csv,1,293.97,252.85154724121094
+B,0,TensorFlow selected,168,solar_data_wed_22nd.csv,1,300.38,254.86839294433594
+B,0,TensorFlow selected,169,solar_data_wed_22nd.csv,1,292.01,244.96420288085938
+B,0,TensorFlow selected,170,solar_data_wed_22nd.csv,1,270.34,252.2283172607422
+B,0,TensorFlow selected,171,solar_data_wed_29th.csv,2,233.73,246.5202178955078
+B,0,TensorFlow selected,172,solar_data_wed_29th.csv,2,238.84,251.15423583984375
+B,0,TensorFlow selected,173,solar_data_wed_29th.csv,2,244.39,267.3868713378906
+B,0,TensorFlow selected,174,solar_data_wed_29th.csv,2,262.63,281.9833984375
+B,0,TensorFlow selected,175,solar_data_wed_29th.csv,2,274.84,283.4824523925781
+B,0,TensorFlow selected,176,solar_data_wed_29th.csv,2,278.76,280.37457275390625
+B,0,TensorFlow selected,177,solar_data_wed_29th.csv,2,271.85,277.4654541015625
+B,0,TensorFlow selected,178,solar_data_wed_29th.csv,2,263.52,276.83624267578125
+B,0,TensorFlow selected,179,solar_data_wed_29th.csv,2,256.6,263.17742919921875
+B,0,TensorFlow selected,180,solar_data_wed_8th.csv,1,193.15,227.91928100585938
+B,0,TensorFlow selected,181,solar_data_wed_8th.csv,1,201.93,238.87823486328125
+B,0,TensorFlow selected,182,solar_data_wed_8th.csv,1,236.78,242.286865234375
+B,0,TensorFlow selected,183,solar_data_wed_8th.csv,1,253.94,246.1101837158203
+B,0,TensorFlow selected,184,solar_data_wed_8th.csv,1,283.96,264.93487548828125
+B,0,TensorFlow selected,185,solar_data_wed_8th.csv,1,293.97,269.50640869140625
+B,0,TensorFlow selected,186,solar_data_wed_8th.csv,1,296.38,276.6796875
+B,0,TensorFlow selected,187,solar_data_wed_8th.csv,1,292.01,281.2607421875
+B,0,TensorFlow selected,188,solar_data_wed_8th.csv,1,270.34,265.45257568359375

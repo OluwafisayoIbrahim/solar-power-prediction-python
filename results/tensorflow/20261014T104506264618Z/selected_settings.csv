@@ -1,0 +1,7 @@
+track,seed,fold,model,hidden,alpha,convergence_warnings,epochs,inner_mae
+B,0,1,Sklearn untuned,10,0.0001,0.0,,
+B,0,1,Sklearn tuned,10,10.0,0.0,,
+B,0,1,TensorFlow selected,"(3,)",,,2.0,15.61219755045573
+B,0,2,Sklearn untuned,10,0.0001,1.0,,
+B,0,2,Sklearn tuned,3,0.1,0.0,,
+B,0,2,TensorFlow selected,"(3,)",,,2.0,19.422360125506366

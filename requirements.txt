@@ -5,3 +5,4 @@ matplotlib
 seaborn
 jupyter
 joblib
+tensorflow>=2.20,<2.22
