@@ -1,0 +1,14 @@
+{
+  "track": "A",
+  "features": [
+    "solar_irradiance",
+    "current",
+    "voltage",
+    "temperature",
+    "humidity"
+  ],
+  "rows": 189,
+  "seed": 0,
+  "sklearn": "1.9.1",
+  "purpose": "Final fit on all observations; not an independent evaluation"
+}
