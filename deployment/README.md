@@ -110,3 +110,18 @@ Run the spreadsheet regression checks with:
 ```powershell
 .\.venv\Scripts\python.exe -m unittest discover -s tests
 ```
+
+## GitHub Actions checks
+
+The `Python Tests` workflow in `.github/workflows/tests.yml` runs on pushes and
+pull requests using Ubuntu, Python 3.13, and `deployment/requirements.txt`.
+It checks installed dependencies and runs all tests, including saved-model
+predictions, diagrams, spreadsheet uploads, and short upload-training checks.
+It does not rerun the research experiments or overwrite saved models.
+
+Commit and push the workflow to see runs in the repository's Actions tab.
+Manual runs are also available once the workflow is on the default branch.
+Streamlit continues deploying independently from its configured branch; a failed
+test does not automatically block Streamlit deployment. Require the
+`Python 3.13 tests` status check in a branch rule if merges should require passing
+tests, and deploy from that protected branch.
