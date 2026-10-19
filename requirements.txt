@@ -1,8 +1,9 @@
-pandas
-numpy
-scikit-learn
-matplotlib
-seaborn
-jupyter
-joblib
-tensorflow>=2.20,<2.22
+pandas==3.0.6
+numpy==2.5.3
+scipy==1.18.1
+scikit-learn==1.9.1
+matplotlib==3.11.2
+seaborn==0.13.2
+jupyter==1.1.1
+joblib==1.6.0
+tensorflow==2.21.0

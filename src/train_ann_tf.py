@@ -140,7 +140,7 @@ def main():
     except ModuleNotFoundError as exc:
         if exc.name != "tensorflow":
             raise
-        raise SystemExit("Install optional dependencies: python -m pip install -r requirements-tensorflow.txt") from exc
+        raise SystemExit("Install dependencies: python -m pip install -r requirements.txt") from exc
     df = add_day_id(load_processed_data())
     validate_features(df)
     groups = df["day_id"].to_numpy()

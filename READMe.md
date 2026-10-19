@@ -16,7 +16,7 @@ the analysis with corrected, held-out validation, and reports what the ANN can
 and cannot actually predict.
 
 The project now also compares a TensorFlow/Keras ANN with the scikit-learn
-models using the same held-out days. The completed comparison includes custom
+models using the same held-out days. The completed comparisons include custom
 architecture selection, early stopping, and saved training/validation curves.
 
 ## Dataset
@@ -93,21 +93,22 @@ below includes the completed TensorFlow run. Values are means over seeds
 | A | Linear Regression | 0.992 | 1.245 | 0.382 | 0.998 |
 | A | ANN, untuned | 1.319 | 3.814 | 0.518 | 0.978 |
 | A | ANN, tuned | 1.141 | 1.574 | 0.442 | 0.997 |
-| A | TensorFlow ANN, selected | 1.854 | 2.781 | 0.715 | 0.990 |
+| A | TensorFlow ANN, selected | 1.237 | 1.811 | 0.471 | 0.996 |
 | B | Linear Regression | 12.165 | 15.149 | 4.854 | 0.701 |
 | B | ANN, untuned | 14.302 | 23.980 | 5.698 | 0.191 |
 | B | ANN, tuned | 11.965 | 15.089 | 4.786 | 0.703 |
 | B | TensorFlow ANN, selected | 12.015 | 14.979 | 4.797 | 0.707 |
 
-Full comparison, including standard deviations:
-[comparison.csv](results/tensorflow/20261014T104851616874Z/comparison.csv).
+Full comparisons, including standard deviations:
+[Track A, 1,000-epoch ceiling](results/tensorflow/20261019T100248937256Z/comparison.csv)
+and [Track B](results/tensorflow/20261014T104851616874Z/comparison.csv).
 The original baseline/scikit-learn table remains in
 `results/metrics/model_comparison.csv`.
 
-The completed run used Python 3.13.1, TensorFlow 2.21.0 and scikit-learn 1.9.1.
-Its [configuration](results/tensorflow/20261014T104851616874Z/config.json)
-records the settings and versions. Standard deviations describe variation
-across initialization seeds, not confidence intervals for generalization.
+Both completed runs used Python 3.13.1, TensorFlow 2.21.0 and scikit-learn
+1.9.1. Their configurations record the settings and versions. Standard
+deviations describe variation across initialization seeds, not confidence
+intervals for generalization.
 
 ![Predicted vs measured, Track A](results/figures/pred_vs_measured_track_a_ann_tuned.png)
 ![Predicted vs measured, Track B](results/figures/pred_vs_measured_track_b_ann_tuned.png)
@@ -135,9 +136,10 @@ measurably worse.
 On Track B, TensorFlow has slightly lower RMSE (14.979 W) and higher R²
 (0.707) than the tuned scikit-learn ANN, but slightly higher MAE (12.015 W)
 and MAPE (4.797%). These small differences do not establish a meaningful
-advantage on 21 measurement days. On Track A, TensorFlow's MAE and MAPE are
-higher than all the other compared models. Adding TensorFlow provides more
-training controls and learning curves, but does not automatically improve accuracy.
+advantage on 21 measurement days. Raising Track A's training ceiling from 300
+to 1,000 epochs reduced TensorFlow MAPE from 0.715% to 0.471%, but linear
+regression remained better at 0.382%. Adding TensorFlow provides more training
+controls and learning curves, but does not automatically improve accuracy.
 
 This compares training approaches, not just frameworks: TensorFlow uses Adam
 and standardized targets, while scikit-learn uses L-BFGS and unscaled targets.
@@ -153,8 +155,10 @@ days for the median best epoch count from the inner folds. Outer test days
 never select the architecture or training duration.
 
 Defaults are 300 maximum epochs, batch size 32, learning rate 0.001 and hidden
-kernel L2 of 0.0001. Input and target scalers are fitted only on the training
-portion of each fit. Predictions are converted back to watts before evaluation.
+kernel L2 of 0.0001. Track A was rerun with a 1,000-epoch ceiling after every
+one of its original 21 selected refits chose epoch 300. Input and target
+scalers are fitted only on the training portion of each fit. Predictions are
+converted back to watts before evaluation.
 
 Example learning curves for Track B, seed 0, outer fold 1:
 
@@ -176,10 +180,11 @@ Every run creates a new `results/tensorflow/<UTC timestamp>/` directory:
 | `config.json` | Run controls and Python/model-library versions |
 | `learning_curves/` | PNG curves and per-epoch CSVs for selected candidates' inner fits |
 
-The completed run emitted scikit-learn L-BFGS convergence warnings during inner
-tuning: some fits reached the 5,000-iteration limit. Completion does not mean
-every fit converged. Inner tuning warnings appear in the terminal; the counts
-in `selected_settings.csv` cover final sklearn fits only.
+The completed Track A run emitted scikit-learn L-BFGS convergence warnings
+during inner tuning. Among the 21 final outer fits, 13 untuned and 14 tuned
+fits also reached the 5,000-iteration limit. Completion does not mean every
+fit converged. Inner tuning warnings appear in the terminal; the counts in
+`selected_settings.csv` cover final sklearn fits only.
 
 The daily profile plots show the tuned Track B model tracking the general
 shape of a day's power curve reasonably well, but with real, visible
@@ -196,6 +201,17 @@ deviation in magnitude on some days (see `fri_10th`, `fri_17th` in particular).
   future. The TensorFlow addition does not change that distinction.
 - Architecture is selected inside CV, but other TensorFlow controls are fixed
   in advance. Repeatedly adjusting them based on outer results would bias evaluation.
+- Each inner validation fold supplies both the early-stopping epoch and the
+  score used to select the architecture. This can make inner selection mildly
+  optimistic, but the untouched outer test days keep the reported scores fair.
+- Track A remained training-limited after the rerun: 18 of 21 selected refits
+  chose epoch 1,000, and 50 of 63 selected inner histories had their best
+  validation MAE at the final epoch. Its 0.471% MAPE should therefore be read
+  as the result under a 1,000-epoch budget, not a fully converged optimum.
+- The untuned Track B ANN is unstable across seeds (R2 standard deviation
+  0.463) and produced convergence warnings. Its exact score may be sensitive
+  to numerical environment even though the conclusion that it performs worst
+  is unchanged.
 - Grouped-by-day validation and a random row-based split give fairly similar
   results on this dataset, suggesting same-day leakage is not the dominant
   source of the original inflated numbers — the current/voltage leakage is.
@@ -204,36 +220,34 @@ deviation in magnitude on some days (see `fri_10th`, `fri_17th` in particular).
 
 ```
 solar-power-prediction-python/
-├── data/
-│   ├── raw/                        # original per-day CSVs
-│   └── processed/                  # combined, cleaned dataset
-├── notebooks/
-│   └── 01_data_exploration.ipynb
-├── src/
-│   ├── load_data.py                # load, clean, combine
-│   ├── features.py                 # Track A / Track B feature definitions
-│   ├── evaluate.py                 # MAE, RMSE, MAPE, R²
-│   ├── models.py                   # ANN definition
-│   ├── models_tf.py                # configurable Keras ANN
-│   ├── train_ann.py                # tuned/untuned ANN, grouped nested CV
-│   ├── train_ann_tf.py             # TensorFlow comparison and learning curves
-│   ├── train_baselines.py          # physics + linear regression baselines
-│   ├── save_results.py             # writes results/metrics/model_comparison.csv
-│   ├── save_predictions.py         # writes results/predictions/*.csv
-│   └── plots.py                    # writes results/figures/*.png
-├── results/
-│   ├── metrics/model_comparison.csv
-│   ├── predictions/
-│   ├── tensorflow/                 # timestamped comparison runs and curves
-│   └── figures/
-├── requirements.txt
-└── READMe.md
+|-- .github/workflows/              # automated Python tests
+|-- data/                            # raw and processed measurements
+|-- deployment/                      # Streamlit app and deployment helpers
+|-- notebooks/                       # exploratory analysis
+|-- results/
+|   |-- figures/                     # comparison plots
+|   |-- metrics/                     # saved metrics
+|   |-- models/                      # deployable sklearn and TensorFlow models
+|   |-- predictions/                 # pooled out-of-fold predictions
+|   `-- tensorflow/                  # timestamped comparisons and curves
+|-- src/
+|   |-- baselines.py                 # baseline CV, using validation.py
+|   |-- validation.py                # shared grouped-validation helpers
+|   |-- predict.py                   # sklearn inference
+|   |-- predict_tf.py                # TensorFlow inference and scaling
+|   |-- train_final_model.py         # final sklearn model export
+|   |-- train_final_tf.py            # final TensorFlow model export
+|   |-- export_baseline_models.py    # linear and untuned model exports
+|   `-- ...                          # loading, features, training and plots
+|-- tests/                            # unit and Streamlit integration tests
+|-- requirements.txt                 # pinned research environment
+`-- READMe.md
 ```
 
 ## How to run
 
-From the project root on Windows, install all dependencies (including
-`tensorflow>=2.20,<2.22`) into the project virtual environment:
+From the project root on Windows, install the pinned research dependencies
+(including TensorFlow 2.21.0) into the project virtual environment:
 
 ```powershell
 .\.venv\Scripts\python.exe -m pip install -r requirements.txt
@@ -291,6 +305,13 @@ refit and save a final Track B model using the completed comparison's settings:
 ```
 
 The default source run is `results/tensorflow/20261014T104851616874Z`.
+It supplies the current Track B model. Recreate the current Track A model from
+its 1,000-epoch comparison with:
+
+```powershell
+.\.venv\Scripts\python.exe src/train_final_tf.py --track A --run results/tensorflow/20261019T100248937256Z --output PATH_TO_EMPTY_DIRECTORY
+```
+
 Use `--run PATH` for another completed run and `--track A` for Track A.
 The final architecture is the most frequent inner-selected architecture across
 all seeds and folds (ties use candidate order). Its median selected epoch count
@@ -312,8 +333,8 @@ For inference, import `load_tf_model` and `predict_measurements` from
 `src/predict_tf.py` (or `predict_tf` when `src` is on the Python import path).
 Load once, then pass a DataFrame with named feature columns; the helper orders
 inputs, applies input scaling, and converts outputs back to watts. Only load
-trusted model/scaler files. The `.gitignore` exceptions allow the two Track B
-scalers to be included with the network for deployment.
+trusted model/scaler files. The `.gitignore` exceptions allow both tracks'
+scalers to be included with the networks for deployment.
 
 ## Interactive prediction app
 

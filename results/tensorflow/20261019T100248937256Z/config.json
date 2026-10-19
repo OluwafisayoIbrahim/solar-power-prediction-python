@@ -1,0 +1,33 @@
+{
+  "architectures": [
+    [
+      10
+    ],
+    [
+      16,
+      8
+    ]
+  ],
+  "activation": "tanh",
+  "epochs": 1000,
+  "patience": 30,
+  "batch_size": 32,
+  "learning_rate": 0.001,
+  "l2": 0.0001,
+  "seeds": [
+    0,
+    1,
+    2
+  ],
+  "tracks": [
+    "A"
+  ],
+  "folds": 7,
+  "inner_folds": 3,
+  "output": "C:\\Users\\user\\Documents\\fisayo\\solar-power-prediction-python\\results\\tensorflow\\20261019T100248937256Z",
+  "smoke_test": false,
+  "python": "3.13.1",
+  "tensorflow": "2.21.0",
+  "sklearn": "1.9.1",
+  "rows": 189
+}

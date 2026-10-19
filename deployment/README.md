@@ -101,7 +101,9 @@ explicitly allows these artifacts. Missing predictors are clearly marked and
 cannot make predictions. No dataset is required for inference/upload training.
 
 To regenerate missing baseline exports locally, run `python src/export_baseline_models.py`.
-To create Track A TensorFlow, run `python src/train_final_tf.py --track A`.
+To recreate the current Track A TensorFlow model, use the completed 1,000-epoch
+comparison and an empty output directory:
+`python src/train_final_tf.py --track A --run results/tensorflow/20261019T100248937256Z --output PATH_TO_EMPTY_DIRECTORY`.
 Existing artifacts are preserved. The initial Track A untuned ANN export reached
 its 5,000-iteration limit and emitted a convergence warning.
 
