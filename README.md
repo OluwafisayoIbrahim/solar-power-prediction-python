@@ -1,4 +1,4 @@
-# Solar Power Forecasting: Python Reimplementation and Audit
+# Solar Power Forecasting: Python Reimplementation
 
 A Python reimplementation and re-evaluation of an earlier MATLAB feedforward-ANN
 project for solar power forecasting. The original MATLAB project is here:
