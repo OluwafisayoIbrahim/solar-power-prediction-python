@@ -46,7 +46,7 @@ if missing:
 
 @st.cache_resource
 def get_model(key):
-    return load_model(key, ROOT / "results/models")
+    return load_model(key)
 
 
 @st.cache_data
@@ -205,7 +205,7 @@ def training_tab():
     elif group == "timestamp":
         st.caption("Timestamp groups are calendar days in UTC.")
     epochs = 100
-    if spec.kind == "tensorflow":
+    if spec.kind in ("tensorflow", "pytorch"):
         epochs = st.number_input("Training epochs", min_value=1, max_value=500, value=100,
                                   key="training_epochs", on_change=clear_results)
     if st.button("Train selected model", type="primary", disabled=bool(missing), icon=":material/play_arrow:"):
@@ -295,10 +295,13 @@ with model_tab:
                            icon=":material/download:")
         st.caption("Inputs: " + ", ".join(loaded.spec.features))
         columns = st.columns(3)
-        if loaded.spec.kind == "tensorflow":
+        if loaded.spec.kind in ("tensorflow", "pytorch"):
             columns[0].metric("Training readings", metadata["rows"])
             columns[1].metric("Epochs", metadata["epochs"])
-            columns[2].metric("Parameters", f"{loaded.estimator[0].count_params():,}")
+            network = loaded.estimator[0]
+            parameters = (network.count_params() if loaded.spec.kind == "tensorflow"
+                          else sum(parameter.numel() for parameter in network.parameters()))
+            columns[2].metric("Parameters", f"{parameters:,}")
         elif loaded.spec.kind == "physics":
             columns[0].metric("Formula", "P = I x V")
             columns[1].metric("Learned parameters", "0")
@@ -313,7 +316,10 @@ with model_tab:
         st.caption("189 measurements from 21 days. Predictions outside the observed conditions may be unreliable; this is not a future-weather forecast.")
         curve = None
         if "source_run" in metadata:
-            curve = ROOT / "results/tensorflow" / Path(metadata["source_run"].replace("\\", "/")).name / f"learning_curves/track{loaded.spec.track}_seed0_fold1.png"
+            framework = "pytorch" if loaded.spec.kind == "pytorch" else "tensorflow"
+            run_name = Path(metadata["source_run"].replace("\\", "/")).name
+            st.caption(f"Source run: {framework}/{run_name}")
+            curve = ROOT / "results" / framework / run_name / f"learning_curves/track{loaded.spec.track}_seed0_fold1.png"
         if curve is not None and curve.is_file():
             with st.expander("Training and validation curves"):
                 st.image(str(curve), width="stretch")

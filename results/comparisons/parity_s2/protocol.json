@@ -1,0 +1,137 @@
+{
+  "tensorflow": {
+    "architectures": [
+      [
+        10
+      ],
+      [
+        16,
+        8
+      ]
+    ],
+    "activation": "tanh",
+    "epochs": 1000,
+    "patience": 30,
+    "batch_size": 16,
+    "learning_rate": 0.01,
+    "l2": 0.0001,
+    "seeds": [
+      0,
+      1,
+      2
+    ],
+    "tracks": [
+      "A",
+      "B"
+    ],
+    "folds": 7,
+    "inner_folds": 3,
+    "output": "results\\tensorflow\\convergence_s2",
+    "smoke_test": false,
+    "python": "3.13.1",
+    "sklearn": "1.9.1",
+    "rows": 189,
+    "tensorflow": "2.21.0"
+  },
+  "pytorch": {
+    "architectures": [
+      [
+        10
+      ],
+      [
+        16,
+        8
+      ]
+    ],
+    "activation": "tanh",
+    "epochs": 1000,
+    "patience": 30,
+    "batch_size": 16,
+    "learning_rate": 0.01,
+    "l2": 0.0001,
+    "seeds": [
+      0,
+      1,
+      2
+    ],
+    "tracks": [
+      "A",
+      "B"
+    ],
+    "folds": 7,
+    "inner_folds": 3,
+    "output": "results\\pytorch\\parity_s2",
+    "smoke_test": false,
+    "python": "3.13.1",
+    "sklearn": "1.9.1",
+    "rows": 189,
+    "torch": "2.9.1+cpu"
+  },
+  "warnings": [],
+  "convergence": [
+    {
+      "track": "A",
+      "model": "TensorFlow selected",
+      "selections": 21,
+      "cap": 1000,
+      "cap_hits": 0,
+      "min": 68,
+      "median": 179.0,
+      "max": 431,
+      "votes": {
+        "(10,)": 8,
+        "(16, 8)": 13
+      },
+      "mean_inner_mae": 1.3192335175654963,
+      "passes_threshold": true
+    },
+    {
+      "track": "B",
+      "model": "TensorFlow selected",
+      "selections": 21,
+      "cap": 1000,
+      "cap_hits": 0,
+      "min": 3,
+      "median": 15.0,
+      "max": 41,
+      "votes": {
+        "(10,)": 7,
+        "(16, 8)": 14
+      },
+      "mean_inner_mae": 11.194881388884586,
+      "passes_threshold": true
+    },
+    {
+      "track": "A",
+      "model": "PyTorch selected",
+      "selections": 21,
+      "cap": 1000,
+      "cap_hits": 0,
+      "min": 71,
+      "median": 126.0,
+      "max": 207,
+      "votes": {
+        "(16, 8)": 17,
+        "(10,)": 4
+      },
+      "mean_inner_mae": 1.2750556315175947,
+      "passes_threshold": true
+    },
+    {
+      "track": "B",
+      "model": "PyTorch selected",
+      "selections": 21,
+      "cap": 1000,
+      "cap_hits": 0,
+      "min": 3,
+      "median": 16.0,
+      "max": 82,
+      "votes": {
+        "(10,)": 7,
+        "(16, 8)": 14
+      },
+      "mean_inner_mae": 10.918709881315507,
+      "passes_threshold": true
+    }
+  ]
+}

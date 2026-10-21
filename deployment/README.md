@@ -3,11 +3,11 @@
 Run from the repository root:
 
 ```powershell
-.\.venv\Scripts\python.exe -m pip install -r deployment/requirements.txt
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt
 .\.venv\Scripts\python.exe -m streamlit run deployment/app.py
 ```
 
-The model selector covers nine predictors: TensorFlow, tuned/untuned
+The model selector covers eleven predictors: TensorFlow, PyTorch, tuned/untuned
 scikit-learn ANNs and linear regression for both tracks, plus the Track A
 physics baseline. The Models tab offers a separate diagram selector and PNG
 download for every saved model. Neural-network images use actual saved layer
@@ -76,12 +76,13 @@ only; held-out readings are never used to fit or stop training.
 
 The selected saved model supplies the architecture and hyperparameters. A tuned
 ANN reuses its existing chosen settings; upload training does not rerun nested
-hyperparameter search. TensorFlow uses a fixed epoch count (1-500, default 100)
+hyperparameter search. TensorFlow and PyTorch use a fixed epoch count (1-500, default 100)
 chosen before training. These upload scores are not the published nested-CV
 scores, and repeated tuning against the same holdout can bias them.
 
 After training, single and batch predictions in this mode use the session model.
 Download its ZIP before closing the session: TensorFlow exports the network,
+both scalers and metadata; PyTorch exports a CPU `.pt` state dictionary,
 both scalers and metadata; sklearn exports its complete preprocessing pipeline
 and metadata. The export remains fitted on the training partition, not all rows.
 Serialization uses temporary files that are removed after creating the download.
@@ -91,19 +92,32 @@ trained because `P = I * V` has no learned parameters; use saved-model mode for 
 ## Deployment files
 
 Choose `deployment/app.py` as the Streamlit entrypoint and Python 3.13.
-The adjacent requirements file includes Excel/image dependencies and pins
-TensorFlow, NumPy and scikit-learn to the saved model environment.
-Include the deployment folder, `src/predict_tf.py`, `src/evaluate.py`,
-`src/features.py`, `src/models_tf.py`, and the artifacts in `results/models`.
-Both tracks require their `.keras` network, x/y scalers and TF metadata, plus
-their tuned ANN, untuned ANN and linear `.joblib` pipelines. The root `.gitignore`
-explicitly allows these artifacts. Missing predictors are clearly marked and
-cannot make predictions. No dataset is required for inference/upload training.
+The adjacent `requirements.txt` delegates to `../requirements.txt`; all package
+versions live in the root requirements file, including CPU PyTorch. Keep both
+files in the repository. CI uses the same dependency list.
+Include the deployment folder, the full `src/` folder and these artifacts:
+
+| Model family | Active artifact directory | Required files per track |
+|---|---|---|
+| TensorFlow S2 | `results/exports/tf_s2` | `.keras`, x/y scalers, TF metadata |
+| PyTorch S2 | `results/exports/torch_s2` | `.pt` state dictionary, x/y scalers, torch metadata |
+| scikit-learn | `results/models` | tuned ANN, untuned ANN and linear `.joblib` pipelines |
+
+The registry chooses these directories explicitly. Older TensorFlow files in
+`results/models` are preserved but are no longer the app's default models.
+Both S2 frameworks use hidden layers `(16, 8)`. TensorFlow A/B use 167/5 epochs;
+PyTorch A/B use 124/16. The app shows each network's parameter count, source run
+and diagram. Include `results/tensorflow/convergence_s2/learning_curves` and
+`results/pytorch/parity_s2/learning_curves` to display their comparison curves.
+Missing predictors are marked and cannot make predictions. No dataset is
+required for inference/upload training. Only load trusted model/scaler files.
 
 To regenerate missing baseline exports locally, run `python src/export_baseline_models.py`.
-To recreate the current Track A TensorFlow model, use the completed 1,000-epoch
-comparison and an empty output directory:
-`python src/train_final_tf.py --track A --run results/tensorflow/20261019T100248937256Z --output PATH_TO_EMPTY_DIRECTORY`.
+To recreate an S2 TensorFlow model, use the completed comparison and an empty
+output directory:
+`python src/train_final_tf.py --track A --run results/tensorflow/convergence_s2 --output PATH_TO_EMPTY_DIRECTORY`.
+For PyTorch use `src/train_final_torch.py` with `--run results/pytorch/parity_s2`.
+Repeat with `--track B` for Track B. Do not rerun exports into existing folders.
 Existing artifacts are preserved. The initial Track A untuned ANN export reached
 its 5,000-iteration limit and emitted a convergence warning.
 
@@ -120,6 +134,11 @@ pull requests using Ubuntu, Python 3.13, and `deployment/requirements.txt`.
 It checks installed dependencies and runs all tests, including saved-model
 predictions, diagrams, spreadsheet uploads, and short upload-training checks.
 It does not rerun the research experiments or overwrite saved models.
+
+Before pushing, include both S2 export directories with their scaler files,
+the PyTorch source modules and the updated app/tests. Push to Streamlit's
+configured deployment branch only after local tests pass. These local edits
+do not update the hosted app until that push/redeployment happens.
 
 Commit and push the workflow to see runs in the repository's Actions tab.
 Manual runs are also available once the workflow is on the default branch.

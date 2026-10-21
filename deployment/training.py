@@ -4,6 +4,7 @@ from io import BytesIO
 import json
 from pathlib import Path
 from tempfile import TemporaryDirectory
+from types import SimpleNamespace
 import warnings
 from zipfile import ZipFile
 
@@ -62,6 +63,10 @@ def train_uploaded(frame, original, group_column=None, epochs=100, progress=None
                     sklearn=sklearn.__version__, numpy=np.__version__,
                     note="Trained only on training partition; evaluation rows remain held out")
     metadata.pop("source_run", None)
+    # Session fits must not inherit the research run's provenance or data hash.
+    for key in ("training_data_sha256", "architecture_votes", "selection_folds",
+                "selection", "epoch_cap", "created_utc"):
+        metadata.pop(key, None)
     convergence = 0
     if original.spec.kind == "tensorflow":
         import tensorflow as tf
@@ -82,6 +87,12 @@ def train_uploaded(frame, original, group_column=None, epochs=100, progress=None
                             callbacks=[Progress()]).history
         metadata.update(epochs=epochs, training_loss=history["loss"])
         estimator = (model, x_scaler, y_scaler, metadata)
+    elif original.spec.kind == "pytorch":
+        from train_ann_torch import fit_torch
+        fitted = fit_torch(x_train, y_train, tuple(metadata["hidden_layers"]), 0,
+                           SimpleNamespace(**metadata), epochs=epochs, progress=progress)
+        metadata.update(epochs=epochs, training_loss=fitted[3]["loss"])
+        estimator = (*fitted[:3], metadata)
     else:
         estimator = clone(original.estimator)
         with warnings.catch_warnings(record=True) as caught:
@@ -117,6 +128,15 @@ def export_trained(loaded):
             joblib.dump(x_scaler, folder / f"{prefix}_x_scaler.joblib")
             joblib.dump(y_scaler, folder / f"{prefix}_y_scaler.joblib")
             metadata_name = f"{prefix}_tf_metadata.json"
+        elif loaded.spec.kind == "pytorch":
+            import torch
+            from predict_torch import artifact_names
+            names = artifact_names(loaded.spec.track)
+            model, x_scaler, y_scaler, _ = loaded.estimator
+            torch.save(model.state_dict(), folder / names["model"])
+            joblib.dump(x_scaler, folder / names["x_scaler"])
+            joblib.dump(y_scaler, folder / names["y_scaler"])
+            metadata_name = names["metadata"]
         else:
             joblib.dump(loaded.estimator, folder / loaded.spec.filename)
             metadata_name = "metadata.json"

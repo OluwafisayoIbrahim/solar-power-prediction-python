@@ -41,11 +41,11 @@ def architecture(value):
         raise argparse.ArgumentTypeError("Use positive layer sizes, e.g. 10 or 16,8") from exc
 
 
-def parse_args():
-    parser = argparse.ArgumentParser(description=__doc__)
+def parse_args(argv=None, default_epochs=300, description=__doc__):
+    parser = argparse.ArgumentParser(description=description)
     parser.add_argument("--architectures", type=architecture, nargs="+", default=[(10,), (16, 8)])
     parser.add_argument("--activation", choices=["tanh", "relu", "elu"], default="tanh")
-    parser.add_argument("--epochs", type=int, default=300)
+    parser.add_argument("--epochs", type=int, default=default_epochs)
     parser.add_argument("--patience", type=int, default=30)
     parser.add_argument("--batch-size", type=int, default=32)
     parser.add_argument("--learning-rate", type=float, default=0.001)
@@ -56,7 +56,7 @@ def parse_args():
     parser.add_argument("--inner-folds", type=int, default=3)
     parser.add_argument("--output", type=Path)
     parser.add_argument("--smoke-test", action="store_true", help="Short integration check, not research results")
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
     if args.smoke_test:
         args.epochs, args.patience = 2, 1
         args.folds, args.inner_folds = 2, 2
@@ -103,12 +103,17 @@ def predict_tf(fitted, X):
 
 
 def select_tf(X, y, groups, seed, args, curve_dir, prefix):
+    return select_ann(X, y, groups, seed, args, curve_dir, prefix, fit_tf, predict_tf)
+
+
+def select_ann(X, y, groups, seed, args, curve_dir, prefix, fit, predict):
+    """Shared inner splits, selection and curve reporting for both frameworks."""
     candidates = []
     for hidden in args.architectures:
         errors, epochs, histories = [], [], []
         for tr, va in GroupKFold(args.inner_folds).split(X, y, groups):
-            fitted = fit_tf(X[tr], y[tr], hidden, seed, args, (X[va], y[va]))
-            errors.append(mean_absolute_error(y[va], predict_tf(fitted, X[va])))
+            fitted = fit(X[tr], y[tr], hidden, seed, args, (X[va], y[va]))
+            errors.append(mean_absolute_error(y[va], predict(fitted, X[va])))
             history = fitted[3]
             epochs.append(int(np.argmin(history["val_mae"])) + 1)
             histories.append((history, float(fitted[2].scale_[0])))
@@ -141,6 +146,12 @@ def main():
         if exc.name != "tensorflow":
             raise
         raise SystemExit("Install dependencies: python -m pip install -r requirements.txt") from exc
+    run_comparison(args, "tensorflow", tf.__version__, "TensorFlow selected",
+                   fit_tf, predict_tf, select_tf)
+
+
+def run_comparison(args, framework, version, label, fit, predict, select):
+    """Keep outer splits, sklearn baselines and output schemas identical."""
     df = add_day_id(load_processed_data())
     validate_features(df)
     groups = df["day_id"].to_numpy()
@@ -150,13 +161,16 @@ def main():
     if any(len(np.unique(groups[tr])) < max(args.inner_folds, 3) for tr, _ in splits):
         raise SystemExit("Not enough outer training days for inner CV")
     stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ")
-    output = args.output or Path(__file__).resolve().parents[1] / "results" / "tensorflow" / stamp
+    base = Path(__file__).resolve().parents[1] / "results"
+    output = args.output or (base / "smoke" / framework / stamp if args.smoke_test
+                             else base / framework / stamp)
     output.mkdir(parents=True, exist_ok=False)
     curves = output / "learning_curves"
     curves.mkdir()
     metadata = vars(args).copy()
     metadata.update(output=str(output), python=platform.python_version(),
-                    tensorflow=tf.__version__, sklearn=sklearn.__version__, rows=len(df))
+                    sklearn=sklearn.__version__, rows=len(df))
+    metadata["torch" if framework == "pytorch" else framework] = version
     (output / "config.json").write_text(json.dumps(metadata, indent=2), encoding="utf-8")
     metrics, predictions, selections = [], [], []
     for track in args.tracks:
@@ -164,14 +178,14 @@ def main():
         X, y = X.to_numpy(dtype=float), y.to_numpy(dtype=float)
         for seed in args.seeds:
             pooled = {name: np.zeros(len(y)) for name in
-                      ("Linear", "Sklearn untuned", "Sklearn tuned", "TensorFlow selected")}
+                      ("Linear", "Sklearn untuned", "Sklearn tuned", label)}
             fold_ids = np.zeros(len(y), dtype=int)
             for fold, (tr, te) in enumerate(splits, 1):
                 print(f"Track {track}, seed {seed}, fold {fold}/{args.folds}", flush=True)
                 fold_ids[te] = fold
                 linear = make_pipeline(StandardScaler(), LinearRegression()).fit(X[tr], y[tr])
                 pooled["Linear"][te] = linear.predict(X[te])
-                for label, config in [("Sklearn untuned", UNTUNED),
+                for baseline_label, config in [("Sklearn untuned", UNTUNED),
                                       ("Sklearn tuned", select_hyperparameters(X[tr], y[tr], groups[tr], seed))]:
                     with warnings.catch_warnings(record=True) as caught:
                         warnings.simplefilter("always", ConvergenceWarning)
@@ -179,21 +193,21 @@ def main():
                     for warning in caught:
                         if not issubclass(warning.category, ConvergenceWarning):
                             warnings.warn(str(warning.message), warning.category)
-                    pooled[label][te] = model.predict(X[te])
-                    selections.append(dict(track=track, seed=seed, fold=fold, model=label,
+                    pooled[baseline_label][te] = model.predict(X[te])
+                    selections.append(dict(track=track, seed=seed, fold=fold, model=baseline_label,
                                            hidden=str(config[0]), alpha=config[1],
                                            convergence_warnings=sum(issubclass(w.category, ConvergenceWarning) for w in caught)))
-                hidden, epochs, inner_mae = select_tf(
+                hidden, epochs, inner_mae = select(
                     X[tr], y[tr], groups[tr], seed, args, curves, f"track{track}_seed{seed}_fold{fold}")
-                fitted = fit_tf(X[tr], y[tr], hidden, seed, args, epochs=epochs)
-                pooled["TensorFlow selected"][te] = predict_tf(fitted, X[te])
-                selections.append(dict(track=track, seed=seed, fold=fold, model="TensorFlow selected",
+                fitted = fit(X[tr], y[tr], hidden, seed, args, epochs=epochs)
+                pooled[label][te] = predict(fitted, X[te])
+                selections.append(dict(track=track, seed=seed, fold=fold, model=label,
                                        hidden=str(hidden), epochs=epochs, inner_mae=inner_mae))
             if track == "A":
                 pooled["Physics"] = (df["current"] * df["voltage"]).to_numpy()
-            for label, preds in pooled.items():
-                metrics.append(dict(track=track, seed=seed, model=label, **compute_metrics(y, preds)))
-                predictions.append(pd.DataFrame(dict(track=track, seed=seed, model=label,
+            for model_label, preds in pooled.items():
+                metrics.append(dict(track=track, seed=seed, model=model_label, **compute_metrics(y, preds)))
+                predictions.append(pd.DataFrame(dict(track=track, seed=seed, model=model_label,
                                                      row=np.arange(len(y)), day_id=groups,
                                                      fold=fold_ids, measured=y, predicted=preds)))
             pd.DataFrame(metrics).to_csv(output / "metrics_per_seed.csv", index=False)

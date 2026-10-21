@@ -23,12 +23,12 @@ ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_RUN = ROOT / "results/tensorflow/20261014T104851616874Z"
 
 
-def final_settings(config, settings, track):
+def final_settings(config, settings, track, model_label="TensorFlow selected"):
     """Vote over inner-selected settings, without using outer test scores."""
     if config.get("smoke_test"):
         raise ValueError("A smoke-test run cannot supply deployment settings")
     rows = settings[(settings["track"] == track) &
-                    (settings["model"] == "TensorFlow selected")].copy()
+                    (settings["model"] == model_label)].copy()
     expected = {(seed, fold) for seed in config["seeds"]
                 for fold in range(1, config["folds"] + 1)}
     if len(rows) != len(expected) or set(zip(rows["seed"], rows["fold"])) != expected:
