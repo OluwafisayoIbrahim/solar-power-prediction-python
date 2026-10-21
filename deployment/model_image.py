@@ -18,6 +18,13 @@ def architecture_image(model):
 def predictor_image(loaded):
     if loaded.spec.kind == "tensorflow":
         return architecture_image(loaded.estimator[0])
+    if loaded.spec.kind == "pytorch":
+        model = loaded.estimator[0]
+        layers = [(model.hidden[0].in_features, "Inputs", "Standardized measurements")]
+        for index, layer in enumerate(model.hidden, 1):
+            layers.append((layer.out_features, f"Hidden {index}", loaded.metadata["activation"]))
+        layers.append((model.output.out_features, "Output", "linear"))
+        return render_network(layers, "Raw inputs -> input scaler -> network -> target inverse scaler -> power (W)")
     if loaded.spec.kind == "physics":
         return render_network([(2, "Inputs", "Current (A), voltage (V)"),
                                (1, "Multiplication", "P = I x V")],

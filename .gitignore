@@ -2,6 +2,7 @@
 __pycache__/
 *.pyc
 .ipynb_checkpoints/
+results/smoke/
 results/models/*.joblib
 !results/models/track_b_x_scaler.joblib
 !results/models/track_b_y_scaler.joblib

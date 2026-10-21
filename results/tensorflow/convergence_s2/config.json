@@ -1,0 +1,34 @@
+{
+  "architectures": [
+    [
+      10
+    ],
+    [
+      16,
+      8
+    ]
+  ],
+  "activation": "tanh",
+  "epochs": 1000,
+  "patience": 30,
+  "batch_size": 16,
+  "learning_rate": 0.01,
+  "l2": 0.0001,
+  "seeds": [
+    0,
+    1,
+    2
+  ],
+  "tracks": [
+    "A",
+    "B"
+  ],
+  "folds": 7,
+  "inner_folds": 3,
+  "output": "results\\tensorflow\\convergence_s2",
+  "smoke_test": false,
+  "python": "3.13.1",
+  "sklearn": "1.9.1",
+  "rows": 189,
+  "tensorflow": "2.21.0"
+}

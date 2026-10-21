@@ -1,0 +1,35 @@
+{
+  "track": "A",
+  "features": [
+    "solar_irradiance",
+    "current",
+    "voltage",
+    "temperature",
+    "humidity"
+  ],
+  "target": "power",
+  "prediction_unit": "W",
+  "hidden_layers": [
+    16,
+    8
+  ],
+  "epochs": 124,
+  "epoch_cap": 1000,
+  "seed": 0,
+  "architecture_votes": 17,
+  "selection_folds": 21,
+  "source_run": "C:\\Users\\user\\Documents\\fisayo\\solar-power-prediction-python\\results\\pytorch\\parity_s2",
+  "rows": 189,
+  "selection": "Most frequent inner-selected architecture; candidate order breaks ties; median epochs for that architecture.",
+  "training_data_sha256": "4f0a47b5a90064a98cee74f1a31bc548aa79c545bb759d8f3e10259645a8a99a",
+  "activation": "tanh",
+  "learning_rate": 0.01,
+  "l2": 0.0001,
+  "batch_size": 16,
+  "device": "cpu",
+  "python": "3.13.1",
+  "torch": "2.9.1+cpu",
+  "sklearn": "1.9.1",
+  "numpy": "2.5.3",
+  "created_utc": "2026-10-21T08:38:54.625694+00:00"
+}

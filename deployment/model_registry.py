@@ -1,4 +1,4 @@
-"""Explicit registry of the project's saved predictors; no training in the app."""
+"""Explicit artifact locations and inference for the app's saved predictors."""
 
 from dataclasses import dataclass
 from pathlib import Path
@@ -8,8 +8,10 @@ import numpy as np
 
 from features import TRACK_A_FEATURES, TRACK_B_FEATURES
 from predict_tf import load_tf_model, predict_measurements
+from predict_torch import artifact_names, load_torch_model, predict_measurements as predict_torch
 
-MODEL_DIR = Path(__file__).resolve().parents[1] / "results/models"
+ROOT = Path(__file__).resolve().parents[1]
+MODEL_DIR = ROOT / "results/models"
 
 
 @dataclass(frozen=True)
@@ -27,6 +29,7 @@ class ModelSpec:
                     "A simple electrical baseline with no training or learned parameters.")
         explanation = {
             "tensorflow": "A TensorFlow/Keras neural network that learns nonlinear relationships, trained with the Adam optimizer.",
+            "pytorch": "A PyTorch neural network trained on CPU with Adam, using the same architecture candidates and day-grouped selection protocol as TensorFlow.",
             "tuned": "A scikit-learn neural network whose original hidden-layer size and regularization were selected using day-grouped cross-validation.",
             "untuned": "A scikit-learn neural network with a fixed 10-neuron hidden layer and light regularization, used as a reference without hyperparameter tuning.",
             "linear": "Fits a weighted sum of the inputs plus an intercept, providing a simple baseline for comparison with neural networks.",
@@ -42,7 +45,14 @@ class ModelSpec:
             return ["current", "voltage"]
         return TRACK_A_FEATURES if self.track == "A" else TRACK_B_FEATURES
 
-    def missing_files(self, directory=MODEL_DIR):
+    @property
+    def model_dir(self):
+        if self.kind in ("tensorflow", "pytorch"):
+            return ROOT / "results/exports" / ("tf_s2" if self.kind == "tensorflow" else "torch_s2")
+        return MODEL_DIR
+
+    def missing_files(self, directory=None):
+        directory = self.model_dir if directory is None else Path(directory)
         if self.kind == "physics":
             return []
         files = [self.filename]
@@ -50,6 +60,8 @@ class ModelSpec:
             prefix = f"track_{self.track.lower()}"
             files += [f"{prefix}_x_scaler.joblib", f"{prefix}_y_scaler.joblib",
                       f"{prefix}_tf_metadata.json"]
+        elif self.kind == "pytorch":
+            files = list(artifact_names(self.track).values())
         return [name for name in files if not (Path(directory) / name).is_file()]
 
 
@@ -58,6 +70,7 @@ for track in ("B", "A"):
     prefix = f"track_{track.lower()}"
     for kind, title, suffix in [
         ("tensorflow", "TensorFlow ANN", "ann_final.keras"),
+        ("pytorch", "PyTorch ANN", "torch_ann_final.pt"),
         ("tuned", "Tuned scikit-learn ANN", "ann_final.joblib"),
         ("untuned", "Untuned scikit-learn ANN", "ann_untuned.joblib"),
         ("linear", "Linear regression", "linear_final.joblib"),
@@ -79,6 +92,8 @@ class LoadedModel:
             raise ValueError("Provide finite measurements for every required input")
         if self.spec.kind == "tensorflow":
             result = predict_measurements(self.estimator, frame)
+        elif self.spec.kind == "pytorch":
+            result = predict_torch(self.estimator, frame)
         elif self.spec.kind == "physics":
             result = X[:, 0] * X[:, 1]
         else:
@@ -89,8 +104,9 @@ class LoadedModel:
         return result
 
 
-def load_model(key, directory=MODEL_DIR):
+def load_model(key, directory=None):
     spec = MODELS[key]
+    directory = spec.model_dir if directory is None else Path(directory)
     missing = spec.missing_files(directory)
     if missing:
         raise FileNotFoundError("Missing model artifacts: " + ", ".join(missing))
@@ -99,6 +115,9 @@ def load_model(key, directory=MODEL_DIR):
         metadata = estimator[3]
         if metadata["features"] != spec.features:
             raise ValueError("Saved feature order does not match this track")
+    elif spec.kind == "pytorch":
+        estimator = load_torch_model(spec.track, directory)
+        metadata = estimator[3]
     elif spec.kind == "physics":
         estimator, metadata = None, {"formula": "power = current * voltage"}
     else:
