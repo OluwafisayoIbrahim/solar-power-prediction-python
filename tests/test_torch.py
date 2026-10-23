@@ -69,7 +69,7 @@ class TorchTests(unittest.TestCase):
         np.testing.assert_array_equal(predict_torch(first, self.X), predict_torch(second, self.X))
 
     def test_stopping_restores_best_and_scalers_use_training_only(self):
-        self.args.learning_rate = 1e-30  # Float32 updates round away: a forced plateau.
+        self.args.learning_rate = 1e-30 
         self.args.patience = 2
         x_val, y_val = self.X[:5] + 20, self.y[:5] + 100
         fitted = fit_torch(self.X[5:], self.y[5:], (10,), 0, self.args, (x_val, y_val))

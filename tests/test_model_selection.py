@@ -93,7 +93,7 @@ class ModelTests(unittest.TestCase):
         self.assertEqual(MODELS["b_tuned"].model_dir, ROOT / "results/models")
 
     def test_pytorch_upload_ui_and_session_prediction(self):
-        app = AppTest.from_file(str(ROOT / "deployment/app.py"), default_timeout=90).run()
+        app = AppTest.from_file(str(ROOT / "deployment/prediction_workspace.py"), default_timeout=90).run()
         app.selectbox(key="prediction_model").select("b_pytorch").run()
         app.selectbox(key="diagram_model").select("b_pytorch").run()
         self.assertTrue(any("pytorch/parity_s2" in caption.value for caption in app.caption))
@@ -125,12 +125,22 @@ class ModelTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             train_uploaded(self.frame, load_model("a_physics"))
 
+    def test_historical_models_keep_their_own_metrics(self):
+        from model_statistics import research_scores
+        for key, epochs, run in [
+            ("a_tensorflow_historical", 1000, "20261019T100248937256Z"),
+            ("b_tensorflow_historical", 82, "20261014T104851616874Z")]:
+            loaded = load_model(key)
+            self.assertEqual(loaded.metadata["epochs"], epochs)
+            self.assertIn(run, research_scores(loaded.spec).source_run)
+            self.assertEqual(loaded.spec.model_dir, ROOT / "results/models")
+
     def test_cached_model_without_description(self):
         cached = load_model("a_physics")
         spec = cached.spec
         cached.spec = SimpleNamespace(key=spec.key, label=spec.label, track=spec.track,
                                       kind=spec.kind, features=spec.features)
-        app = AppTest.from_file(str(ROOT / "deployment/app.py"), default_timeout=30)
+        app = AppTest.from_file(str(ROOT / "deployment/prediction_workspace.py"), default_timeout=30)
         app.session_state["prediction_model"] = "a_physics"
         app.session_state["diagram_model"] = "a_physics"
         with patch("model_registry.load_model", return_value=cached):
@@ -140,7 +150,7 @@ class ModelTests(unittest.TestCase):
         self.assertTrue(any("no training or learned parameters" in item.value for item in app.markdown))
 
     def test_ui_model_switching_and_training(self):
-        app = AppTest.from_file(str(ROOT / "deployment/app.py"), default_timeout=90).run()
+        app = AppTest.from_file(str(ROOT / "deployment/prediction_workspace.py"), default_timeout=90).run()
         for key in MODELS:
             app.selectbox(key="prediction_model").select(key).run()
             app.selectbox(key="diagram_model").select(key).run()

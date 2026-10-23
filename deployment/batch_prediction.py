@@ -126,7 +126,6 @@ def chart_data(result, timestamp=None):
 
 
 def download_csv(result):
-    # Prevent uploaded text from becoming formulas when opened in Excel.
     safe = result.copy()
     for name in safe.select_dtypes(include=["object", "string"]).columns:
         safe[name] = safe[name].map(

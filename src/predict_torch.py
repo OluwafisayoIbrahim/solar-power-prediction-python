@@ -31,7 +31,6 @@ def load_torch_model(track="B", model_dir=MODEL_DIR):
         raise ValueError("Metadata track or features do not match the requested model")
     model = TorchANN(len(features), metadata["hidden_layers"], metadata["activation"],
                      metadata["learning_rate"], metadata["l2"], metadata["seed"])
-    # Save/load parameters only, not a pickled Python model object.
     state = torch.load(folder / names["model"], map_location="cpu", weights_only=True)
     model.load_state_dict(state, strict=True)
     model.eval()

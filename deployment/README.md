@@ -1,5 +1,43 @@
 # Streamlit prediction app
 
+## Research dashboard navigation
+
+The sidebar opens six views:
+
+- **Research Overview:** dataset and protocol counts, research workflow,
+  evidence-based findings and links into the dashboard.
+- **Dataset Explorer:** source-day and numeric filters, column selection,
+  sorting/downloads, measurement profiles, distributions, correlations and units.
+- **Experiments & Results:** separate original, historical TensorFlow and matched
+  S2 collections; metric filters, saved out-of-fold scatter/residual plots,
+  daily profiles and inner-fold learning curves.
+- **Prediction Workspace:** the existing eleven predictors, single and spreadsheet
+  predictions, optional compatible-model comparison, range warnings, evaluation
+  downloads and session-only uploaded-data training.
+- **Model Explorer:** track/framework/family filters, up to two saved models,
+  architecture downloads, actual estimator settings, parameters and relevant metrics.
+- **Research Methodology & Limitations:** preprocessing, grouped/nested validation,
+  repeated seeds, metric definitions, limitations and proposed future experiments.
+
+`app.py` owns navigation; `prediction_workspace.py` retains the prediction UI;
+`research_pages.py` renders research views; `research_data.py` caches read-only
+artifact loading and supplies statistics/error transformations. Existing registry,
+batch validation, training and diagram modules remain shared.
+
+Research pages require `data/processed/solar_data_combined.csv`, original reports
+under `results/metrics` and `results/predictions`, TensorFlow run directories,
+`results/pytorch/parity_s2`, and `results/comparisons/parity_s2`. Keep each run's
+configuration, predictions and learning-curve CSVs with its metrics. Historical
+settings are shown separately; no fitted-model predictions replace held-out records.
+The dataset's 1900 date is a placeholder: profiles use recorded hour and source day.
+Calendar coverage cannot be established from those timestamps. Original prediction
+CSVs do not identify a seed; their filenames are shown without inventing one.
+
+No new packages are required; interactive charts use Streamlit's existing Altair
+dependency. Missing artifacts display an unavailable-view message. Upload metrics
+remain descriptive and separate from published CV results. All source datasets,
+research results and saved weights are read-only throughout dashboard operation.
+
 Run from the repository root:
 
 ```powershell
@@ -7,7 +45,11 @@ Run from the repository root:
 .\.venv\Scripts\python.exe -m streamlit run deployment/app.py
 ```
 
-The model selector covers eleven predictors: TensorFlow, PyTorch, tuned/untuned
+The model selector covers thirteen saved predictors: eleven current predictors
+plus historical TensorFlow Track A (1000 epochs) and Track B (82 epochs).
+Historical models are explicitly labelled in prediction and diagram selectors
+and Model Explorer, and their metrics come from their own saved experiments.
+Current predictors include TensorFlow S2, PyTorch S2, tuned/untuned
 scikit-learn ANNs and linear regression for both tracks, plus the Track A
 physics baseline. The Models tab offers a separate diagram selector and PNG
 download for every saved model. Neural-network images use actual saved layer

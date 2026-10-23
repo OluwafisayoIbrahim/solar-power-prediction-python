@@ -38,7 +38,6 @@ def final_settings(config, settings, track, model_label="TensorFlow selected"):
     if any(layer not in candidates for layer in layers):
         raise ValueError("Saved architecture is absent from the run configuration")
     counts = Counter(layers)
-    # Candidate order resolves ties deterministically, without consulting scores.
     hidden = max(candidates, key=lambda item: counts[item])
     epochs = rows.loc[[layer == hidden for layer in layers], "epochs"].to_numpy(float)
     if not np.isfinite(epochs).all() or (epochs < 1).any() or (epochs > config["epochs"]).any():

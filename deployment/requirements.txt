@@ -1,2 +1,1 @@
-# Streamlit checks the entrypoint folder first; keep dependencies at the root.
 -r ../requirements.txt

@@ -608,7 +608,14 @@ Historical `check_convergence.py` output, summarized from the saved CSVs:
 
 ## Interactive prediction app
 
-`deployment/app.py` includes a selector for all eleven comparison predictors,
+The app now includes six sidebar views: Research Overview, Dataset Explorer,
+Experiments & Results, Prediction Workspace, Model Explorer, and Research
+Methodology & Limitations. Research charts load saved experiment artifacts;
+historical and matched-framework results have separate views. See
+[dashboard documentation](deployment/README.md) for data provenance and controls.
+
+`deployment/app.py` includes a selector for all eleven current comparison predictors
+and two explicitly labelled historical TensorFlow models (13 saved predictors),
 single-reading predictions, CSV/Excel (`.xlsx`) batch uploads, prediction graphs,
 measured-power comparisons, CSV downloads, and downloadable model diagrams.
 Choose saved-model inference or train a fresh session model from uploaded
