@@ -17,7 +17,7 @@ class Upload(BytesIO):
 
 class AppTests(unittest.TestCase):
     def make_app(self):
-        return AppTest.from_file(str(ROOT / "deployment/app.py"), default_timeout=90)
+        return AppTest.from_file(str(ROOT / "deployment/prediction_workspace.py"), default_timeout=90)
 
     def assert_healthy(self, app):
         self.assertEqual(len(app.exception), 0, str(app.exception))

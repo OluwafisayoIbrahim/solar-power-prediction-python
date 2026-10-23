@@ -47,7 +47,6 @@ def export_final(run, track, output):
         raise ValueError("A completed PyTorch comparison is required")
     settings = pd.read_csv(run / "selected_settings.csv")
     hidden, epochs, votes, total = final_settings(config, settings, track)
-    # Check before the potentially long fit, as well as at save time.
     for name in artifact_names(track).values():
         if (output / name).exists():
             raise FileExistsError(f"Already exists: {output / name}. Use a new --output directory.")

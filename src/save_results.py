@@ -109,10 +109,6 @@ def main() -> None:
 
     rows = []
 
-    # --------------------------------------------------
-    # Physics baseline
-    # --------------------------------------------------
-
     physics_predictions = (
         df["current"].to_numpy()
         * df["voltage"].to_numpy()
@@ -130,10 +126,6 @@ def main() -> None:
             metrics=physics_metrics,
         )
     )
-
-    # --------------------------------------------------
-    # Linear regression
-    # --------------------------------------------------
 
     track_a_linear_predictions = linear_out_of_fold(
         X_a,
@@ -172,10 +164,6 @@ def main() -> None:
             metrics=track_b_linear_metrics,
         )
     )
-
-    # --------------------------------------------------
-    # ANN models
-    # --------------------------------------------------
 
     for track_name, X, y in (
         ("A", X_a, y_a),
@@ -232,10 +220,6 @@ def main() -> None:
                     seed="mean_of_seeds",
                 )
             )
-
-    # --------------------------------------------------
-    # Save results
-    # --------------------------------------------------
 
     results_df = pd.DataFrame(rows)
 

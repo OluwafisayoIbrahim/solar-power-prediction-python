@@ -65,7 +65,7 @@ def compare_runs(tf_run, torch_run, output):
                 **{f"{metric}_{stat}": float(getattr(np, stat)(rows[metric].to_numpy()))
                    for metric in METRICS for stat in ("mean", "std")}))
     table = pd.DataFrame(combined)
-    # Show one baseline when the runs agree; preserve both when they differ.
+    
     for track in sorted(table.track.unique()):
         for model in BASELINES:
             rows = table[(table.track == track) & (table.model == model)]

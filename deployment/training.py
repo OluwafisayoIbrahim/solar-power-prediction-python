@@ -63,7 +63,6 @@ def train_uploaded(frame, original, group_column=None, epochs=100, progress=None
                     sklearn=sklearn.__version__, numpy=np.__version__,
                     note="Trained only on training partition; evaluation rows remain held out")
     metadata.pop("source_run", None)
-    # Session fits must not inherit the research run's provenance or data hash.
     for key in ("training_data_sha256", "architecture_votes", "selection_folds",
                 "selection", "epoch_cap", "created_utc"):
         metadata.pop(key, None)

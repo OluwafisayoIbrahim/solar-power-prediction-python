@@ -21,6 +21,8 @@ class ModelSpec:
     track: str
     kind: str
     filename: str = ""
+    artifact_directory: str = ""
+    research_run: str = ""
 
     @property
     def description(self):
@@ -47,6 +49,8 @@ class ModelSpec:
 
     @property
     def model_dir(self):
+        if self.artifact_directory:
+            return ROOT / self.artifact_directory
         if self.kind in ("tensorflow", "pytorch"):
             return ROOT / "results/exports" / ("tf_s2" if self.kind == "tensorflow" else "torch_s2")
         return MODEL_DIR
@@ -69,8 +73,8 @@ MODELS = {}
 for track in ("B", "A"):
     prefix = f"track_{track.lower()}"
     for kind, title, suffix in [
-        ("tensorflow", "TensorFlow ANN", "ann_final.keras"),
-        ("pytorch", "PyTorch ANN", "torch_ann_final.pt"),
+        ("tensorflow", "TensorFlow ANN (S2)", "ann_final.keras"),
+        ("pytorch", "PyTorch ANN (S2)", "torch_ann_final.pt"),
         ("tuned", "Tuned scikit-learn ANN", "ann_final.joblib"),
         ("untuned", "Untuned scikit-learn ANN", "ann_untuned.joblib"),
         ("linear", "Linear regression", "linear_final.joblib"),
@@ -78,6 +82,14 @@ for track in ("B", "A"):
         key = f"{track.lower()}_{kind}"
         MODELS[key] = ModelSpec(key, f"Track {track} - {title}", track, kind, f"{prefix}_{suffix}")
 MODELS["a_physics"] = ModelSpec("a_physics", "Track A - Physics (current x voltage)", "A", "physics")
+MODELS["a_tensorflow_historical"] = ModelSpec(
+    "a_tensorflow_historical", "Track A - TensorFlow ANN (historical, 1000 epochs)",
+    "A", "tensorflow", "track_a_ann_final.keras", "results/models",
+    "Historical TensorFlow Track A (1000 epochs)")
+MODELS["b_tensorflow_historical"] = ModelSpec(
+    "b_tensorflow_historical", "Track B - TensorFlow ANN (historical, 82 epochs)",
+    "B", "tensorflow", "track_b_ann_final.keras", "results/models",
+    "Original TensorFlow (300 epochs)")
 
 
 @dataclass

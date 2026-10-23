@@ -20,11 +20,9 @@ def fit_torch(X, y, hidden, seed, args, validation=None, epochs=None, progress=N
     from models_torch import TorchANN, l2_penalty
 
     x_scaler, y_scaler = StandardScaler(), StandardScaler()
-    # Tensors are float32 arrays whose operations autograd can differentiate.
     x = torch.from_numpy(x_scaler.fit_transform(X).astype("float32"))
     target = torch.from_numpy(y_scaler.fit_transform(y.reshape(-1, 1)).astype("float32"))
     model = TorchANN(X.shape[1], hidden, args.activation, args.learning_rate, args.l2, seed)
-    # TensorDataset pairs inputs/targets; DataLoader includes the partial batch.
     generator = torch.Generator().manual_seed(seed)
     loader = DataLoader(TensorDataset(x, target), batch_size=args.batch_size,
                         shuffle=True, drop_last=False, generator=generator, num_workers=0)
@@ -47,19 +45,16 @@ def fit_torch(X, y, hidden, seed, args, validation=None, epochs=None, progress=N
             loss = mse(predictions, targets) + l2_penalty(model, args.l2)
             if not torch.isfinite(loss):
                 raise ValueError("Training produced a non-finite loss")
-            # backward computes gradients; step updates parameters using Adam.
             loss.backward()
             optimizer.step()
             total_loss += loss.detach().item() * len(inputs)
             total_mae += (predictions.detach() - targets).abs().sum().item()
-        # Like Keras, training metrics aggregate batch predictions before updates.
         history["loss"].append(total_loss / len(x))
         history["mae"].append(total_mae / len(x))
         if progress is not None:
             progress((epoch + 1) / epoch_limit)
         if validation is not None:
             model.eval()
-            # Validation never builds a gradient graph or updates parameters.
             with torch.no_grad():
                 predictions = model(x_val)
                 val_mae = (predictions - y_val).abs().mean().item()
@@ -70,7 +65,6 @@ def fit_torch(X, y, hidden, seed, args, validation=None, epochs=None, progress=N
             history["val_loss"].append(val_loss)
             if val_mae < best_mae:
                 best_mae, wait = val_mae, 0
-                # A deepcopy prevents later updates mutating the checkpoint.
                 best_state = deepcopy(model.state_dict())
             else:
                 wait += 1
