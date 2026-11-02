@@ -17,7 +17,14 @@ The sidebar opens six views:
 - **Model Explorer:** track/framework/family filters, up to two saved models,
   architecture downloads, actual estimator settings, parameters and relevant metrics.
 - **Research Methodology & Limitations:** preprocessing, grouped/nested validation,
-  repeated seeds, metric definitions, limitations and proposed future experiments.
+  framework-specific training, repeated seeds and metric definitions.
+
+The overview includes the research objective, questions and demonstrated contributions.
+The original study preprint is distinguished from the subsequent Python results.
+Prediction form defaults use cached dataset medians when available, with observed
+ranges in input help and warnings for values beyond those ranges. Model inspection
+and prediction share one cached loader. No saved weights or experimental results
+are changed by this refactor.
 
 `app.py` owns navigation; `prediction_workspace.py` retains the prediction UI;
 `research_pages.py` renders research views; `research_data.py` caches read-only

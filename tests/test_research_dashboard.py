@@ -65,5 +65,17 @@ class DashboardTests(unittest.TestCase):
         self.assertEqual(app.session_state["dashboard_page"], "Dataset Explorer")
         self.assertFalse(len(app.exception), str(app.exception))
 
+    def test_observed_prediction_defaults_and_both_tracks(self):
+        app = AppTest.from_file(str(ROOT / "deployment/prediction_workspace.py"), default_timeout=90).run()
+        for track, model in [("A", "a_linear"), ("B", "b_linear")]:
+            next(item for item in app.selectbox if item.label == "Prediction track").select(track).run()
+            app.selectbox(key="prediction_model").set_value(model).run()
+            self.assertEqual(app.number_input(key="input_solar_irradiance").value,
+                             float(dataset().solar_irradiance.median()))
+            next(item for item in app.button if item.label == "Predict power").click().run()
+            self.assertFalse(len(app.exception), str(app.exception))
+            self.assertFalse(len(app.error), str(app.error))
+            self.assertTrue(any(item.label == "Predicted power" for item in app.metric))
+
 if __name__ == "__main__":
     unittest.main()

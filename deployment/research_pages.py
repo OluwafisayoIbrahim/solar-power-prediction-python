@@ -23,10 +23,12 @@ def histogram(values, label):
         x=alt.X("value:Q", title=label, bin=alt.Bin(maxbins=25)), y="count()", tooltip=["count()"]), width="stretch")
 
 def overview():
-    st.title("Solar Power Prediction")
-    st.write("An interactive research dashboard for evaluating machine-learning models using solar and environmental measurements.")
-    st.write("This work revisits an undergraduate MATLAB ANN study in Python. Day-grouped evaluation, "
-             "nested model selection and baseline comparisons examine whether low prediction errors "
+    st.title("Solar Power Prediction Using Artificial Neural Networks: A Python-Based Re-evaluation")
+    st.subheader("Research context and objective")
+    st.write("Machine learning can estimate solar power from measured conditions, but useful evaluation depends on "
+             "input availability, simple baselines and generalisation to unseen data. This completed empirical investigation "
+             "re-evaluated an earlier MATLAB undergraduate project in Python using alternative input configurations and stricter validation.")
+    st.write("Day-grouped evaluation, nested model selection and baseline comparisons examine whether low prediction errors "
              "reflect generalisation or electrical inputs that nearly determine the target.")
     df, cfg = dataset(), config("TensorFlow S2")
     counts = df.groupby("day_id").size()
@@ -36,6 +38,24 @@ def overview():
     for column, (label, value) in zip(st.columns(6), values.items()):
         column.metric(label, value)
     track_note()
+    with st.expander("Research questions and contributions", expanded=True):
+        st.markdown("""
+**Research questions**
+
+- How does including measured current and voltage affect performance?
+- How do neural networks compare with linear regression and the electrical physics baseline?
+- How well do models generalise to unseen measurement days?
+- What limits follow from feature dependence, leakage risks and a small dataset?
+
+**Demonstrated contributions**
+
+The Python reimplementation audits the original task definition and validation,
+compares electrical/environmental and environmental/temporal inputs, and evaluates
+scikit-learn, TensorFlow/Keras and PyTorch networks against simpler baselines.
+Day-grouped evaluation, nested selection where applicable, repeated seeds and saved
+out-of-fold predictions support reproducible comparison. This is an empirical
+re-evaluation, with no claim of a novel forecasting algorithm.
+""")
     st.subheader("Research workflow")
     st.graphviz_chart('digraph { rankdir=LR; node [shape=box]; "Data collection" -> "Preparation" -> "Feature selection" -> "Training" -> "Grouped cross-validation" -> "Evaluation" -> "Comparison"; }')
     st.subheader("What the saved experiments show")
@@ -54,6 +74,7 @@ def overview():
             st.button(label, icon=":material/arrow_forward:", width="stretch",
                       on_click=lambda target=destination: st.session_state.update(dashboard_page=target))
     st.link_button("Original MATLAB research", "https://github.com/OluwafisayoIbrahim/ANN-Forecasting-for-Solar-Power")
+    st.caption("The original SSRN preprint concerns the earlier study; the subsequent Python experiments are reported separately in this repository.")
 
 def dataset_explorer():
     st.title("Dataset Explorer")
@@ -143,6 +164,14 @@ def experiments():
         name: st.column_config.NumberColumn(format="%.3f")
         for name in shown.columns if name.endswith(("_mean", "_std"))})
     st.download_button("Download displayed metrics", shown.to_csv(index=False), "research_metrics.csv", "text/csv")
+    st.subheader("Interpretation of findings")
+    st.write("In the matched S2 collection, linear regression has the lowest Track A mean MAE. "
+             "The tuned scikit-learn network has the lowest Track B mean MAE, but improvements over linear regression are small "
+             "and rankings depend on the metric: PyTorch's Track B RMSE is higher than linear regression's. "
+             "Additional network complexity therefore does not consistently improve performance. "
+             "Track A's much smaller errors reflect access to electrical quantities directly related to power; "
+             "Track B is a harder estimation task. Neither establishes future-horizon forecasting or statistical significance.")
+    st.caption("Interpretation refers to the complete matched S2 results, irrespective of the display filters above. Historical collections use different settings.")
     metric = st.selectbox("Comparison metric", ["MAE", "RMSE", "MAPE", "R2"])
     st.caption("Higher is better." if metric == "R2" else "Lower is better. MAE/RMSE: W; MAPE: percent.")
     if not shown.empty:
@@ -174,14 +203,21 @@ def experiments():
         st.info("No saved predictions for this selection.")
         return
     residuals = errors(predictions)
-    scatter = alt.Chart(residuals).mark_circle(size=45).encode(x="measured:Q", y="predicted:Q", tooltip=["day_id", "measured", "predicted"])
+    st.subheader("Measured versus predicted power")
+    scatter = alt.Chart(residuals).mark_circle(size=45).encode(
+        x=alt.X("measured:Q", title="Measured power (W)"),
+        y=alt.Y("predicted:Q", title="Predicted power (W)"), tooltip=["day_id", "measured", "predicted"])
     limits = [float(residuals[["measured", "predicted"]].min().min()), float(residuals[["measured", "predicted"]].max().max())]
     diagonal = alt.Chart(pd.DataFrame({"measured": limits, "predicted": limits})).mark_line(color="#c45858").encode(x="measured:Q", y="predicted:Q")
     st.altair_chart((scatter + diagonal).interactive(), width="stretch")
     st.caption("Diagonal: perfect predictions. Residual = measured power - predicted power (W).")
+    st.subheader("Error distributions")
     histogram(residuals.residual, "Residual (W)")
     histogram(residuals.absolute_error, "Absolute error (W)")
-    st.scatter_chart(residuals, x="predicted", y="residual")
+    st.subheader("Residuals versus predicted power")
+    st.scatter_chart(residuals, x="predicted", y="residual", x_label="Predicted power (W)", y_label="Residual (W)")
+    st.caption("Structure or changing spread can reveal systematic errors; the distributions above summarise signed and absolute errors.")
+    st.subheader("Held-out daily power profile")
     day = st.selectbox("Daily performance", sorted(residuals.day_id.unique()))
     daily = residuals[residuals.day_id == day].sort_values("hour")
     st.line_chart(daily, x="hour", y=["measured", "predicted"])
@@ -268,15 +304,34 @@ def methodology():
     st.title("Research Methodology & Limitations")
     st.write("The MATLAB study was revisited to audit validation and task definition, then extended with baseline comparisons and TensorFlow/PyTorch experiments.")
     track_note()
+    df = dataset()
+    st.subheader("Dataset and experimental configurations")
+    st.write(f"The processed dataset contains {len(df)} observations across {df.day_id.nunique()} measurement days, "
+             "with irradiance, temperature, humidity, current, voltage, measured power and time. "
+             "Source CSV filenames define day groups. Time is parsed as hour + minute/60; its 1900 date is a placeholder. "
+             "Calculated power and power difference are diagnostic columns, excluded from model inputs.")
+    st.dataframe(pd.DataFrame([
+        {"Track": "A: electrical and environmental", "Inputs": "Irradiance, current, voltage, temperature, humidity", "Task": "Contemporaneous power estimation with measured electrical inputs"},
+        {"Track": "B: environmental and temporal", "Inputs": "Irradiance, temperature, humidity, hour", "Task": "Contemporaneous estimation without measured current or voltage"},
+    ]), hide_index=True, width="stretch")
+    st.subheader("Models and training procedures")
+    st.write("The scikit-learn MLP uses tanh, a linear output and L-BFGS (up to 5,000 iterations). "
+             "Its untuned reference has 10 hidden units and alpha=0.0001; nested selection searches 3 or 10 units "
+             "and alpha in {0.1, 1, 10}. It does not use the neural-framework early-stopping procedure. "
+             "Linear regression uses standardised inputs and ordinary least squares, without nested tuning. "
+             "The Track A physics baseline computes P = I × V without fitting.")
+    st.write("TensorFlow/Keras and PyTorch feedforward networks use Adam, standardised inputs and targets, "
+             "and inner-validation early stopping. S2 compares hidden layers (10,) and (16, 8), tanh activation, "
+             "learning rate 0.01, L2=0.0001, batch size 16, patience 30 and a 1,000-epoch cap. "
+             "Historical run settings differ and are exposed with their saved results.")
     sections = {
         "Data preparation": "Raw files are combined into the processed CSV; feature sets and day identifiers are explicit. Input scalers are fitted only on each training partition. TensorFlow/PyTorch also standardise targets and convert predictions back to W.",
         "Day-grouped evaluation": "Seven outer folds hold out three complete measurement days each. Every row receives an out-of-fold prediction while its day is excluded from fitting. This evaluates unseen days, not chronological future forecasting.",
-        "Nested selection": "Three inner grouped folds select sklearn hyperparameters or TensorFlow/PyTorch architecture. Neural-network validation MAE determines early stopping; median selected epochs determine outer refit duration. Outer test days do not choose architecture or epochs. Reusing inner validation for stopping and selection can make inner scores optimistic.",
+        "Nested selection": "Three inner grouped folds select tuned sklearn hyperparameters or TensorFlow/PyTorch architecture. For TensorFlow/PyTorch, validation MAE determines early stopping; median selected epochs determine outer refit duration. Outer test days do not choose architecture or epochs. Reusing inner validation for stopping and selection can make inner scores optimistic.",
         "Repeated experiments": "Seeds 0, 1 and 2 assess initialisation variation. Reported means and population standard deviations describe three seeds; they are not confidence intervals. Metrics pool all out-of-fold rows per seed.",
         "Validation improvements": "Day grouping addresses random observation splits and correlated readings. Held-out predictions avoid evaluating fits on reused training observations. Shared metrics, explicit baseline comparisons, nested regularisation selection and saved per-seed artifacts make evaluation more consistent and reproducible. Electrical inputs still define a substantially easier task.",
         "S2 choice and convergence": "S1 and S2 were compared by the predeclared total cap-hit rule; S2 had zero selected refits at the cap versus one for S1. S2 was selected using inner evidence. Historical outer results had already been inspected, so independent confirmation is still needed. Matching protocols does not make framework initialisation or floating-point operations identical.",
-        "Remaining limitations": "189 measurements, 21 days and one collection location limit generalisation. Seasonal coverage is unverified, adjacent readings can correlate, and no external-site or genuine future-time experiment is provided. Repeated development on this dataset can bias conclusions; improved CV does not remove small-sample limits.",
-        "Proposed future work": "Evaluate larger independent photovoltaic datasets and multiple sites. Define a prediction horizon for chronological forecasting; investigate lagged environmental variables and additional baselines. Measure performance as training volume increases. These experiments have not been completed."}
+    }
     for title, text in sections.items():
         st.subheader(title)
         st.write(text)

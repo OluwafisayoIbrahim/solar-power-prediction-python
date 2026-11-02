@@ -12,18 +12,21 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from model_registry import MODELS, load_model, predict_selected
+from model_registry import MODELS, predict_selected
 from evaluate import calculate_mape
 from batch_prediction import (FEATURES, chart_data, download_csv, measured_pairs,
                               read_sheet, run_batch, validate_rows)
 from model_image import predictor_image
 from training import train_uploaded, export_trained
-from research_data import range_warnings, metric_values, DESCRIPTIONS, UNITS
-from research_pages import histogram
+from research_data import range_warnings, metric_values, DESCRIPTIONS, UNITS, dataset
+from research_pages import histogram, saved_model
 
 
-st.title("Solar Power Prediction using Python")
+st.title("Interactive Prediction")
 st.caption("Research demonstration | Power from measured conditions")
+st.info("Track A combines electrical and environmental inputs, including measured current and voltage (P = I × V). "
+        "Track B uses irradiance, temperature, humidity and measurement hour without electrical inputs. "
+        "Both estimate power from contemporaneous conditions; neither is validated for future forecasting.")
 
 
 def clear_results():
@@ -48,9 +51,8 @@ if missing:
     st.warning("This model is not available: " + ", ".join(missing))
 
 
-@st.cache_resource
 def get_model(key):
-    return load_model(key)
+    return saved_model(key)
 
 
 @st.cache_data
@@ -292,6 +294,13 @@ with training:
     else:
         st.info("Select Train from uploaded data in Model source to fit and evaluate a session model.")
 with single:
+    try:
+        reference = dataset()
+        defaults = reference[list(UNITS)].median().to_dict()
+        st.caption("Defaults are medians of the research measurements. Individual medians need not represent one observed operating condition.")
+    except (FileNotFoundError, ValueError, KeyError, OSError):
+        reference, defaults = None, {}
+        st.caption("Research measurements unavailable; reference defaults are shown.")
     with st.form("prediction"):
         columns = st.columns(2)
         controls = {
@@ -305,9 +314,12 @@ with single:
         values = {}
         for index, feature in enumerate(spec.features):
             label, default, lower, upper = controls[feature]
+            default = float(defaults.get(feature, default))
+            observed = (f" Observed range: {reference[feature].min():g} to {reference[feature].max():g} {UNITS[feature]}."
+                        if reference is not None else "")
             values[feature] = columns[index % 2].number_input(
                 label, value=default, min_value=lower, max_value=upper, key=f"input_{feature}",
-                help=DESCRIPTIONS.get(feature, feature) + ". " + (f"Minimum {lower}. " if lower is not None else "Finite values. ") + (f"Maximum {upper}." if upper is not None else ""))
+                help=DESCRIPTIONS.get(feature, feature) + ". " + (f"Minimum {lower}. " if lower is not None else "Finite values. ") + (f"Maximum {upper}." if upper is not None else "") + observed)
         submitted = st.form_submit_button("Predict power", type="primary", disabled=bool(missing), icon=":material/bolt:", width="stretch")
     if submitted:
         measurements = pd.DataFrame([values])

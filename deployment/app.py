@@ -17,7 +17,8 @@ with st.sidebar:
     page = st.radio("Research dashboard", PAGES, key="dashboard_page")
     st.caption("Solar measurements, independent evaluation and interactive predictions.")
     st.link_button("GitHub repository", "https://github.com/OluwafisayoIbrahim/solar-power-prediction-python", icon=":material/code:", width="stretch")
-    st.link_button("Research preprint", "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4771898", icon=":material/article:", width="stretch")
+    st.link_button("Original study preprint (SSRN)", "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4771898", icon=":material/article:", width="stretch")
+    st.link_button("Python methodology and documentation", "https://github.com/OluwafisayoIbrahim/solar-power-prediction-python/blob/dev/README.md", width="stretch")
 try:
     if page == "Prediction Workspace":
         runpy.run_path(str(ROOT / "deployment/prediction_workspace.py"))
