@@ -1,0 +1,68 @@
+{
+  "audit_date": "2026-11-05",
+  "scope": "Read-only documentation and presentation of committed experiments; no retraining, deduplication or result replacement",
+  "claims": [
+    {
+      "claim": "Dataset counts, units, ranges, missing values and duplicate measurements; Table 1 and Figure 2",
+      "sources": ["data/raw", "data/processed/solar_data_combined.csv", "src/load_data.py", "deployment/research_data.py", "README.md"],
+      "verification": "Computed from current stored rows. 189 rows; 21 filenames; 9 rows per filename; 0 missing cells; 0 full-record duplicates with source; 9 duplicate measurement records without source identity. Within-file intervals 35–92 minutes.",
+      "qualification": "21 filename groups do not establish 21 distinct dates. solar_data_tue_21st.csv and solar_data_tue_28st.csv repeat measurements. No source rows changed. Collection location is documented, not independently verified. Calendar period and calibration records are unavailable."
+    },
+    {
+      "claim": "Author, undergraduate completion in 2023, original architecture and historical reassessment",
+      "sources": [
+        "https://github.com/OluwafisayoIbrahim/ANN-Forecasting-for-Solar-Power/blob/578401bb0d106c53f0e152380441a8338854ed57/README.md",
+        "https://github.com/OluwafisayoIbrahim/ANN-Forecasting-for-Solar-Power/blob/578401bb0d106c53f0e152380441a8338854ed57/NeuralNet.m",
+        "README.md",
+        "src/models.py"
+      ],
+      "verification": "Original repository read via GitHub connector at commit 578401bb0d106c53f0e152380441a8338854ed57. README reports five inputs, fitnet(10), tansig/purelin, trainlm, daily mapminmax and daily train/test reuse. NeuralNet.m explicitly uses 80/10/10 random division, five files and a 9000-epoch cap.",
+      "qualification": "NeuralNet.m converts time to numeric and includes every non-target column, conflicting with five-input README description. README-reported daily function is absent from inspected tree. Exact historical results are not independently verified."
+    },
+    {
+      "claim": "Experimental feature configurations; Table 2; electrical relation and task distinction",
+      "sources": ["src/features.py", "src/train_baselines.py", "src/train_ann_tf.py", "src/evaluate.py"],
+      "verification": "Track A: solar_irradiance,current,voltage,temperature,humidity. Track B: solar_irradiance,temperature,humidity,hour. Physics uses current*voltage only. No future horizon or forecast weather inputs.",
+      "qualification": "Feature-target dependence is distinct from preprocessing leakage. Availability depends on the deployment task."
+    },
+    {
+      "claim": "Preprocessing, architectures, optimisers, stopping and selection; Table 3; Figures 1 and 3",
+      "sources": ["src/models.py", "src/train_ann.py", "src/models_tf.py", "src/models_torch.py", "src/train_ann_tf.py", "src/train_ann_torch.py", "results/tensorflow/convergence_s2/config.json", "results/pytorch/parity_s2/config.json"],
+      "verification": "7 outer filename-group folds; 3 inner folds; seeds 0,1,2. Sklearn tuned grid: hidden 3/10, alpha 0.1/1/10, tanh, L-BFGS max_iter 5000. S2: candidates (10,) and (16,8), tanh, Adam lr 0.01, hidden L2 0.0001, batch 16, cap 1000, patience 30. Training-partition input scaling; TF/PT also scale targets. Median inner best epochs set outer refit duration.",
+      "qualification": "Untuned MLP and baselines have different selection procedures. The mean prediction is a synthetic metric sanity check in evaluate.py, not a saved research baseline. baselines.py contains an in-sample linear check that is not the manuscript's CV source."
+    },
+    {
+      "claim": "All abstract and discussion performance numbers; Tables 4–6; Figure 5; within-track rankings",
+      "sources": ["results/comparisons/parity_s2/comparison.csv", "results/tensorflow/convergence_s2/metrics_per_seed.csv", "results/pytorch/parity_s2/metrics_per_seed.csv", "results/tensorflow/convergence_s2/predictions.csv", "results/pytorch/parity_s2/predictions.csv", "src/compare_frameworks.py", "src/evaluate.py"],
+      "verification": "Load summary from committed CSV; validate against per-seed mean and population std, then recompute each seed metric from saved OOF predictions. All displayed performance values derive from this evidence.",
+      "qualification": "Seed SD is not a confidence interval. No significance test, independent site evaluation or duplicate-corrected experiment exists. Original Python reports and historical TensorFlow runs remain accessible separately and are not merged with S2."
+    },
+    {
+      "claim": "Figures 4, 6 and 7: parity, residuals and source-group MAE",
+      "sources": ["results/tensorflow/convergence_s2/predictions.csv", "results/pytorch/parity_s2/predictions.csv", "data/processed/solar_data_combined.csv", "deployment/manuscript_figures.py"],
+      "verification": "All seed-0 outer rows for the selected track; Linear and Sklearn tuned from TF source plus the selected TF/PT networks. Residual=measured-predicted; group MAE is mean absolute residual.",
+      "qualification": "Disclosed seed is a diagnostic example, not a best seed; source-file order is not chronological. Final fitted weights never supply these charts."
+    },
+    {
+      "claim": "S2 selection, convergence and framework comparability",
+      "sources": ["README.md", "src/check_convergence.py", "src/compare_frameworks.py", "results/comparisons/parity_s2/protocol.json", "results/tensorflow/convergence_s1/selected_settings.csv", "results/tensorflow/convergence_s2/selected_settings.csv"],
+      "verification": "README records cap-hit selection rule and October 2026 completion. Protocol JSON reports matching controls/reference checks and no warnings.",
+      "qualification": "Historical outer scores had already been inspected. Matching settings do not imply identical numerical optimisation or a general framework winner."
+    },
+    {
+      "claim": "Deployment and scientific evidence are separate; library versions and reproduction commands",
+      "sources": ["deployment/model_registry.py", "deployment/prediction_workspace.py", "deployment/training.py", "src/train_final_tf.py", "src/train_final_torch.py", "results/exports", "requirements.txt", "deployment/requirements.txt", ".github/workflows/tests.yml", "deployment/README.md"],
+      "verification": "S2 and historical saved models stay in their registered artifact locations. Final models fit all rows and are not independently scored by their outer-CV reports. Upload training uses a session holdout. Research versions come from saved configurations; installation pins come from requirements.txt.",
+      "qualification": "No current affiliation, funding declaration, ethics approval, conflict-of-interest statement or external deployment validity is inferred."
+    }
+  ],
+  "references": [
+    {"number": 1, "url": "https://doi.org/10.2139/ssrn.4771898", "checked_via": "SSRN indexed publisher record: O. Ibrahim, manuscript May 25 2023, posted April 18 2024. Full text blocked with 403; no numerical historical findings imported."},
+    {"number": 2, "url": "https://doi.org/10.1016/j.solener.2016.06.069", "checked_via": "ScienceDirect publisher search record, title/authors/volume/pages/year and abstract"},
+    {"number": 3, "url": "https://doi.org/10.1016/0893-6080(89)90020-8", "checked_via": "ScienceDirect publisher search record, title/authors and abstract; bibliographic volume/pages cross-checked"},
+    {"number": 4, "url": "https://doi.org/10.1145/2382577.2382579", "checked_via": "Author institution record https://cris.tau.ac.il/en/publications/leakage-in-data-mining-formulation-detection-and-avoidance/; ACM direct access blocked"},
+    {"number": 5, "url": "https://doi.org/10.1111/ecog.02881", "checked_via": "Wiley publisher article and bibliographic record; first online December 2016, issue publication 2017"},
+    {"number": 6, "url": "https://www.jmlr.org/papers/v11/cawley10a.html", "checked_via": "JMLR publisher article, authors, year and pages"}
+  ],
+  "deferred": ["PDF export with paginated equations, tables, figures and references", "Provenance resolution and a separately versioned duplicate-aware research evaluation"]
+}

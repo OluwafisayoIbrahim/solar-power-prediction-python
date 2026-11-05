@@ -22,8 +22,10 @@ from research_data import range_warnings, metric_values, DESCRIPTIONS, UNITS, da
 from research_pages import histogram, saved_model
 
 
-st.title("Interactive Prediction")
-st.caption("Research demonstration | Power from measured conditions")
+workspace_view = globals().get("WORKSPACE_VIEW", "combined")
+st.title("Train / Experiment" if workspace_view == "train" else "Predict")
+st.caption("Fit a session model with a separate holdout; these experiments do not replace the research manuscript."
+           if workspace_view == "train" else "Interactive demonstration | Power from measured conditions")
 st.info("Track A combines electrical and environmental inputs, including measured current and voltage (P = I × V). "
         "Track B uses irradiance, temperature, humidity and measurement hour without electrical inputs. "
         "Both estimate power from contemporaneous conditions; neither is validated for future forecasting.")
@@ -35,14 +37,28 @@ def clear_results():
 
 
 prediction_track = st.selectbox("Prediction track", ["All tracks", "A", "B"], on_change=clear_results)
-compatible_keys = [key for key, item in MODELS.items() if prediction_track == "All tracks" or item.track == prediction_track]
+compatible_keys = [key for key, item in MODELS.items()
+                   if (prediction_track == "All tracks" or item.track == prediction_track)
+                   and (workspace_view != "train" or item.kind != "physics")]
 model_key = st.selectbox("Prediction model", compatible_keys,
                          format_func=lambda key: MODELS[key].label,
                          key="prediction_model", on_change=clear_results)
 spec = MODELS[model_key]
+if st.session_state.get("workspace_view") != workspace_view:
+    for key in ("batch_result", "batch_key", "plot_axis", "upload_key"):
+        st.session_state.pop(key, None)
+    st.session_state["workspace_view"] = workspace_view
+if "trained_model" in st.session_state and st.session_state["trained_model"].spec.key != model_key:
+    clear_results()
 st.write(spec.description)
-mode = st.radio("Model source", ["Saved models", "Train from uploaded data"],
-                horizontal=True, key="model_source", on_change=clear_results)
+if workspace_view == "combined":
+    # Keep the standalone workspace compatible with existing integrations.
+    mode = st.radio("Model source", ["Saved models", "Train from uploaded data"],
+                    horizontal=True, key="model_source", on_change=clear_results)
+else:
+    mode = "Train from uploaded data" if workspace_view == "train" else "Saved models"
+    st.caption("Session model: train below, then use the session prediction tabs. Project models are never overwritten."
+               if workspace_view == "train" else "Predictions use saved project models. Use Train / Experiment to fit a new model from uploaded data.")
 st.caption("Required inputs: " + ", ".join(spec.features))
 if spec.track == "A":
     st.info("Track A uses current and voltage to estimate contemporaneous power; it is not a weather-only forecast.")
@@ -63,8 +79,8 @@ def get_model_image(key):
 def active_model():
     if mode == "Saved models":
         return get_model(model_key)
-    if "trained_model" not in st.session_state:
-        raise ValueError("Train the selected model in the Training tab first.")
+    if "trained_model" not in st.session_state or st.session_state["trained_model"].spec.key != model_key:
+        raise ValueError("Train the selected model in Train / Experiment first.")
     return st.session_state["trained_model"]
 
 
@@ -287,12 +303,19 @@ def training_tab():
         render_results(st.session_state["training_result"], prefix="training_")
 
 
-single, batch, training, model_tab = st.tabs(["Single Prediction", "Spreadsheet Prediction", "Train From Uploaded Data", "Model diagram"])
-with training:
-    if mode == "Train from uploaded data":
-        training_tab()
-    else:
-        st.info("Select Train from uploaded data in Model source to fit and evaluate a session model.")
+if workspace_view == "predict":
+    single, batch, model_tab = st.tabs(["Single Prediction", "Spreadsheet Prediction", "Model diagram"])
+    training = None
+elif workspace_view == "train":
+    training, single, batch, model_tab = st.tabs(["Train From Uploaded Data", "Session prediction", "Session spreadsheet prediction", "Model diagram"])
+else:
+    single, batch, training, model_tab = st.tabs(["Single Prediction", "Spreadsheet Prediction", "Train From Uploaded Data", "Model diagram"])
+if training is not None:
+    with training:
+        if mode == "Train from uploaded data":
+            training_tab()
+        else:
+            st.info("Select Train from uploaded data in Model source to fit and evaluate a session model.")
 with single:
     try:
         reference = dataset()
