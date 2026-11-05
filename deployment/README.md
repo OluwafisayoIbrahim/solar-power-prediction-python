@@ -2,24 +2,33 @@
 
 ## Research dashboard navigation
 
-The sidebar opens six views:
+The sidebar opens **Overview → Research Manuscript → Results Explorer → Predict →
+Train / Experiment**, followed by Dataset Explorer and Model Explorer.
 
-- **Research Overview:** dataset and protocol counts, research workflow,
-  evidence-based findings and links into the dashboard.
-- **Dataset Explorer:** source-day and numeric filters, column selection,
-  sorting/downloads, measurement profiles, distributions, correlations and units.
-- **Experiments & Results:** separate original, historical TensorFlow and matched
+- **Overview:** a short introduction with the same title and checked S2 evidence as
+  the manuscript, research motivation, approach, three findings and section links.
+- **Research Manuscript:** the full continuous scientific report with in-page contents,
+  methods, results, discussion, limitations, references and reproducibility information.
+- **Results Explorer:** separate original, historical TensorFlow and matched
   S2 collections; metric filters, saved out-of-fold scatter/residual plots,
   daily profiles and inner-fold learning curves.
-- **Prediction Workspace:** the existing eleven predictors, single and spreadsheet
+- **Predict:** the existing thirteen saved predictors, single and spreadsheet
   predictions, optional compatible-model comparison, range warnings, evaluation
-  downloads and session-only uploaded-data training.
+  downloads. This page always uses saved project models.
+- **Train / Experiment:** explicit uploaded-data training, held-out evaluation, model
+  downloads and single/spreadsheet predictions using the trained session model.
+- **Dataset Explorer:** source-day and numeric filters, column selection,
+  sorting/downloads, measurement profiles, distributions, correlations and units.
 - **Model Explorer:** track/framework/family filters, up to two saved models,
   architecture downloads, actual estimator settings, parameters and relevant metrics.
-- **Research Methodology & Limitations:** preprocessing, grouped/nested validation,
-  framework-specific training, repeated seeds and metric definitions.
 
-The overview includes the research objective, questions and demonstrated contributions.
+The former Research Methodology & Limitations page has been removed. Its methods,
+metric definitions and S1/S2 cap-hit diagnostics are consolidated in the manuscript.
+
+The overview summarises the manuscript rather than maintaining a separate research account.
+Its section links route to manuscript anchors using `?view=manuscript#section`.
+The original overview workflow and comparison image are retained in Results Explorer
+under Original research summary figures. Detailed interpretation lives in the manuscript.
 The original study preprint is distinguished from the subsequent Python results.
 Prediction form defaults use cached dataset medians when available, with observed
 ranges in input help and warnings for values beyond those ranges. Model inspection
@@ -30,6 +39,56 @@ are changed by this refactor.
 `research_pages.py` renders research views; `research_data.py` caches read-only
 artifact loading and supplies statistics/error transformations. Existing registry,
 batch validation, training and diagram modules remain shared.
+
+The two operational routes reuse `prediction_workspace.py` with an explicit view:
+Predict hides training controls and uses saved models; Train / Experiment opens on
+training and provides session-inference tabs. Switching routes clears stale batch
+outputs, while a compatible trained session model can remain available. Standalone
+execution keeps the combined workspace for existing integrations and regression tests.
+
+### Manuscript evidence and maintenance
+
+`manuscript.py` renders the article in a native container with a maximum reading
+width of 940 px that shrinks to its parent on narrow screens. `manuscript_content.py`
+holds prose and the bibliography; `manuscript_data.py` loads and checks the saved S2
+outputs; `manuscript_figures.py` generates charts without fitting models. The JSON
+evidence inventory (`manuscript_evidence.json`) maps claims, numbers and figures to
+source files and records citation verification and unresolved provenance issues.
+
+Tables 4–6, the abstract, discussion and comparison chart share the same checked
+comparison/per-seed data. The loader recomputes metrics from saved out-of-fold
+predictions, checks row/target identities and filename-group assignments, and rejects
+missing, duplicate or inconsistent results. Figures 4, 6 and 7 disclose seed 0 and
+use saved outer predictions rather than final deployment weights. Figure controls
+change only the view of fixed evidence. Uploads/session training never replace it.
+
+The audit found nine repeated measurement records across `solar_data_tue_21st.csv`
+and `solar_data_tue_28st.csv`. There are zero full-record duplicates when the source
+filename is included. These different definitions must not be conflated: 21 filenames
+do not prove 21 unique collection days, and nominal grouped CV may still have
+identical observations across partitions. Intervals range from 35 to 92 minutes;
+measurements are approximately hourly. Data and historical metrics are preserved.
+Resolving provenance and publishing a duplicate-aware re-evaluation are separate
+research tasks. No corrected performance is claimed in this UI change.
+
+The original MATLAB README and `NeuralNet.m` were inspected at commit
+`578401bb0d106c53f0e152380441a8338854ed57`. The README describes five inputs;
+the script also selects numeric time. A daily function discussed in the README
+is absent from that tree. The manuscript explicitly distinguishes these sources.
+The original SSRN work is a preprint; full-text access was blocked during the audit,
+so its numerical results are not imported as verified benchmarks. A mean-prediction
+sanity check exists, but no saved grouped-CV mean-baseline experiment was found.
+
+No packages, weights or experiment outputs are added or changed for this manuscript.
+Reliable PDF export is deferred pending a separate pagination/render-verification
+workflow; the Streamlit article is the current presentation. All legacy charts,
+downloads and operational views remain available.
+
+Run the focused checks with `python -m unittest discover -s tests -p test_manuscript.py -v`.
+When adding a new verified experiment, update the source mapping and run these
+checks before changing claims or the chosen research collection. The current
+manuscript has six numbered tables and seven numbered figures; equations are
+rendered with native LaTeX and references use matching numbered links.
 
 Research pages require `data/processed/solar_data_combined.csv`, original reports
 under `results/metrics` and `results/predictions`, TensorFlow run directories,
@@ -62,8 +121,9 @@ physics baseline. The Models tab offers a separate diagram selector and PNG
 download for every saved model. Neural-network images use actual saved layer
 sizes; regression and physics images show their computation structure.
 
-Choose **Saved models** for inference only, or **Train from uploaded data**
-to fit a fresh session model. Changing the model or mode clears previous results.
+Open **Predict** for saved-model inference, or **Train / Experiment**
+to fit a fresh session model. Changing the selected model clears previous results;
+switching workspaces clears batch outputs so saved and session results are not mixed.
 Existing comparison learning curves are shown when available.
 
 ## Spreadsheet predictions
@@ -111,7 +171,7 @@ Uploaded text beginning with formula characters is escaped in CSV exports.
 
 ## Training from uploads
 
-Choose **Train from uploaded data**, select a model, and use the Training tab.
+Open **Train / Experiment**, select a model, and use **Train From Uploaded Data**.
 CSV/Excel training requires the model's input columns plus measured `power`.
 Training is limited to 10,000 rows, at least 10 valid readings. Invalid inputs
 and missing/nonfinite/negative targets are excluded and listed.

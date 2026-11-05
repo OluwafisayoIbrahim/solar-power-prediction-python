@@ -32,6 +32,15 @@ protocol and reference-data checks against TensorFlow.
 Raw data: `data/raw/`. Combined, cleaned data: `data/processed/solar_data_combined.csv`,
 produced by `src/load_data.py`.
 
+The manuscript audit on 2026-11-05 found nine repeated measurement records across
+`solar_data_tue_21st.csv` and `solar_data_tue_28st.csv`. The 21-day count above is a
+count of source-file groups, not independently verified unique dates. Filename-based
+cross-validation may therefore contain identical observations across partitions.
+Recorded within-file intervals range from 35 to 92 minutes. Existing data and
+results are preserved; no duplicate-corrected performance is claimed. See the
+Streamlit Research Manuscript and its
+[evidence inventory](deployment/manuscript_evidence.json) for the audit and limitations.
+
 ## Key finding: Power ≈ Current × Voltage
 
 `power` is almost exactly the product of `current` and `voltage` (that's simple
@@ -608,11 +617,22 @@ Historical `check_convergence.py` output, summarized from the saved CSVs:
 
 ## Interactive prediction app
 
-The app now includes six sidebar views: Research Overview, Dataset Explorer,
-Experiments & Results, Prediction Workspace, Model Explorer, and Research
-Methodology & Limitations. Research charts load saved experiment artifacts;
+The app opens with **Overview**, followed by **Research Manuscript**, **Results Explorer**,
+**Predict**, and **Train / Experiment**, with Dataset Explorer and Model Explorer as
+supporting views. Overview uses the manuscript's title and checked S2 evidence,
+summarises its findings, and links into the full report. The former separate
+methodology/limitations page is consolidated into the manuscript.
+Research charts load saved experiment artifacts;
 historical and matched-framework results have separate views. See
 [dashboard documentation](deployment/README.md) for data provenance and controls.
+
+The manuscript presents a scientific abstract, introduction, cited related work,
+reproducible methods, artifact-backed results, discussion, limitations, proposed
+future work, references and availability statements. Six numbered tables and seven
+numbered figures use the committed S2 outputs. Its evidence loader reconciles
+summary metrics, per-seed metrics and saved held-out predictions without loading
+or fitting models. Original and historical charts and operational workspaces remain
+available separately. Upload training does not change the manuscript's evidence.
 
 `deployment/app.py` includes a selector for all eleven current comparison predictors
 and two explicitly labelled historical TensorFlow models (13 saved predictors),

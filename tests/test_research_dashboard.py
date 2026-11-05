@@ -52,18 +52,65 @@ class DashboardTests(unittest.TestCase):
 
     def test_all_research_pages_and_views(self):
         app = AppTest.from_file(str(ROOT / "deployment/app.py"), default_timeout=90).run()
-        for page in ["Research Overview", "Dataset Explorer", "Experiments & Results", "Model Explorer", "Research Methodology & Limitations", "Prediction Workspace"]:
+        self.assertEqual(app.session_state["dashboard_page"], "Overview")
+        options = list(app.radio(key="dashboard_page").options)
+        self.assertEqual(options[:5], ["Overview", "Research Manuscript", "Results Explorer", "Predict", "Train / Experiment"])
+        self.assertNotIn("Research Methodology & Limitations", options)
+        for page in options:
             app.radio(key="dashboard_page").set_value(page).run()
             self.assertFalse(len(app.exception), str(app.exception))
             self.assertFalse(len(app.error), str(app.error))
-        app.radio(key="dashboard_page").set_value("Experiments & Results").run()
+        app.radio(key="dashboard_page").set_value("Results Explorer").run()
         for collection in ["Historical TensorFlow", "Original scikit-learn / baselines", "Matched TensorFlow/PyTorch S2"]:
             next(item for item in app.selectbox if item.label == "Experiment collection").select(collection).run()
             self.assertFalse(len(app.exception), str(app.exception))
-        app.radio(key="dashboard_page").set_value("Research Overview").run()
+        app.radio(key="dashboard_page").set_value("Overview").run()
         next(item for item in app.button if item.label == "Explore the Dataset").click().run()
         self.assertEqual(app.session_state["dashboard_page"], "Dataset Explorer")
         self.assertFalse(len(app.exception), str(app.exception))
+
+    def test_overview_consistency_links_and_workspace_separation(self):
+        from manuscript_content import TITLE
+        from manuscript_data import load_evidence, score
+        evidence = load_evidence()
+        app = AppTest.from_file(str(ROOT / "deployment/app.py"), default_timeout=90).run()
+        self.assertEqual(app.title[0].value, TITLE)
+        prose = " ".join(item.value for item in app.markdown)
+        self.assertIn(f"{score(evidence, 'B', 'Sklearn tuned'):.3f} W", prose)
+        self.assertIn("?view=manuscript#discussion", prose)
+        self.assertIn("?view=manuscript#limitations", prose)
+        app.query_params["view"] = "manuscript"
+        app.run()
+        self.assertEqual(app.session_state["dashboard_page"], "Research Manuscript")
+        self.assertEqual(app.title[0].value, TITLE)
+        app.radio(key="dashboard_page").set_value("Predict").run()
+        self.assertNotIn("Train From Uploaded Data", [item.label for item in app.tabs])
+        self.assertFalse(any(item.label == "Model source" for item in app.radio))
+        self.assertFalse(any(item.label == "Training measurements" for item in app.get("file_uploader")))
+        app.session_state["batch_result"] = pd.DataFrame({"prediction_model": ["stale saved prediction"]})
+        app.radio(key="dashboard_page").set_value("Train / Experiment").run()
+        self.assertIn("Train From Uploaded Data", [item.label for item in app.tabs])
+        self.assertTrue(any(item.label == "Training measurements" for item in app.get("file_uploader")))
+        self.assertNotIn("batch_result", app.session_state)
+        self.assertFalse(len(app.exception), str(app.exception))
+        self.assertFalse(len(app.error), str(app.error))
+
+    def test_training_route_fits_and_predicts_with_session_model(self):
+        app = AppTest.from_file(str(ROOT / "deployment/app.py"), default_timeout=90).run()
+        app.radio(key="dashboard_page").set_value("Train / Experiment").run()
+        app.selectbox(key="prediction_model").select("b_linear").run()
+        upload = BytesIO(dataset().head(30).to_csv(index=False).encode())
+        upload.name = "training.csv"
+        def uploaded(label, **kwargs):
+            return upload if label == "Training measurements" else None
+        with patch("streamlit.file_uploader", side_effect=uploaded):
+            app.run()
+            next(item for item in app.button if item.label == "Train selected model").click().run()
+            self.assertEqual(app.session_state["trained_model"].spec.key, "b_linear")
+            next(item for item in app.button if item.label == "Predict power").click().run()
+            self.assertTrue(any(item.label == "Predicted power" for item in app.metric))
+            self.assertFalse(len(app.exception), str(app.exception))
+            self.assertFalse(len(app.error), str(app.error))
 
     def test_observed_prediction_defaults_and_both_tracks(self):
         app = AppTest.from_file(str(ROOT / "deployment/prediction_workspace.py"), default_timeout=90).run()
