@@ -96,6 +96,12 @@ class ManuscriptTests(unittest.TestCase):
             headers = {item.value for item in app.header}
             self.assertTrue({label for _, label in content.SECTIONS} <= headers)
             captions = [item.value for item in app.caption]
+            diagrams = app.get("graphviz_chart")
+            self.assertEqual(len(diagrams), 2)
+            for diagram in diagrams:
+                self.assertIn('bgcolor="transparent"', diagram.proto.spec)
+                self.assertNotIn('filled', diagram.proto.spec)
+                self.assertNotIn('#ffffff', diagram.proto.spec)
             for number in range(1, 8):
                 self.assertTrue(any(value.startswith(f"Figure {number}.") for value in captions))
             for number in range(1, 7):

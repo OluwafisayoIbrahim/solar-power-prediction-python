@@ -37,6 +37,14 @@ def render_manuscript():
     # Graphviz's SVG defaults are black, independent of the app theme. Preserve
     # its original geometry and transparent canvas while inheriting text colour.
     st.html("""<style>
+        .st-key-research_manuscript [id^="st-graphviz-chart-"] svg .graph > polygon {
+            fill: none;
+            stroke: none;
+        }
+        .st-key-research_manuscript [id^="st-graphviz-chart-"] svg .node path,
+        .st-key-research_manuscript [id^="st-graphviz-chart-"] svg .node polygon {
+            fill: none;
+        }
         .st-key-research_manuscript [id^="st-graphviz-chart-"] svg text {
             fill: currentColor;
         }

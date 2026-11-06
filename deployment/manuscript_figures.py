@@ -4,9 +4,8 @@ import pandas as pd
 
 
 WORKFLOW = '''digraph {
-  graph [rankdir=TB, bgcolor="#ffffff", fontcolor="#17212b"];
-  node [shape=box, style="rounded,filled", fontname="Arial", fillcolor="#f4f6f8", color="#52606d", fontcolor="#17212b"];
-  edge [color="#52606d", fontcolor="#17212b"];
+  graph [rankdir=TB, bgcolor="transparent"];
+  node [shape=box, style=rounded, fontname="Arial"];
   "Recorded daily CSVs" -> "Header normalisation and decimal hour";
   "Header normalisation and decimal hour" -> "Track A: electrical + environment";
   "Header normalisation and decimal hour" -> "Track B: environment + hour";
@@ -18,9 +17,8 @@ WORKFLOW = '''digraph {
 }'''
 
 VALIDATION = '''digraph {
-  graph [rankdir=TB, bgcolor="#ffffff", fontcolor="#17212b"];
-  node [shape=box, style="rounded,filled", fontname="Arial", fillcolor="#f4f6f8", color="#52606d", fontcolor="#17212b"];
-  edge [color="#52606d", fontcolor="#17212b"];
+  graph [rankdir=TB, bgcolor="transparent"];
+  node [shape=box, style=rounded, fontname="Arial"];
   "21 source groups / 189 rows" -> "Outer training: 18 groups / 162 rows";
   "21 source groups / 189 rows" -> "Outer test: 3 groups / 27 rows";
   "Outer training: 18 groups / 162 rows" -> "Inner fit: 12 groups / 108 rows";
