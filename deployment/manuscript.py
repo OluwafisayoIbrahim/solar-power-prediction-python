@@ -34,6 +34,22 @@ def figure(number, title, chart, interpretation, source, diagram=False):
 
 
 def render_manuscript():
+    # Graphviz's SVG defaults are black, independent of the app theme. Preserve
+    # its original geometry and transparent canvas while inheriting text colour.
+    st.html("""<style>
+        .st-key-research_manuscript [id^="st-graphviz-chart-"] svg text {
+            fill: currentColor;
+        }
+        .st-key-research_manuscript [id^="st-graphviz-chart-"] svg .node path,
+        .st-key-research_manuscript [id^="st-graphviz-chart-"] svg .node polygon,
+        .st-key-research_manuscript [id^="st-graphviz-chart-"] svg .edge path,
+        .st-key-research_manuscript [id^="st-graphviz-chart-"] svg .edge polygon {
+            stroke: currentColor;
+        }
+        .st-key-research_manuscript [id^="st-graphviz-chart-"] svg .edge polygon {
+            fill: currentColor;
+        }
+    </style>""")
     # Fixed maximum reading width shrinks to the parent on narrow screens.
     with st.container(horizontal_alignment="center"):
         with st.container(width=940, key="research_manuscript"):
