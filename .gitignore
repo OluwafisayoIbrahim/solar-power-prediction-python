@@ -1,4 +1,6 @@
 .venv/
+.venv-health/
+health-check-artifacts/
 __pycache__/
 *.pyc
 .ipynb_checkpoints/
