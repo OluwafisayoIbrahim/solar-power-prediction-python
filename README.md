@@ -657,6 +657,64 @@ retrain the model; training is a separate explicit action. See
 [deployment instructions](deployment/README.md) for limits, units,
 output columns, timestamp handling and Streamlit hosting files.
 
+## Automated Streamlit Health Monitoring
+
+The [Streamlit Health Check workflow](.github/workflows/streamlit-health-check.yml)
+opens the public deployment in headless Chromium every six hours (`0 */6 * * *`,
+UTC). It checks the real Overview UI, including the embedded app frame, rather
+than treating an HTTP 200 landing page as proof of health. If it sees the normal
+Community Cloud sleep screen, it clicks a recognized wake button once and waits
+for the Overview to load. It never opens prediction/training tools or uploads data.
+The monitor uses only Playwright; production/ML requirements are unchanged.
+
+After merging these files into the repository's **default branch**, enable GitHub
+Actions if necessary, open **Actions → Streamlit Health Check → Run workflow**,
+and inspect the run's **Verify public Streamlit interface** logs. Successful runs
+report `already_awake` or `awakened`. The workflow fails if readiness cannot be
+verified. Failed checks provide a `streamlit-health-check-…` artifact with a
+viewport screenshot and bounded JSON diagnostics, retained for seven days.
+Authentication/access-gate screenshots are deliberately omitted. No cookies,
+credentials, page HTML, raw console messages or URL queries are recorded. Browser
+installation failures appear in the job logs and may have no screenshot. Use
+GitHub's built-in Actions notification settings for failure notifications.
+
+Change the workflow's `schedule` cron to adjust frequency. Use its Actions menu
+**Disable workflow**, or remove the `schedule` entry (retaining manual runs), to
+disable scheduled monitoring. Schedules run from the default branch and may be
+delayed or dropped under GitHub load. GitHub can disable scheduled workflows in
+inactive public repositories after 60 days; check that the workflow remains enabled.
+See [GitHub's scheduling rules](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#schedule).
+
+To run locally in a separate environment (PowerShell):
+
+```powershell
+python -m venv .venv-health
+.\.venv-health\Scripts\python.exe -m pip install -r scripts/requirements-health-check.txt
+.\.venv-health\Scripts\python.exe -m playwright install --only-shell chromium
+.\.venv-health\Scripts\python.exe scripts/check_streamlit.py --timeout 180
+$env:RUN_HEALTH_BROWSER_TESTS = '1'
+.\.venv-health\Scripts\python.exe -m unittest discover -s tests -p test_streamlit_health_check.py -v
+```
+
+On Linux, install the browser with `python -m playwright install --with-deps
+--only-shell chromium`. The script accepts `--url`, `--timeout` (total budget,
+default 180 seconds), `--attempts` (default two, maximum three), and
+`--artifacts-dir`. It retries only transient connectivity/hosting failures with
+short exponential backoff, within that budget. It does not refresh while the app
+is initializing or retry a wake click. An unknown sleep-screen button fails with
+diagnostics instead of clicking an arbitrary control. Exit code 0 means the
+Overview was verified; 1 means the check failed; 2 indicates invalid arguments.
+The regular ML test suite skips browser fixtures unless explicitly enabled.
+
+**This is best-effort monitoring and cannot guarantee prevention of Streamlit
+Community Cloud hibernation.** A network, browser or readiness timeout means
+health is unverified, not a confirmed application outage. Deployment errors,
+access restrictions, sleep/wake failures and connectivity failures are reported
+separately. The check does not sign in, solve CAPTCHAs or bypass hosting controls.
+Cloud UI changes may require updating the wake labels or Overview readiness checks.
+Local fixtures test wake behavior; only a real sleeping deployment can establish
+that the live wake-up flow works.
+
 ## Relationship to the original project
 
 This project corrects and extends an earlier undergraduate MATLAB project. The original repository has been updated with a
