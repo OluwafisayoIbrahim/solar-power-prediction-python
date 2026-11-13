@@ -1,5 +1,7 @@
 # Solar Power Forecasting: Python Reimplementation
 
+The saved models are available on Hugging Face: [OluwafisayoIbrahim/solar-power-prediction](https://huggingface.co/OluwafisayoIbrahim/solar-power-prediction).
+
 A Python reimplementation and re-evaluation of an earlier MATLAB feedforward-ANN
 project for solar power forecasting. The original MATLAB project is here at this repository :
 [https://github.com/OluwafisayoIbrahim/ANN-Forecasting-for-Solar-Power].
