@@ -102,7 +102,17 @@ def load_evidence():
         raise ValueError("The manuscript's matched S2 configurations no longer agree")
     convergence = {candidate: convergence_summary(ROOT / f"results/tensorflow/convergence_{candidate.lower()}")[1]
                    for candidate in ("S1", "S2")}
-    return {"dataset": frame, "audit": audit_dataset(frame), "comparison": table,
+    audit = audit_dataset(frame)
+    # Cross-check the overlap against every saved track/model/seed in both runs.
+    duplicate_folds = {}
+    for source in audit["duplicate_sources"]:
+        assignments = {int(fold) for preds in predictions.values()
+                       for fold in preds.loc[preds.day_id == source, "fold"].unique()}
+        if len(assignments) != 1:
+            raise ValueError("Repeated-source fold assignments disagree across saved predictions")
+        duplicate_folds[source] = assignments.pop()
+    audit["duplicate_source_folds"] = duplicate_folds
+    return {"dataset": frame, "audit": audit, "comparison": table,
             "convergence": convergence,
             "configs": configs, "predictions": predictions, "seeds": seeds, "protocol": protocol}
 

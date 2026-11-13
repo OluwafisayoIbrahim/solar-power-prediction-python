@@ -62,22 +62,35 @@ missing, duplicate or inconsistent results. Figures 4, 6 and 7 disclose seed 0 a
 use saved outer predictions rather than final deployment weights. Figure controls
 change only the view of fixed evidence. Uploads/session training never replace it.
 
-The audit found nine repeated measurement records across `solar_data_tue_21st.csv`
+The November 5, 2026 audit found nine repeated measurement records across `solar_data_tue_21st.csv`
 and `solar_data_tue_28st.csv`. There are zero full-record duplicates when the source
 filename is included. These different definitions must not be conflated: 21 filenames
-do not prove 21 unique collection days, and nominal grouped CV may still have
-identical observations across partitions. Intervals range from 35 to 92 minutes;
+do not prove 21 unique collection days. The November 13 follow-up checked saved
+TensorFlow and PyTorch S2 predictions: the files occupy outer folds 1 and 7,
+respectively. Identical copies cross training/test boundaries when either fold
+is held out. The effect on reported error remains unmeasured. Intervals range from 35 to 92 minutes;
 measurements are approximately hourly. Data and historical metrics are preserved.
 Resolving provenance and publishing a duplicate-aware re-evaluation are separate
 research tasks. No corrected performance is claimed in this UI change.
 
 The original MATLAB README and `NeuralNet.m` were inspected at commit
-`578401bb0d106c53f0e152380441a8338854ed57`. The README describes five inputs;
-the script also selects numeric time. A daily function discussed in the README
-is absent from that tree. The manuscript explicitly distinguishes these sources.
+`578401bb0d106c53f0e152380441a8338854ed57`. The README does not state an input count;
+the script selects numeric time alongside five measured predictors. A daily function discussed in the README
+is absent from that tree. The manuscript explicitly distinguishes these sources. This corrects the initial
+November 5 input-count attribution. Location and 2023 completion are attributed
+to project documentation, without independent institutional certification.
 The original SSRN work is a preprint; full-text access was blocked during the audit,
 so its numerical results are not imported as verified benchmarks. A mean-prediction
 sanity check exists, but no saved grouped-CV mean-baseline experiment was found.
+
+The November 13, 2026 reference review checked all six identities and bibliographic
+records: references 1, 2 and 4 at record/abstract level, and references 3, 5 and 6
+additionally against relevant full-text passages. SSRN full text and historical
+MATLAB numerical results remain unverified. Antonanzas et al. classify studies
+by forecast horizon and input origin and propose comparability guidelines; the
+classification of Tracks A/B as contemporaneous estimation is this project's
+interpretation of its features and protocol. The README-documented selection
+rule is not independently established as predeclared.
 
 No packages, weights or experiment outputs are added or changed for this manuscript.
 Reliable PDF export is deferred pending a separate pagination/render-verification

@@ -79,6 +79,9 @@ class DashboardTests(unittest.TestCase):
         self.assertIn(f"{score(evidence, 'B', 'Sklearn tuned'):.3f} W", prose)
         self.assertIn("?view=manuscript#discussion", prose)
         self.assertIn("?view=manuscript#limitations", prose)
+        self.assertIn("outer folds 1 and 7", prose)
+        self.assertIn("cross training/test boundaries", prose)
+        self.assertIn("effect on reported error remains unmeasured", prose)
         app.query_params["view"] = "manuscript"
         app.run()
         self.assertEqual(app.session_state["dashboard_page"], "Research Manuscript")

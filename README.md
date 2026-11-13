@@ -37,7 +37,10 @@ produced by `src/load_data.py`.
 The manuscript audit on 2026-11-05 found nine repeated measurement records across
 `solar_data_tue_21st.csv` and `solar_data_tue_28st.csv`. The 21-day count above is a
 count of source-file groups, not independently verified unique dates. Filename-based
-cross-validation may therefore contain identical observations across partitions.
+cross-validation contains identical measurement copies across training/test boundaries when
+outer fold 1 or 7 is held out: saved predictions assign the two files to folds 1
+and 7 respectively. This was confirmed in the November 13, 2026 follow-up; the
+effect on reported error remains unmeasured.
 Recorded within-file intervals range from 35 to 92 minutes. Existing data and
 results are preserved; no duplicate-corrected performance is claimed. See the
 Streamlit Research Manuscript and its
@@ -130,7 +133,7 @@ Run controls (historical TF rows are retained separately from the S2 comparison)
 | PyTorch S2: `results/pytorch/parity_s2` | 1000 | 0.01 | 16 | A, B | 0, 1, 2 |
 
 S1, S2 and the matching PyTorch S2 run are complete. S2 was selected by the
-predeclared cap-count rule, not by outer-test scores. All settings use
+README-documented selection rule, not by outer-test scores. All settings use
 patience 30, tanh, hidden candidates `(10,)` and `(16, 8)`, L2 0.0001,
 seven outer folds and three inner folds. The earlier Track B result used
 the **300-epoch cap**, not the later Track A budget.
@@ -429,7 +432,11 @@ The Streamlit registry now uses the S2 TensorFlow and PyTorch exports.
 Unittest discovery finds `test_torch.py`, which skips cleanly when torch is
 absent; the complete app test suite requires the root dependencies.
 
-### Predeclared choice rule
+### README-documented selection rule
+
+The November 13, 2026 review confirmed one TensorFlow S1 cap hit and zero
+S2 cap hits in saved settings. The inspected evidence does not independently
+establish when this rule was decided.
 
 Run both S1 and S2 below with the same tracks, seeds, architectures and folds.
 Use only `selected_settings.csv` and inner learning curves to choose:
@@ -504,7 +511,7 @@ command reads all training controls from that TF run to avoid accidental
 framework differences:
 
 ```powershell
-$chosen = "s2"  # Selected by the predeclared inner-evidence rule.
+$chosen = "s2"  # Selected by the README-documented selection rule.
 $tfRun = "results/tensorflow/convergence_$chosen"
 $ptRun = "results/pytorch/parity_$chosen"
 $config = Get-Content "$tfRun/config.json" -Raw | ConvertFrom-Json

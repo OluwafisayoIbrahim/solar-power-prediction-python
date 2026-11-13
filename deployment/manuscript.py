@@ -96,13 +96,16 @@ def _article():
     st.markdown(f"The processed dataset contains **{a['rows']} observations in {a['groups']} source-file groups**, "
                 f"with {a['readings_min']}–{a['readings_max']} readings per group. The project README attributes collection "
                 "to Olabisi Onabanjo University, Ogun State, Nigeria, using solar panels and measurement instruments. "
-                "The raw daily CSVs accompany the processed dataset. The original project was completed in 2023, "
-                "but the exact measurement dates cannot be reconstructed from the placeholder 1900 timestamps.")
+                "The raw daily CSVs accompany the processed dataset. Project documentation dates completion to 2023; "
+                "location and completion are not independently institutionally certified here. "
+                "The exact measurement dates cannot be reconstructed from the placeholder 1900 timestamps.")
     st.markdown(f"Consecutive within-file intervals range from **{a['interval_min']:g} to {a['interval_max']:g} minutes**. "
                 f"There are {a['missing']} missing cells and {a['duplicate_records']} exact full-record duplicates when source identity is included. "
                 "These counts do not establish independence or instrument accuracy.")
-    st.warning(f"Provenance finding: {a['duplicate_measurements']} repeated measurement records appear under different filenames "
-               f"({', '.join(a['duplicate_sources'])}). The experiments group by filename, so 21 identifiers do not establish 21 unique days. "
+    st.warning(f"November 5, 2026 provenance finding: {a['duplicate_measurements']} repeated measurement records appear under different filenames "
+               f"({', '.join(a['duplicate_sources'])}). The November 13 follow-up confirms these files in outer folds 1 and 7 respectively in saved predictions. "
+               "Identical measurement copies cross training/test boundaries when either fold is held out; the effect on reported error remains unmeasured. "
+               "The experiments group by filename, so 21 identifiers do not establish 21 unique days. "
                "Saved data and results have been retained unchanged; resolving provenance and re-evaluating performance is future work.")
     table(1, "Observed variables, units and empirical ranges; all stored rows retained.", dataset_table(evidence),
           "data/processed/solar_data_combined.csv. Hour is decimal time; irradiance units follow repository documentation.")
@@ -134,15 +137,15 @@ def _article():
     caps = {candidate: sum(row["cap_hits"] for row in rows)
             for candidate, rows in evidence["convergence"].items()}
     st.markdown(f"**S1/S2 convergence diagnostics.** Across both tracks, S1 had {caps['S1']} selected outer refit(s) "
-                f"at the epoch cap and S2 had {caps['S2']}. The predeclared rule preferred fewer total cap hits, "
+                f"at the epoch cap and S2 had {caps['S2']}. The README-documented selection rule preferred fewer total cap hits, "
                 "so S2 was selected using inner evidence. The screening threshold is fewer than 20% of "
                 "selected refits at the cap per track. Reaching the cap can indicate undertraining; "
                 "avoiding it or passing this screen does not prove convergence. These counts come from "
-                "the saved selected settings, not outer-test accuracy.")
+                "the saved selected settings, not outer-test accuracy. The inspected evidence does not independently establish when the rule was decided.")
     figure(3, "One outer iteration of the nested grouped design; repeat for seven outer folds and each ANN seed.",
            figures.VALIDATION,
            "The outer test branch does not enter inner selection. Counts refer to filename groups, not verified independent dates; "
-           "duplicate measurements across identifiers are a separate overlap risk. Inner branches rotate over three partitions.",
+           "identical measurement copies cross training/test boundaries for held-out folds 1 and 7. Inner branches rotate over three partitions.",
            "src/train_ann.py; src/train_ann_tf.py; saved S2 configurations and fold assignments.", diagram=True)
     st.subheader("3.8 Metrics and aggregation")
     st.markdown("Let $y_i$ and $\\hat y_i$ be measured and predicted power in watts, $n$ the number of pooled held-out rows, "
@@ -221,7 +224,7 @@ def _article():
     for index, (citation, url) in enumerate(content.REFERENCES, 1):
         st.subheader(f"[{index}]", anchor=f"ref-{index}")
         st.markdown(f"{citation} [Source]({url})")
-    st.caption("Reference metadata checked against publisher/author records. SSRN full-text access was blocked; its indexed bibliographic record was available. The original preprint is not presented as peer reviewed.")
+    st.caption(content.REFERENCE_REVIEW)
     heading("reproducibility", "9. Research transparency and reproducibility")
     st.markdown(f"**Data availability.** [Raw daily CSVs]({REPOSITORY_TREE}data/raw) and "
                 f"[processed measurements]({REPOSITORY_TREE}data/processed/solar_data_combined.csv) are included in the repository. "
