@@ -29,6 +29,16 @@ class ManuscriptTests(unittest.TestCase):
         self.assertEqual(audit["duplicate_records"], 0)
         self.assertEqual(audit["duplicate_measurements"], 9)
         self.assertEqual(audit["duplicate_sources"], ["solar_data_tue_21st.csv", "solar_data_tue_28st.csv"])
+        self.assertEqual(audit["duplicate_source_folds"], {
+            "solar_data_tue_21st.csv": 1, "solar_data_tue_28st.csv": 7})
+        # Each of the nine measurements has copies in different outer folds.
+        from manuscript_data import MEASUREMENTS
+        frame = self.evidence["dataset"]
+        repeated = frame[frame.duplicated(MEASUREMENTS, keep=False)].copy()
+        repeated["fold"] = repeated.source_file.map(audit["duplicate_source_folds"])
+        copies = repeated.groupby(MEASUREMENTS).fold.agg(set)
+        self.assertEqual(len(copies), 9)
+        self.assertTrue(all(folds == {1, 7} for folds in copies))
         self.assertEqual((audit["interval_min"], audit["interval_max"]), (35, 92))
         for track in ("A", "B"):
             table = result_table(self.evidence, track)
@@ -84,6 +94,23 @@ class ManuscriptTests(unittest.TestCase):
         self.assertEqual(len(inventory["references"]), len(content.REFERENCES))
         self.assertTrue((ROOT / COMPARISON).is_file())
 
+    def test_review_corrections_and_scope(self):
+        inventory = json.loads((ROOT / "deployment/manuscript_evidence.json").read_text(encoding="utf-8"))
+        self.assertEqual(inventory["audit_date"], "2026-11-05")
+        self.assertEqual(inventory["corrections"][0]["date"], "2026-11-13")
+        review = inventory["reference_review"]
+        self.assertEqual(review["record_abstract_level"], [1, 2, 4])
+        self.assertEqual(review["additional_relevant_full_text_passages"], [3, 5, 6])
+        self.assertEqual(review["identities_and_bibliographic_records_checked"], list(range(1, 7)))
+        self.assertIn("README at this commit does not state an input count", content.HISTORICAL)
+        self.assertIn("not a dataset-specific finding", content.RELATED_WORK)
+        self.assertIn("not independent institutional certification", content.INTRODUCTION)
+        self.assertIn("does not independently establish when the rule was decided", content.VALIDATION)
+        self.assertIn("historical MATLAB numerical results remain unverified", content.REFERENCE_REVIEW)
+        caps = {candidate: sum(row["cap_hits"] for row in rows)
+                for candidate, rows in self.evidence["convergence"].items()}
+        self.assertEqual(caps, {"S1": 1, "S2": 0})
+
     def test_manuscript_all_sections_figures_and_track_controls_without_models(self):
         with patch("model_registry.load_model", side_effect=AssertionError("The manuscript must not load fitted models")):
             app = AppTest.from_file(str(ROOT / "deployment/app.py"), default_timeout=90)
@@ -107,6 +134,10 @@ class ManuscriptTests(unittest.TestCase):
             for number in range(1, 7):
                 self.assertTrue(any(value.startswith(f"Table {number}.") for value in captions))
             self.assertTrue(any("9 repeated measurement" in item.value for item in app.warning))
+            self.assertTrue(any("cross training/test boundaries" in item.value for item in app.warning))
+            self.assertTrue(any("November 13, 2026" in item.value and "record/abstract level" in item.value
+                                for item in app.caption))
+            self.assertFalse(any("predeclared rule" in item.value.lower() for item in app.markdown))
             self.assertTrue(any("S1 had 1 selected outer refit(s) at the epoch cap and S2 had 0" in item.value
                                 for item in app.markdown))
             app.selectbox(key="manuscript_track").select("A").run()

@@ -14,7 +14,7 @@ SECTIONS = [
     ("limitations", "6. Limitations"), ("conclusion", "7. Conclusion and future work"),
     ("references", "8. References"), ("reproducibility", "9. Research transparency and reproducibility")]
 
-# Metadata checked against publisher/author records on 2026-11-05.
+# Initial metadata audit: 2026-11-05; scoped reference follow-up: 2026-11-13.
 REFERENCES = [
     ("O. Ibrahim, “Forecasting Solar Power Generation using Artificial Neural Networks,” SSRN preprint, "
      "manuscript dated May 25, 2023; posted Apr. 18, 2024. doi: 10.2139/ssrn.4771898.",
@@ -36,13 +36,23 @@ REFERENCES = [
      "https://www.jmlr.org/papers/v11/cawley10a.html"),
 ]
 
+REFERENCE_REVIEW = (
+    "Reference review, November 13, 2026: all six reference identities and bibliographic records "
+    "were checked. References [1], [2] and [4] were checked at record/abstract level; "
+    "[3], [5] and [6] were additionally checked against relevant full-text passages. "
+    "This does not mean all six papers were fully read or independently verified in their entirety. "
+    "SSRN full text and historical MATLAB numerical results remain unverified. "
+    "The original preprint is not presented as peer reviewed."
+)
+
 INTRODUCTION = """
 Photovoltaic power forecasting supports the scheduling and integration of variable solar generation.
 Forecasting studies must specify both the prediction horizon and the information available before
 that horizon; weather measurements, weather forecasts and electrical measurements imply different
 prediction problems [[2]](#ref-2).
 
-The original undergraduate investigation at Olabisi Onabanjo University, completed in 2023,
+Project documentation describes the original undergraduate investigation as completed at
+Olabisi Onabanjo University in 2023; this is not independent institutional certification. It
 implemented a MATLAB feedforward ANN to estimate power from measured conditions [[1]](#ref-1).
 The subsequent Python study revisited its task definition, evaluation and baseline comparisons.
 It asks whether low errors reflect useful generalisation or access to electrical measurements
@@ -57,10 +67,11 @@ These are questions about this dataset and protocol, rather than claims of a new
 """
 
 RELATED_WORK = """
-**Solar prediction and feature availability.** Antonanzas et al. review photovoltaic forecasting
-methods and the importance of horizons, data sources and comparability [[2]](#ref-2).
-Their framing distinguishes advance weather-based prediction from estimation conditioned on
-measurements at the target time. The present experiments belong to the latter category.
+**Solar prediction and feature availability.** Antonanzas et al. classify photovoltaic forecasting
+studies by forecast horizon and input origin and propose comparability guidelines [[2]](#ref-2).
+This project interprets Tracks A/B as contemporaneous estimation based on their features and
+protocol, which use measurements at the target time without an advance horizon. This is our
+interpretation of these experiments, not a dataset-specific finding of that review.
 The electrical baseline implemented here is the direct product of measured voltage and current;
 it is not a weather-driven photovoltaic performance model.
 
@@ -95,8 +106,9 @@ per-day evaluation and reuse of daily observations for training and testing.
 [NeuralNet.m]({ORIGINAL}/blob/{ORIGINAL_COMMIT}/NeuralNet.m) combines five named daily files,
 uses `dividerand(..., 0.8, 0.1, 0.1)`, sets a 9,000-epoch cap, and does not disable
 `fitnet`'s internal division. It converts time to numeric form and selects `1:end-1` as
-inputs. Thus, this script includes time alongside the five measured predictors, whereas
-the repository's README describes five inputs. The daily function mentioned in the README
+inputs. Thus, this script includes numeric time alongside five measured predictors. The
+README at this commit does not state an input count; no input-count conflict is established.
+The daily function mentioned in the README
 is absent from this inspected tree. Hidden/output activations and daily normalisation are
 README-reported details, not explicit settings in this script.
 
@@ -157,8 +169,9 @@ repeat the same values across these records. These are not confidence intervals 
 independent dataset replications. The nominal day grouping reduces same-file overlap,
 but the duplicate-source issue prevents a claim of complete observational independence.
 
-S1 and S2 were compared using the README's cap-hit rule and inner evidence, not by choosing
-the lowest outer error. S2 was selected. Historical outer scores had already been inspected,
+S1 and S2 were compared using the README-documented selection rule and inner evidence.
+The inspected evidence does not independently establish when the rule was decided. S2 was selected.
+Historical outer scores had already been inspected,
 so this remains a development study requiring independent confirmation. Matching framework
 settings does not make random initialisations or floating-point operations identical.
 """
@@ -166,9 +179,11 @@ settings does not make random initialisations or floating-point operations ident
 LIMITATIONS = """
 **Sample size and effective independence.** Only 189 rows and 21 source-file identifiers
 are available. Nine measurement records repeat under two different identifiers. File-based
-grouping therefore cannot ensure that identical measurements are always separated from
-training, even though it keeps each filename intact. This may make held-out error optimistic;
-its magnitude has not been measured. This report preserves the published outputs rather
+grouping keeps each filename intact, but the saved predictions assign
+`solar_data_tue_21st.csv` to outer fold 1 and `solar_data_tue_28st.csv` to outer fold 7.
+Identical measurement copies therefore cross training/test boundaries when either fold is
+held out. This confirms overlap; its effect on reported error remains unmeasured.
+This report preserves the published outputs rather
 than silently deduplicating data or claiming corrected performance.
 
 **Temporal and geographic coverage.** Collection is attributed to one university installation
@@ -249,7 +264,9 @@ descriptive difference has no supplied significance test. PyTorch's Track B mean
 **RQ3 — held-out groups, with a qualification.** The Python protocol excludes each test filename from
 fitting and nests model selection, improving the experimental design relative to the documented
 historical reuse and observation-level splits. There is no controlled experiment here isolating the
-effect of changing split strategy. Duplicate measurements across filenames also mean these scores
+effect of changing split strategy. The repeated files occupy outer folds 1 and 7, so identical
+measurement copies cross training/test boundaries when either fold is held out; the error effect
+remains unmeasured. These scores
 cannot be described as wholly independent-day validation. External-site or chronological forecasting
 performance cannot be inferred from them.
 

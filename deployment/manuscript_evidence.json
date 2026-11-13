@@ -4,9 +4,9 @@
   "claims": [
     {
       "claim": "Dataset counts, units, ranges, missing values and duplicate measurements; Table 1 and Figure 2",
-      "sources": ["data/raw", "data/processed/solar_data_combined.csv", "src/load_data.py", "deployment/research_data.py", "README.md"],
+      "sources": ["data/raw", "data/processed/solar_data_combined.csv", "src/load_data.py", "deployment/research_data.py", "README.md", "results/tensorflow/convergence_s2/predictions.csv", "results/pytorch/parity_s2/predictions.csv"],
       "verification": "Computed from current stored rows. 189 rows; 21 filenames; 9 rows per filename; 0 missing cells; 0 full-record duplicates with source; 9 duplicate measurement records without source identity. Within-file intervals 35–92 minutes.",
-      "qualification": "21 filename groups do not establish 21 distinct dates. solar_data_tue_21st.csv and solar_data_tue_28st.csv repeat measurements. No source rows changed. Collection location is documented, not independently verified. Calendar period and calibration records are unavailable."
+      "qualification": "21 filename groups do not establish 21 distinct dates. solar_data_tue_21st.csv and solar_data_tue_28st.csv repeat measurements. No source rows changed. Collection location is documented, not independently verified. Calendar period and calibration records are unavailable. Follow-up 2026-11-13: saved predictions assign solar_data_tue_21st.csv to outer fold 1 and solar_data_tue_28st.csv to outer fold 7. Identical copies cross training/test boundaries when either fold is held out; the effect on reported error remains unmeasured."
     },
     {
       "claim": "Author, undergraduate completion in 2023, original architecture and historical reassessment",
@@ -16,14 +16,14 @@
         "README.md",
         "src/models.py"
       ],
-      "verification": "Original repository read via GitHub connector at commit 578401bb0d106c53f0e152380441a8338854ed57. README reports five inputs, fitnet(10), tansig/purelin, trainlm, daily mapminmax and daily train/test reuse. NeuralNet.m explicitly uses 80/10/10 random division, five files and a 9000-epoch cap.",
-      "qualification": "NeuralNet.m converts time to numeric and includes every non-target column, conflicting with five-input README description. README-reported daily function is absent from inspected tree. Exact historical results are not independently verified."
+      "verification": "Original repository read via GitHub connector at commit 578401bb0d106c53f0e152380441a8338854ed57. README gives no input count and reports fitnet(10), tansig/purelin, trainlm, daily mapminmax and daily train/test reuse. NeuralNet.m explicitly uses 80/10/10 random division, five files and a 9000-epoch cap.",
+      "qualification": "Correction 2026-11-13: NeuralNet.m converts time to numeric and includes time alongside five measured predictors; no README input-count conflict is established. University location and 2023 completion are attributed to project documentation, not independent institutional certification. README-reported daily function is absent from inspected tree. Historical MATLAB numerical results remain unverified."
     },
     {
       "claim": "Experimental feature configurations; Table 2; electrical relation and task distinction",
       "sources": ["src/features.py", "src/train_baselines.py", "src/train_ann_tf.py", "src/evaluate.py"],
       "verification": "Track A: solar_irradiance,current,voltage,temperature,humidity. Track B: solar_irradiance,temperature,humidity,hour. Physics uses current*voltage only. No future horizon or forecast weather inputs.",
-      "qualification": "Feature-target dependence is distinct from preprocessing leakage. Availability depends on the deployment task."
+      "qualification": "Feature-target dependence is distinct from preprocessing leakage. Availability depends on the deployment task. Antonanzas et al. classify photovoltaic forecasting studies by forecast horizon and input origin and propose comparability guidelines. The interpretation of Tracks A/B as contemporaneous estimation is this project's assessment of its features and protocol, not a dataset finding in that review."
     },
     {
       "claim": "Preprocessing, architectures, optimisers, stopping and selection; Table 3; Figures 1 and 3",
@@ -46,8 +46,8 @@
     {
       "claim": "S2 selection, convergence and framework comparability",
       "sources": ["README.md", "src/check_convergence.py", "src/compare_frameworks.py", "results/comparisons/parity_s2/protocol.json", "results/tensorflow/convergence_s1/selected_settings.csv", "results/tensorflow/convergence_s2/selected_settings.csv"],
-      "verification": "README records cap-hit selection rule and October 2026 completion. Protocol JSON reports matching controls/reference checks and no warnings.",
-      "qualification": "Historical outer scores had already been inspected. Matching settings do not imply identical numerical optimisation or a general framework winner."
+      "verification": "README records cap-hit selection rule and October 2026 completion. Protocol JSON reports matching controls/reference checks and no warnings. Saved TensorFlow settings confirm one S1 cap hit and zero S2 cap hits.",
+      "qualification": "Historical outer scores had already been inspected. Matching settings do not imply identical numerical optimisation or a general framework winner. Correction 2026-11-13: use README-documented selection rule; inspected evidence does not independently establish when the rule was decided."
     },
     {
       "claim": "Deployment and scientific evidence are separate; library versions and reproduction commands",
@@ -57,12 +57,51 @@
     }
   ],
   "references": [
-    {"number": 1, "url": "https://doi.org/10.2139/ssrn.4771898", "checked_via": "SSRN indexed publisher record: O. Ibrahim, manuscript May 25 2023, posted April 18 2024. Full text blocked with 403; no numerical historical findings imported."},
-    {"number": 2, "url": "https://doi.org/10.1016/j.solener.2016.06.069", "checked_via": "ScienceDirect publisher search record, title/authors/volume/pages/year and abstract"},
-    {"number": 3, "url": "https://doi.org/10.1016/0893-6080(89)90020-8", "checked_via": "ScienceDirect publisher search record, title/authors and abstract; bibliographic volume/pages cross-checked"},
-    {"number": 4, "url": "https://doi.org/10.1145/2382577.2382579", "checked_via": "Author institution record https://cris.tau.ac.il/en/publications/leakage-in-data-mining-formulation-detection-and-avoidance/; ACM direct access blocked"},
-    {"number": 5, "url": "https://doi.org/10.1111/ecog.02881", "checked_via": "Wiley publisher article and bibliographic record; first online December 2016, issue publication 2017"},
-    {"number": 6, "url": "https://www.jmlr.org/papers/v11/cawley10a.html", "checked_via": "JMLR publisher article, authors, year and pages"}
+    {"number": 1, "url": "https://doi.org/10.2139/ssrn.4771898", "checked_via": "SSRN indexed publisher record: O. Ibrahim, manuscript May 25 2023, posted April 18 2024. Full text blocked with 403; no numerical historical findings imported.", "review_2026_11_13": "Identity and bibliographic record checked at record/abstract level."},
+    {"number": 2, "url": "https://doi.org/10.1016/j.solener.2016.06.069", "checked_via": "ScienceDirect publisher search record, title/authors/volume/pages/year and abstract", "review_2026_11_13": "Identity and bibliographic record checked at record/abstract level."},
+    {"number": 3, "url": "https://doi.org/10.1016/0893-6080(89)90020-8", "checked_via": "ScienceDirect publisher search record, title/authors and abstract; bibliographic volume/pages cross-checked", "review_2026_11_13": "Identity and bibliographic record checked; relevant full-text passages additionally checked."},
+    {"number": 4, "url": "https://doi.org/10.1145/2382577.2382579", "checked_via": "Author institution record https://cris.tau.ac.il/en/publications/leakage-in-data-mining-formulation-detection-and-avoidance/; ACM direct access blocked", "review_2026_11_13": "Identity and bibliographic record checked at record/abstract level."},
+    {"number": 5, "url": "https://doi.org/10.1111/ecog.02881", "checked_via": "Wiley publisher article and bibliographic record; first online December 2016, issue publication 2017", "review_2026_11_13": "Identity and bibliographic record checked; relevant full-text passages additionally checked."},
+    {"number": 6, "url": "https://www.jmlr.org/papers/v11/cawley10a.html", "checked_via": "JMLR publisher article, authors, year and pages", "review_2026_11_13": "Identity and bibliographic record checked; relevant full-text passages additionally checked."}
   ],
+  "corrections": [
+    {
+      "date": "2026-11-13",
+      "scope": "Subsequent corrections to the November 5 audit; original audit date and repeated-measurement finding retained. No experiments changed.",
+      "changes": [
+        "Corrected original README input-count attribution: it states no count. NeuralNet.m includes numeric time alongside five measured predictors.",
+        "Separated Antonanzas et al. classification by forecast horizon/input origin and comparability guidelines from this project's contemporaneous-estimation interpretation.",
+        "Confirmed repeated files in saved TensorFlow/PyTorch S2 predictions occupy outer folds 1 and 7, respectively; copies cross training/test boundaries when either is held out. Error effect unmeasured.",
+        "Replaced predeclaration claims with README-documented selection rule; one TensorFlow S1 cap hit and zero S2 cap hits confirmed, decision timing not independently established.",
+        "Attributed university location and 2023 completion to project documentation, not independent institutional certification."
+      ]
+    }
+  ],
+  "reference_review": {
+    "date": "2026-11-13",
+    "identities_and_bibliographic_records_checked": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "record_abstract_level": [
+      1,
+      2,
+      4
+    ],
+    "additional_relevant_full_text_passages": [
+      3,
+      5,
+      6
+    ],
+    "unverified": [
+      "SSRN full text",
+      "Historical MATLAB numerical results"
+    ],
+    "qualification": "Records the independently reviewed follow-up supplied for this correction. Does not claim all six papers were fully read or independently verified in their entirety."
+  },
   "deferred": ["PDF export with paginated equations, tables, figures and references", "Provenance resolution and a separately versioned duplicate-aware research evaluation"]
 }

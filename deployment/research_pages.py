@@ -56,7 +56,8 @@ def overview():
         f"{score(evidence, 'B', 'Sklearn tuned'):.3f} W versus {score(evidence, 'B', 'Linear'):.3f} W for linear regression; "
         "the small difference is descriptive, not statistically established. [Results](?view=manuscript#results).\n"
         f"- **Generalisation remains qualified.** {audit['duplicate_measurements']} measurement records repeat under "
-        "different filenames, limiting the independence of file-grouped validation. No external or future-horizon "
+        "different filenames assigned to outer folds 1 and 7. Identical copies cross training/test boundaries "
+        "when either fold is held out; the effect on reported error remains unmeasured. No external or future-horizon "
         "forecasting validation is established. [Limitations](?view=manuscript#limitations).")
     st.caption("Findings use the same checked S2 evidence as the manuscript. Full methods, references and scientific qualifications are in the report.")
     st.subheader("Explore the application")
