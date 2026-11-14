@@ -1,0 +1,4 @@
+# Production sessions share imported modules. Avoid source-watch invalidation
+# while another session is importing manuscript or model-registry modules.
+[server]
+fileWatcherType = "none"

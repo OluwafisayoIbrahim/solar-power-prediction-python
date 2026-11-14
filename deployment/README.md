@@ -214,6 +214,21 @@ trained because `P = I * V` has no learned parameters; use saved-model mode for 
 ## Deployment files
 
 Choose `deployment/app.py` as the Streamlit entrypoint and Python 3.13.
+
+Run Streamlit from the repository root so `.streamlit/config.toml` is loaded.
+The deployment disables source-file watching to avoid shared-module invalidation
+during live updates, which can surface as import-time `KeyError: 'manuscript'`
+or `KeyError: 'model_registry'`. Widget interactions and normal script reruns
+remain enabled. Restart the app process after source updates; on Community Cloud,
+use **Manage app → Reboot app** after this configuration reaches the deployed
+branch. A browser refresh alone does not restart the Python process.
+
+For local development only, opt back into source watching explicitly:
+
+```bash
+python -m streamlit run deployment/app.py --server.fileWatcherType=auto
+```
+
 The adjacent `requirements.txt` delegates to `../requirements.txt`; all package
 versions live in the root requirements file, including CPU PyTorch. Keep both
 files in the repository. CI uses the same dependency list.
