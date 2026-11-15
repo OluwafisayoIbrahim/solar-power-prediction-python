@@ -32,14 +32,14 @@ def overview():
                 "simple baselines and validation design affect the interpretation of solar power estimates.")
     try:
         if not (ROOT / "manuscript/publication_ready.json").is_file():
-            raise ValueError("Updated research and manuscript review are in progress; no updated model ranking is published yet")
+            raise ValueError("Research results are not available yet.")
         evidence = load_evidence()
     except (FileNotFoundError, ValueError) as exc:
         frame = dataset()
         st.warning(str(exc))
-        st.write(f"Updated dataset: {len(frame)} observations, {frame.day_id.nunique()} daily groups. "
-                 "An accidentally repeated daily file was removed. Full research runs are in progress; "
-                 "superseded results are available separately in Results Explorer.")
+        st.write(f"Dataset: {len(frame)} observations, {frame.day_id.nunique()} daily groups. "
+                 "One repeated daily file was excluded. "
+                 "Historical results are available separately in Results Explorer.")
         st.metric("No-fitting current × voltage MAE (W)",
                   f"{(frame.power - frame.current * frame.voltage).abs().mean():.4f}")
         return
@@ -64,7 +64,7 @@ def overview():
                 "Both tracks estimate power from contemporaneous measurements.")
     st.markdown(track_summary(evidence, "A"))
     st.markdown(track_summary(evidence, "B"))
-    st.caption("An accidentally repeated daily file was removed before evaluation. Small sample size, "
+    st.caption("One repeated daily file was excluded before evaluation. Small sample size, "
                "uncertain temporal coverage and absent external validation limit generalisation.")
     st.subheader("Explore the application")
     with st.container(horizontal=True):
@@ -89,7 +89,7 @@ def dataset_explorer():
         col.metric(name, value)
     st.caption("Source: data/processed/solar_data_combined.csv. Source filenames identify measurement days. "
                "The 1900 timestamp year is a placeholder; calendar dates and seasonal coverage cannot be reconstructed.")
-    st.caption("The updated dataset excludes an accidentally repeated daily file and contains no exact repeated measurement records when filename identity is excluded.")
+    st.caption("The updated dataset excludes a repeated daily file and contains no exact repeated measurement records when filename identity is excluded.")
     st.dataframe(df[list(UNITS)].agg(["min", "max"]).T.assign(unit=pd.Series(UNITS)), width="stretch")
     st.dataframe(df.isna().sum().rename("Missing values"), width="stretch")
     days = st.multiselect("Measurement days", sorted(df.day_id.unique()), default=sorted(df.day_id.unique())[:2])
@@ -143,12 +143,12 @@ def learning_curves():
 
 def experiments():
     st.title("Results Explorer")
-    st.warning("Historical 189-row experiments are superseded because they included an accidental duplicate daily file. They are preserved for comparison and are not updated results.")
+    st.warning("Historical experiments use 189 observations across 21 daily files. The current collection uses 180 observations across 20 daily files.")
     track_note()
     with st.expander("Original research summary figures"):
         st.graphviz_chart('digraph { rankdir=LR; node [shape=box]; "Data collection" -> "Preparation" -> "Feature selection" -> "Training" -> "Grouped cross-validation" -> "Evaluation" -> "Comparison"; }')
         st.image(str(ROOT / "results/figures/model_comparison_bars.png"), caption="Original baseline/scikit-learn comparison; matched S2 scores are shown separately below.")
-    view = st.selectbox("Experiment collection", ["20-day research", "Matched TensorFlow/PyTorch S2 (superseded)", "Historical TensorFlow", "Original scikit-learn / baselines"])
+    view = st.selectbox("Experiment collection", ["20-day research", "Matched TensorFlow/PyTorch S2 (historical)", "Historical TensorFlow", "Original scikit-learn / baselines"])
     run = None
     if view.startswith("20-day"):
         from research_protocol import completed_collection

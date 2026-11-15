@@ -1,7 +1,7 @@
-# Editorial reference and pending updated manuscript
+# Editorial reference and pending manuscript results
 
 `editorial_reference_superseded.zip` is an unchanged copy of the latest edited
-LaTeX bundle supplied by the researcher. It contains editable LaTeX, the old
+LaTeX bundle supplied for the manuscript. It contains editable LaTeX, the old
 PDF, seven source tables, main and supplementary figure PDFs, and Vega-Lite
 specifications. The title and six updated reference attributions must be
 preserved. This bundle uses superseded 189-row results and is not an updated

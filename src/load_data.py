@@ -27,7 +27,7 @@ def validate_research_data(df: pd.DataFrame) -> None:
     if "source_file" not in df:
         raise ValueError("Research data require source_file identities")
     if set(df.source_file) & EXCLUDED_DAILY_FILES:
-        raise ValueError("Accidentally repeated daily file is excluded from research")
+        raise ValueError("Repeated daily file is excluded from research")
     counts = df.groupby("source_file").size()
     if len(df) != 180 or len(counts) != 20 or not counts.eq(9).all():
         raise ValueError("Research data must contain 180 rows, 20 days, nine rows per day")
@@ -64,7 +64,7 @@ def load_all_solar_data(raw_data_dir: Path = RAW_DATA_DIR) -> pd.DataFrame:
 
     for file_path in csv_files:
         if file_path.name in EXCLUDED_DAILY_FILES:
-            raise ValueError(f"Excluded accidental duplicate returned: {file_path.name}")
+            raise ValueError(f"Excluded repeated daily file returned: {file_path.name}")
         df = pd.read_csv(file_path)
         df = clean_column_names(df)
         df["source_file"] = file_path.name

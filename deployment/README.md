@@ -1,14 +1,10 @@
 # Streamlit prediction app
 
-> **Correction status:** The active dataset has 180 rows across 20 daily files
-> after removal of an accidental duplicate. The 189-row results and S2 exports
-> documented below are superseded historical artifacts. Full updated runs
-> are in progress; see [run status](../results/research_20_days/README.md).
-> The current registry points to `results/research_20_days/exports/{tensorflow,
-> pytorch,sklearn}` and withholds fitted predictors until `completed.json` is
-> verified. Physics remains available; historical models are explicitly labelled.
-> Manuscript findings are withheld until updated content/PDF review is recorded.
-> Historical plots use the preserved 189-row snapshot rather than updated row IDs.
+The active dataset contains 180 observations across 20 daily files. One repeated
+daily file was excluded before evaluation. Historical experiments use 189
+observations and are available separately. Model exports are stored in
+`results/research_20_days/exports`. Availability depends on completion of the
+research runs; the no-fitting electrical-product baseline remains available.
 
 ## Research dashboard navigation
 

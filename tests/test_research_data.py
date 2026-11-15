@@ -1,4 +1,4 @@
-"""Regression checks for the researcher-confirmed accidental duplicate."""
+"""Dataset identity and partition checks."""
 from pathlib import Path
 import sys
 import tempfile
@@ -103,7 +103,7 @@ class ResearchDataTests(unittest.TestCase):
         frame = load_processed_data()
         bad = frame.copy()
         bad.loc[0, "source_file"] = "solar_data_tue_28st.csv"
-        with self.assertRaisesRegex(ValueError, "Accidentally repeated"):
+        with self.assertRaisesRegex(ValueError, "Repeated daily file"):
             validate_research_data(bad)
         bad = frame.copy()
         bad.loc[9, MEASUREMENT_COLUMNS] = bad.loc[0, MEASUREMENT_COLUMNS].values
@@ -112,7 +112,7 @@ class ResearchDataTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "solar_data_tue_28st.csv"
             path.write_bytes((ROOT / "data/excluded/solar_data_tue_28st.csv").read_bytes())
-            with self.assertRaisesRegex(ValueError, "Excluded accidental"):
+            with self.assertRaisesRegex(ValueError, "Excluded repeated daily file"):
                 load_all_solar_data(Path(directory))
 
     def test_outer_and_inner_partitions_have_no_shared_groups_or_measurements(self):

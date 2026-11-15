@@ -86,7 +86,7 @@ information that is legitimately available [[4]](#ref-4). Current and voltage ar
 inputs for electrical estimation, but unavailable shortcuts for a weather-only deployment.
 This feature-availability issue differs from fitting preprocessing on test observations.
 Roberts et al. explain why validation must respect dependence structures [[5]](#ref-5).
-Here, daily grouping separates measurement days after an accidentally repeated daily file was removed.
+Here, daily grouping separates measurement days after one repeated daily file was excluded.
 
 **Selection bias and baseline comparisons.** Cawley and Talbot show that finite-sample model
 selection can itself overfit and bias evaluation [[6]](#ref-6). The Python experiments separate
@@ -180,7 +180,7 @@ settings does not make random initialisations or floating-point operations ident
 
 LIMITATIONS = """
 **Sample size and effective independence.** Only 180 observations across 20 daily files are
-available. An accidentally repeated daily file was removed before evaluation. The retained
+available. One repeated daily file was excluded before evaluation. The retained
 records contain no exact repeated measurements when filename identity is excluded.
 The small sample and potentially correlated readings still limit generalisation.
 
@@ -248,7 +248,7 @@ not evidence of superior weather-only forecasting.
 Rankings depend on the metric and must be interpreted within each track's information setting.
 
 **RQ3 ? held-out days.** Each test daily group and its measurements are excluded from fitting.
-Model selection is nested within the outer training days. The accidental repeat was removed
+Model selection is nested within the outer training days. One repeated daily file was excluded
 before evaluation. There is no controlled experiment isolating the effect of changing the
 split strategy. External-site or future-horizon performance cannot be inferred from these results.
 

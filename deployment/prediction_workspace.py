@@ -27,9 +27,9 @@ st.title("Train / Experiment" if workspace_view == "train" else "Predict")
 st.caption("Fit a session model with a separate holdout; these experiments do not replace the research manuscript."
            if workspace_view == "train" else "Interactive demonstration | Power from measured conditions")
 if not (ROOT / "results/research_20_days/completed.json").is_file():
-    st.warning("Updated research runs and inference exports are in progress. "
-               "Current fitted predictors are withheld until the full collection is verified. "
-               "The no-fitting physics baseline remains available. Superseded models are labelled explicitly.")
+    st.warning("Research models are not available yet. "
+               ""
+               "The electrical-product baseline and historical models are available separately.")
 st.info("Track A combines electrical and environmental inputs, including measured current and voltage (P = I × V). "
         "Track B uses irradiance, temperature, humidity and measurement hour without electrical inputs. "
         "Both estimate power from contemporaneous conditions; neither is validated for future forecasting.")
@@ -415,7 +415,7 @@ with model_tab:
             else:
                 columns[1].metric("Iterations", estimator.n_iter_)
                 columns[2].metric("L2 alpha", estimator.alpha)
-        st.caption(("Superseded 189-row experiment with an accidental duplicate daily file. " if loaded.spec.research_run else
+        st.caption(("Historical experiment: 189 observations across 21 daily files. " if loaded.spec.research_run else
                     "Updated research dataset: 180 measurements from 20 daily files. ") +
                    "Predictions outside the observed conditions may be unreliable; this is not a future-weather forecast.")
         from model_statistics import render_model_statistics

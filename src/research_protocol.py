@@ -1,4 +1,4 @@
-"""Shared, fail-closed provenance for the duplicate-free research collection."""
+"""Shared, fail-closed provenance for the 20-day research collection."""
 import hashlib
 import json
 from pathlib import Path

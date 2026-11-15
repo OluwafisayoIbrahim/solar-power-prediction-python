@@ -3,6 +3,7 @@ from pathlib import Path
 import sys
 import unittest
 import json
+import re
 import pandas as pd
 
 from streamlit.testing.v1 import AppTest
@@ -25,6 +26,10 @@ class ResearchAppTests(unittest.TestCase):
                 app.radio(key="dashboard_page").set_value(page).run()
                 self.assertFalse(app.exception, str(app.exception))
                 self.assertFalse(app.error, str(app.error))
+                visible = " ".join(item.value for kind in (app.markdown, app.caption, app.warning, app.info)
+                                   for item in kind)
+                self.assertIsNone(re.search(r"\b(researcher|mistake|accidental|accidentally|corrected|fix)\b",
+                                            visible, re.IGNORECASE))
 
     def test_rankings_follow_evidence_and_inventory_separates_history(self):
         # Temporary in-memory values test ranking behavior, not research results.
@@ -40,7 +45,7 @@ class ResearchAppTests(unittest.TestCase):
     def test_registry_uses_fresh_exports_and_labels_history(self):
         for spec in MODELS.values():
             if spec.research_run:
-                self.assertIn("superseded", spec.label)
+                self.assertIn("historical", spec.label)
             elif spec.kind != "physics":
                 self.assertIn("research_20_days", spec.model_dir.as_posix())
 
@@ -52,7 +57,7 @@ class ResearchAppTests(unittest.TestCase):
         self.assertFalse(app.exception, str(app.exception))
         self.assertFalse(app.error, str(app.error))
         if not (ROOT / "manuscript/publication_ready.json").is_file():
-            self.assertTrue(any("updated manuscript" in item.value.lower() for item in app.warning))
+            self.assertTrue(any("manuscript results" in item.value.lower() for item in app.warning))
             self.assertEqual(len(app.dataframe), 0)
         if not (COLLECTION / "completed.json").is_file():
             with self.assertRaisesRegex(ValueError, "incomplete"):

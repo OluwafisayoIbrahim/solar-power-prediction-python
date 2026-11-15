@@ -1,11 +1,10 @@
 # Research on 20 daily files — in progress
 
-The active data contain 180 observations across 20 daily CSVs. The researcher
-confirmed that `solar_data_tue_28st.csv` was an accidental second save of the
-21st. It is preserved in `data/excluded`, while both `solar_data_tue_21st.csv`
-and the distinct `solar_data_tue_28th.csv` remain active. The original processed
-189-row data are preserved in `data/historical/solar_data_combined_189.csv`.
-All older research outputs are superseded because they included the duplicate.
+The active dataset contains 180 observations across 20 daily files. One repeated
+daily file, `solar_data_tue_28st.csv`, was excluded before evaluation. It is stored
+in `data/excluded`. `solar_data_tue_21st.csv` and `solar_data_tue_28th.csv` remain
+in the dataset. The 189-row dataset and its experiments are retained separately
+as historical results.
 
 ## Completed independent work
 

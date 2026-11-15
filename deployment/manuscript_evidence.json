@@ -78,7 +78,7 @@
         "results/research_20_days/dataset_audit.json",
         "results/research_20_days/physics_predictions.csv"
       ],
-      "verification": "180 observations, 20 daily groups, nine readings per group and no exact repeated measurements excluding filename identity. The accidental repeat was removed."
+      "verification": "180 observations, 20 daily groups, nine readings per group and no exact repeated measurements excluding filename identity. One repeated daily file was excluded."
     }
   ],
   "references": [
@@ -143,7 +143,7 @@
       "SSRN full text",
       "Historical MATLAB numerical results"
     ],
-    "qualification": "Records the independently reviewed follow-up supplied for this correction. Does not claim all six papers were fully read or independently verified in their entirety."
+    "qualification": "Records the independently reviewed follow-up supplied for the reference review. Does not claim all six papers were fully read or independently verified in their entirety."
   },
   "historical_inventory": "deployment/manuscript_evidence_historical.json",
   "pending": [

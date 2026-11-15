@@ -49,7 +49,7 @@ def dataset():
 
 @st.cache_data(max_entries=1)
 def historical_dataset():
-    """Reference rows for superseded predictions; never join them to updated rows."""
+    """Reference observations for historical predictions."""
     return add_day_id(pd.read_csv(ROOT / "data/historical/solar_data_combined_189.csv"))
 
 @st.cache_data

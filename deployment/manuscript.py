@@ -70,18 +70,16 @@ def _article():
     st.markdown(f"[Python code]({content.REPOSITORY}) · [Original MATLAB study]({content.ORIGINAL}) · "
                 "[Original preprint](https://doi.org/10.2139/ssrn.4771898) · "
                 f"[Dataset and preparation]({REPOSITORY_TREE}data)")
-    st.caption("Research manuscript: fixed saved experiments. Predict uses saved models; Train / Experiment fits session models. Uploads never replace the evidence below.")
+    st.caption("Research manuscript based on saved experiments. Predict uses saved models; Train / Experiment fits session models. Uploads never replace the evidence below.")
     if not (ROOT / "manuscript/publication_ready.json").is_file():
-        st.warning("The updated manuscript and PDF are being prepared from new experiments. "
-                   "The previous manuscript is superseded because it included an accidental duplicate daily file. "
-                   "Updated findings will appear after all runs and document review are complete.")
+        st.warning("Manuscript results are not available yet.")
         return
     with st.expander("Article contents", expanded=False):
         st.markdown("\n\n".join(f"[{label}](#{anchor})" for anchor, label in content.SECTIONS))
     try:
         evidence = load_evidence()
     except (FileNotFoundError, ValueError, KeyError, OSError) as exc:
-        st.warning(f"Updated manuscript results are pending: {exc}. Superseded scores are withheld.")
+        st.warning(f"Manuscript results are unavailable: {exc}.")
         return
     a = evidence["audit"]
     heading("abstract", "Abstract")
@@ -107,12 +105,12 @@ def _article():
     st.markdown(f"Consecutive within-file intervals range from **{a['interval_min']:g} to {a['interval_max']:g} minutes**. "
                 f"There are {a['missing']} missing cells and {a['duplicate_records']} exact full-record duplicates when source identity is included. "
                 "These counts do not establish independence or instrument accuracy.")
-    st.markdown("An accidentally repeated daily file was removed before evaluation. "
+    st.markdown("One repeated daily file was excluded before evaluation. "
                 "The active data contain no exact repeated measurement records when filename identity is excluded. "
-                "Earlier experiments are retained separately as superseded historical results.")
+                "Earlier experiments are retained separately as historical results.")
     table(1, "Observed variables, units and empirical ranges; all stored rows retained.", dataset_table(evidence),
           "data/processed/solar_data_combined.csv. Hour is decimal time; irradiance units follow repository documentation.")
-    figure(2, "Distribution of measured electrical power across all stored observations, after removal of the accidental repeat.",
+    figure(2, "Distribution of measured electrical power across all stored observations, after removal of the repeated daily file.",
            figures.power_distribution(evidence["dataset"]),
            f"Measured power spans {evidence['dataset'].power.min():.2f}–{evidence['dataset'].power.max():.2f} W. "
            "This is the observed operating range, not evidence of behaviour at night or across other installations.",
@@ -170,8 +168,7 @@ def _article():
     heading("results", "4. Experimental results")
     st.markdown("The following tables use the completed matched-framework collection. A read-only loader checks the summary against "
                 "per-seed metrics and recomputes those metrics from saved out-of-fold records. It also checks row identities, "
-                "targets and filename-group fold assignments. It does not train models. The audit qualification about duplicate "
-                "records applies to every interpretation of these scores.")
+                "targets and daily-group fold assignments. It does not train models.")
     if evidence["protocol"]["warnings"]:
         st.warning("Saved comparison warnings: " + "; ".join(evidence["protocol"]["warnings"]))
     st.subheader("4.1 Historical findings and comparability")
@@ -231,7 +228,7 @@ def _article():
     heading("reproducibility", "9. Research transparency and reproducibility")
     st.markdown(f"**Data availability.** [Raw daily CSVs]({REPOSITORY_TREE}data/raw) and "
                 f"[processed measurements]({REPOSITORY_TREE}data/processed/solar_data_combined.csv) are included in the repository. "
-                "Full calendar dates and instrument calibration records remain unavailable; the accidental repeated file has been removed. "
+                "Full calendar dates and instrument calibration records remain unavailable; one repeated daily file was excluded. "
                 "No missing metadata are inferred from filenames.")
     st.markdown(f"**Code and artifacts.** [Python source]({REPOSITORY_TREE}src), "
                 f"[saved experiments]({REPOSITORY_TREE}results) and "

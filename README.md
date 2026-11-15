@@ -1,15 +1,5 @@
 # Solar Power Forecasting: Python Reimplementation
 
-> **Duplicate correction in progress.** An accidentally repeated daily file has
-> been removed from the active data: 180 observations, 20 daily files, nine
-> readings per file, and no exact repeated measurements excluding filenames.
-> All 189-row experiment scores and model bundles described below are
-> **superseded historical results**. Full updated S1/S2 runs are in progress;
-> no updated framework ranking or updated manuscript/PDF is claimed yet.
-> See [updated-run status and outputs](results/research_20_days/README.md).
-> The new no-fitting electrical-product MAE is 1.114574 W. Nothing has been
-> merged, published to model hosting, or redeployed by this correction.
-
 The saved models are available on Hugging Face: [OluwafisayoIbrahim/solar-power-prediction](https://huggingface.co/OluwafisayoIbrahim/solar-power-prediction).
 
 A Python reimplementation and re-evaluation of an earlier MATLAB feedforward-ANN
@@ -517,8 +507,7 @@ CSVs cover each inner fold of the selected architecture; PNGs overlay those
 curves per outer fold, matching TensorFlow's existing format.
 
 After choosing S1 or S2 by the rule above, set `$chosen` accordingly. The
-command reads all training controls from that TF run to avoid accidental
-framework differences:
+command reads all training controls from that TF run to keep the framework settings consistent:
 
 ```powershell
 $chosen = "s2"  # Selected by the README-documented selection rule.
@@ -736,6 +725,6 @@ that the live wake-up flow works.
 
 ## Relationship to the original project
 
-This project corrects and extends an earlier undergraduate MATLAB project. The original repository has been updated with a
-note pointing to this correction. The original SSRN preprint has also been
+This project re-evaluates and extends an earlier undergraduate MATLAB project. The original repository has been updated with a
+note linking to this study. The original SSRN preprint has also been
 revised accordingly: [https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4771898].
