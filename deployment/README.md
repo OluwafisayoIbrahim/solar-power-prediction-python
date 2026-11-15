@@ -1,6 +1,21 @@
 # Streamlit prediction app
 
+The active dataset contains 180 observations across 20 daily files. One repeated
+daily file was excluded before evaluation. Historical experiments use 189
+observations and are available separately. Model exports are stored in
+`results/research_20_days/exports`. Availability depends on completion of the
+research runs; the no-fitting electrical-product baseline remains available.
+
 ## Research dashboard navigation
+
+All seven views use neutral research names. Overview and Research Manuscript
+withhold model findings while full experiments and document review are pending.
+Results Explorer separates the 20-day collection from superseded historical
+collections. Dataset Explorer reads the active 180-row dataset. Predict, Train /
+Experiment and Model Explorer use the shared registry and show availability
+messages until the completed collection is verified; physics remains available.
+The active evidence inventory records pending work separately from
+`manuscript_evidence_historical.json`.
 
 The sidebar opens **Overview → Research Manuscript → Results Explorer → Predict →
 Train / Experiment**, followed by Dataset Explorer and Model Explorer.
@@ -71,7 +86,7 @@ respectively. Identical copies cross training/test boundaries when either fold
 is held out. The effect on reported error remains unmeasured. Intervals range from 35 to 92 minutes;
 measurements are approximately hourly. Data and historical metrics are preserved.
 Resolving provenance and publishing a duplicate-aware re-evaluation are separate
-research tasks. No corrected performance is claimed in this UI change.
+research tasks. No updated performance is claimed in this UI change.
 
 The original MATLAB README and `NeuralNet.m` were inspected at commit
 `578401bb0d106c53f0e152380441a8338854ed57`. The README does not state an input count;

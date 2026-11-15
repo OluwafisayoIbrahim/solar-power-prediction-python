@@ -2,11 +2,13 @@
 
 from dataclasses import dataclass
 from pathlib import Path
+import json
 
 import joblib
 import numpy as np
 
 from features import TRACK_A_FEATURES, TRACK_B_FEATURES
+from research_protocol import completed_collection, data_digest
 from predict_tf import load_tf_model, predict_measurements
 from predict_torch import artifact_names, load_torch_model, predict_measurements as predict_torch
 
@@ -51,11 +53,15 @@ class ModelSpec:
     def model_dir(self):
         if self.artifact_directory:
             return ROOT / self.artifact_directory
-        if self.kind in ("tensorflow", "pytorch"):
-            return ROOT / "results/exports" / ("tf_s2" if self.kind == "tensorflow" else "torch_s2")
-        return MODEL_DIR
+        return ROOT / "results/research_20_days/exports" / (
+            self.kind if self.kind in ("tensorflow", "pytorch") else "sklearn")
 
     def missing_files(self, directory=None):
+        if directory is None and not self.artifact_directory and self.kind != "physics":
+            try:
+                completed_collection()
+            except (FileNotFoundError, ValueError):
+                return ["completed updated research collection (pending)"]
         directory = self.model_dir if directory is None else Path(directory)
         if self.kind == "physics":
             return []
@@ -73,8 +79,8 @@ MODELS = {}
 for track in ("B", "A"):
     prefix = f"track_{track.lower()}"
     for kind, title, suffix in [
-        ("tensorflow", "TensorFlow ANN (S2)", "ann_final.keras"),
-        ("pytorch", "PyTorch ANN (S2)", "torch_ann_final.pt"),
+        ("tensorflow", "TensorFlow ANN (20-day, inner-selected protocol)", "ann_final.keras"),
+        ("pytorch", "PyTorch ANN (20-day, inner-selected protocol)", "torch_ann_final.pt"),
         ("tuned", "Tuned scikit-learn ANN", "ann_final.joblib"),
         ("untuned", "Untuned scikit-learn ANN", "ann_untuned.joblib"),
         ("linear", "Linear regression", "linear_final.joblib"),
@@ -118,6 +124,9 @@ class LoadedModel:
 
 def load_model(key, directory=None):
     spec = MODELS[key]
+    active_export = directory is None and not spec.artifact_directory and spec.kind != "physics"
+    if active_export:
+        completed_collection()
     directory = spec.model_dir if directory is None else Path(directory)
     missing = spec.missing_files(directory)
     if missing:
@@ -137,6 +146,12 @@ def load_model(key, directory=None):
         if estimator.n_features_in_ != len(spec.features):
             raise ValueError("Saved model input count does not match this track")
         metadata = {"features": spec.features}
+        if active_export:
+            metadata = json.loads((Path(directory) / spec.filename).with_suffix(".json").read_text(encoding="utf-8"))
+    if active_export:
+        digest = metadata.get("research_dataset_sha256", metadata.get("training_data_sha256"))
+        if metadata.get("rows") != 180 or digest != data_digest() or metadata.get("features") != spec.features:
+            raise ValueError("Inference export does not match the completed updated dataset")
     return LoadedModel(spec, estimator, metadata)
 
 

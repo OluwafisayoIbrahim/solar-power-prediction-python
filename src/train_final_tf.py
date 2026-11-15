@@ -83,6 +83,7 @@ def main():
     joblib.dump(fitted[2], args.output / names["y_scaler"])
     import tensorflow as tf
     metadata = {
+        "research_dataset_sha256": config.get("training_data_sha256"),
         "track": args.track, "features": list(X_frame.columns), "target": "power",
         "prediction_unit": "W", "hidden_layers": hidden, "epochs": epochs, "seed": 0,
         "selection": "Most frequent inner-selected architecture across all seeds/folds; "

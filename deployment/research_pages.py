@@ -4,11 +4,12 @@ import pandas as pd
 import streamlit as st
 import altair as alt
 from research_data import (ROOT, UNITS, DESCRIPTIONS, RUNS, dataset, csv, config,
-                           summary, errors, metric_values, repository_source, source_links)
+                           summary, errors, metric_values, repository_source, source_links,
+                           historical_dataset)
 from model_registry import MODELS, load_model
 from model_image import predictor_image
 
-@st.cache_resource
+@st.cache_resource(show_spinner=False)
 def saved_model(key):
     return load_model(key)
 
@@ -24,12 +25,25 @@ def histogram(values, label):
 
 def overview():
     from manuscript_content import TITLE, ORIGINAL, REPOSITORY
-    from manuscript_data import load_evidence, score
+    from manuscript_data import load_evidence, score, track_summary
 
     st.title(TITLE)
     st.markdown("A Python re-evaluation of an undergraduate MATLAB ANN study, examining how input availability, "
                 "simple baselines and validation design affect the interpretation of solar power estimates.")
-    evidence = load_evidence()
+    overview_navigation()
+    try:
+        if not (ROOT / "manuscript/publication_ready.json").is_file():
+            raise ValueError("Research results are not available yet.")
+        evidence = load_evidence()
+    except (FileNotFoundError, ValueError) as exc:
+        frame = dataset()
+        st.warning(str(exc))
+        st.write(f"Dataset: {len(frame)} observations, {frame.day_id.nunique()} daily groups. "
+                 "One repeated daily file was excluded. "
+                 "Historical results are available separately in Results Explorer.")
+        st.metric("No-fitting current × voltage MAE (W)",
+                  f"{(frame.power - frame.current * frame.voltage).abs().mean():.4f}")
+        return
     audit = evidence["audit"]
     cfg = evidence["configs"]["TensorFlow"]
     for column, (label, value) in zip(st.columns(3), [
@@ -47,19 +61,16 @@ def overview():
                 "with scikit-learn, TensorFlow/Keras and PyTorch networks using grouped validation, nested selection "
                 "where applicable, and repeated ANN seeds. [Read the methods](?view=manuscript#methods).")
     st.subheader("Key findings")
-    st.markdown(
-        f"- **Electrical inputs change the task.** The measured-power versus current × voltage difference averages "
-        f"{audit['power_iv_mae']:.3f} W. Low Track A error does not establish weather-only forecasting. "
-        "[Interpretation](?view=manuscript#discussion).\n"
-        f"- **Complexity does not consistently improve performance.** Linear regression leads Track A by mean MAE "
-        f"({score(evidence, 'A', 'Linear'):.3f} W). Track B tuned scikit-learn MAE is "
-        f"{score(evidence, 'B', 'Sklearn tuned'):.3f} W versus {score(evidence, 'B', 'Linear'):.3f} W for linear regression; "
-        "the small difference is descriptive, not statistically established. [Results](?view=manuscript#results).\n"
-        f"- **Generalisation remains qualified.** {audit['duplicate_measurements']} measurement records repeat under "
-        "different filenames assigned to outer folds 1 and 7. Identical copies cross training/test boundaries "
-        "when either fold is held out; the effect on reported error remains unmeasured. No external or future-horizon "
-        "forecasting validation is established. [Limitations](?view=manuscript#limitations).")
-    st.caption("Findings use the same checked S2 evidence as the manuscript. Full methods, references and scientific qualifications are in the report.")
+    st.markdown(f"The no-fitting electrical-product baseline has mean MAE {audit['power_iv_mae']:.3f} W. "
+                "Both tracks estimate power from contemporaneous measurements.")
+    st.markdown(track_summary(evidence, "A"))
+    st.markdown(track_summary(evidence, "B"))
+    st.caption("One repeated daily file was excluded before evaluation. Small sample size, "
+               "uncertain temporal coverage and absent external validation limit generalisation.")
+
+
+def overview_navigation():
+    from manuscript_content import ORIGINAL, REPOSITORY
     st.subheader("Explore the application")
     with st.container(horizontal=True):
         for label, destination in [
@@ -75,6 +86,7 @@ def overview():
                 "The preprint concerns the original study; the Python re-evaluation is documented in the manuscript.")
 
 
+
 def dataset_explorer():
     st.title("Dataset Explorer")
     with st.spinner("Loading measurements"):
@@ -83,7 +95,7 @@ def dataset_explorer():
         col.metric(name, value)
     st.caption("Source: data/processed/solar_data_combined.csv. Source filenames identify measurement days. "
                "The 1900 timestamp year is a placeholder; calendar dates and seasonal coverage cannot be reconstructed.")
-    st.caption("The displayed collection-day count is a count of source files. Full-record duplicate checks include filenames; the manuscript separately identifies nine repeated measurements across two different filenames.")
+    st.caption("The updated dataset excludes a repeated daily file and contains no exact repeated measurement records when filename identity is excluded.")
     st.dataframe(df[list(UNITS)].agg(["min", "max"]).T.assign(unit=pd.Series(UNITS)), width="stretch")
     st.dataframe(df.isna().sum().rename("Missing values"), width="stretch")
     days = st.multiselect("Measurement days", sorted(df.day_id.unique()), default=sorted(df.day_id.unique())[:2])
@@ -119,7 +131,7 @@ def dataset_explorer():
     st.caption("time: recorded measurement time, with a placeholder date. source_file/day_id: source measurement-day identifier.")
     track_note()
     with st.expander("Dataset limitations"):
-        st.write("Small sample; 21 days at one installation; seasonal coverage is not established. Consecutive readings may be correlated. "
+        st.write("Small sample; 20 daily files at one installation; seasonal coverage is not established. Consecutive readings may be correlated. "
                  "Different installations, weather regimes and seasons require independent validation.")
 
 def learning_curves():
@@ -137,13 +149,23 @@ def learning_curves():
 
 def experiments():
     st.title("Results Explorer")
+    st.warning("Historical experiments use 189 observations across 21 daily files. The current collection uses 180 observations across 20 daily files.")
     track_note()
     with st.expander("Original research summary figures"):
         st.graphviz_chart('digraph { rankdir=LR; node [shape=box]; "Data collection" -> "Preparation" -> "Feature selection" -> "Training" -> "Grouped cross-validation" -> "Evaluation" -> "Comparison"; }')
         st.image(str(ROOT / "results/figures/model_comparison_bars.png"), caption="Original baseline/scikit-learn comparison; matched S2 scores are shown separately below.")
-    view = st.selectbox("Experiment collection", ["Matched TensorFlow/PyTorch S2", "Historical TensorFlow", "Original scikit-learn / baselines"])
+    view = st.selectbox("Experiment collection", ["20-day research", "Matched TensorFlow/PyTorch S2 (historical)", "Historical TensorFlow", "Original scikit-learn / baselines"])
     run = None
-    if view.startswith("Matched"):
+    if view.startswith("20-day"):
+        from research_protocol import completed_collection
+        try:
+            manifest = completed_collection()
+        except (FileNotFoundError, ValueError) as exc:
+            st.info(str(exc))
+            return
+        table = csv(manifest["comparison"])
+        st.caption("Completed updated runs; pooled per-seed scores, followed by means and population standard deviations.")
+    elif view.startswith("Matched"):
         table = csv("results/comparisons/parity_s2/comparison.csv")
         st.caption("Source: results/comparisons/parity_s2/comparison.csv; means and population standard deviations across seeds, not confidence intervals.")
         with st.expander("Matched experiment settings"):
@@ -186,7 +208,9 @@ def experiments():
         predictions = csv(str(path.relative_to(ROOT)))
         st.caption(str(path.relative_to(ROOT)))
     else:
-        prediction_run = run or st.selectbox("Prediction framework", ["TensorFlow S2", "PyTorch S2"])
+        prediction_run = run or st.selectbox("Prediction framework", (
+            ["TensorFlow selected (20-day)", "PyTorch selected (20-day)"] if view.startswith("20-day")
+            else ["TensorFlow S2", "PyTorch S2"]))
         predictions = csv(f"results/{RUNS[prediction_run]}/predictions.csv")
         prediction_track = st.selectbox("Prediction track", sorted(predictions.track.unique()))
         predictions = predictions[predictions.track == prediction_track]
@@ -194,7 +218,8 @@ def experiments():
         seed = st.selectbox("Prediction seed", sorted(predictions.seed.unique()))
         predictions = predictions[(predictions.model == model) & (predictions.seed == seed)]
         if "hour" not in predictions:
-            predictions = predictions.merge(dataset()[["day_id", "hour"]].assign(row=lambda d: d.index), on=["row", "day_id"], validate="many_to_one")
+            reference = dataset() if "research_20_days" in RUNS[prediction_run] else historical_dataset()
+            predictions = predictions.merge(reference[["day_id", "hour"]].assign(row=lambda d: d.index), on=["row", "day_id"], validate="many_to_one")
         st.caption(f"Source: results/{RUNS[prediction_run]}/predictions.csv; seed {seed}; held-out days only.")
     if predictions.empty:
         st.info("No saved predictions for this selection.")
@@ -219,7 +244,7 @@ def experiments():
     daily = residuals[residuals.day_id == day].sort_values("hour")
     st.line_chart(daily, x="hour", y=["measured", "predicted"])
     st.dataframe(pd.DataFrame([metric_values(daily.measured, daily.predicted)]), hide_index=True)
-    st.caption("Daily metrics are descriptive; published scores pool held-out predictions per seed. Small differences on 21 days do not establish significance. Baselines offer a check on whether network complexity helps.")
+    st.caption("Daily metrics are descriptive; published scores pool held-out predictions per seed. Small differences in this dataset do not establish significance. Baselines offer a check on whether network complexity helps.")
     learning_curves()
 
 def model_details(loaded):
@@ -292,7 +317,7 @@ def models():
             st.info(f"Research metrics unavailable: {exc}")
     if scores:
         st.dataframe(pd.DataFrame(scores), hide_index=True, width="stretch")
-        st.caption("Historical and S2 runs have different training settings; inspect each source before comparing their scores.")
+        st.caption("Historical and active research runs have different training settings; inspect each source before comparing their scores.")
     st.write("An epoch is one pass over training data. Adam updates network weights using gradients; sklearn ANNs use L-BFGS. "
              "L2 discourages large weights. Inner-validation early stopping selects useful training durations. Reaching an epoch cap can indicate undertraining; avoiding it does not prove convergence.")
     learning_curves()

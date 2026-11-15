@@ -164,7 +164,7 @@ async def check_attempt(page, url, deadline, diagnostics):
 
 async def save_failure(page, folder, result, diagnostics):
     folder.mkdir(parents=True, exist_ok=True)
-    # Do not accidentally include an older run's screenshot in this report.
+    # Exclude screenshots from earlier runs.
     (folder / "failure.png").unlink(missing_ok=True)
     if page is not None and not page.is_closed():
         # Fresh anonymous context and public page only. Avoid capturing access gates.

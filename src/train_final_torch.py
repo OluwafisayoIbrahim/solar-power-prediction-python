@@ -61,6 +61,7 @@ def export_final(run, track, output):
     fitted = fit_torch(X, y, hidden, 0, SimpleNamespace(**config), epochs=epochs)
     expected = predict_torch(fitted, X)
     metadata = {
+        "research_dataset_sha256": config.get("training_data_sha256"),
         "track": track, "features": list(X_frame.columns), "target": "power",
         "prediction_unit": "W", "hidden_layers": hidden, "epochs": epochs,
         "epoch_cap": config["epochs"], "seed": 0, "architecture_votes": votes,

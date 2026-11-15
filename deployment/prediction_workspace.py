@@ -26,6 +26,10 @@ workspace_view = globals().get("WORKSPACE_VIEW", "combined")
 st.title("Train / Experiment" if workspace_view == "train" else "Predict")
 st.caption("Fit a session model with a separate holdout; these experiments do not replace the research manuscript."
            if workspace_view == "train" else "Interactive demonstration | Power from measured conditions")
+if not (ROOT / "results/research_20_days/completed.json").is_file():
+    st.warning("Research models are not available yet. "
+               ""
+               "The electrical-product baseline and historical models are available separately.")
 st.info("Track A combines electrical and environmental inputs, including measured current and voltage (P = I × V). "
         "Track B uses irradiance, temperature, humidity and measurement hour without electrical inputs. "
         "Both estimate power from contemporaneous conditions; neither is validated for future forecasting.")
@@ -411,18 +415,23 @@ with model_tab:
             else:
                 columns[1].metric("Iterations", estimator.n_iter_)
                 columns[2].metric("L2 alpha", estimator.alpha)
-        st.caption("189 measurements from 21 days. Predictions outside the observed conditions may be unreliable; this is not a future-weather forecast.")
+        st.caption(("Historical experiment: 189 observations across 21 daily files. " if loaded.spec.research_run else
+                    "Updated research dataset: 180 measurements from 20 daily files. ") +
+                   "Predictions outside the observed conditions may be unreliable; this is not a future-weather forecast.")
         from model_statistics import render_model_statistics
         render_model_statistics(loaded)
         curve = None
         if "source_run" in metadata:
             framework = "pytorch" if loaded.spec.kind == "pytorch" else "tensorflow"
-            run_name = Path(metadata["source_run"].replace("\\", "/")).name
-            st.caption(f"Source run: {framework}/{run_name}")
-            curve = ROOT / "results" / framework / run_name / f"learning_curves/track{loaded.spec.track}_seed0_fold1.png"
+            from research_data import repository_source
+            run_name = repository_source(metadata["source_run"])
+            st.caption(f"Source run: {run_name}")
+            curve = ROOT / run_name / f"learning_curves/track{loaded.spec.track}_seed0_fold1.png"
         if curve is not None and curve.is_file():
             with st.expander("Training and validation curves"):
                 st.image(str(curve), width="stretch")
                 st.caption("Comparison run: seed 0, outer fold 1. Inner-fold curves, not the final refit's test performance.")
+    except (FileNotFoundError, ValueError) as exc:
+        st.info(f"Model unavailable: {exc}")
     except Exception as exc:
         st.error(f"Model unavailable: {exc}")

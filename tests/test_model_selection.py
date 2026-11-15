@@ -21,9 +21,10 @@ from model_image import predictor_image
 from batch_prediction import read_sheet, run_batch
 from training import train_uploaded, export_trained
 from streamlit.testing.v1 import AppTest
+from model_fixtures import SavedModelFixtures, PRODUCTION_SPECS
 
 
-class ModelTests(unittest.TestCase):
+class ModelTests(SavedModelFixtures, unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.frame = load_processed_data()
@@ -49,6 +50,7 @@ class ModelTests(unittest.TestCase):
         for key in ["b_tensorflow", "a_pytorch", "b_pytorch", "b_tuned", "b_untuned", "a_linear"]:
             with self.subTest(model=key):
                 saved = load_model(key)
+                saved.metadata["research_dataset_sha256"] = "test-fixture"
                 before = saved.predict(self.frame.head())
                 progress = []
                 trained, evaluation, rejected, _ = train_uploaded(
@@ -56,6 +58,7 @@ class ModelTests(unittest.TestCase):
                 self.assertEqual(progress[-1], 1.0)
                 self.assertNotIn("source_run", trained.metadata)
                 self.assertNotIn("training_data_sha256", trained.metadata)
+                self.assertNotIn("research_dataset_sha256", trained.metadata)
                 self.assertTrue(rejected.empty)
                 heldout = evaluation.index
                 train_frame = self.frame.drop(index=heldout)
@@ -76,21 +79,19 @@ class ModelTests(unittest.TestCase):
                             exported = joblib.load(Path(temp) / saved.spec.filename)
                             np.testing.assert_allclose(exported.predict(evaluation[saved.spec.features].to_numpy()), trained.predict(evaluation))
 
-    def test_s2_artifact_routing_and_required_files(self):
-        for kind, folder, run in [("tensorflow", "tf_s2", "convergence_s2"),
-                                  ("pytorch", "torch_s2", "parity_s2")]:
+    def test_research_artifact_routing_and_required_files(self):
+        for kind in ["tensorflow", "pytorch"]:
             for track in ("a", "b"):
                 key = f"{track}_{kind}"
                 with self.subTest(model=key):
-                    spec = MODELS[key]
-                    self.assertEqual(spec.model_dir, ROOT / "results/exports" / folder)
-                    self.assertIn(run, load_model(key).metadata["source_run"])
+                    spec = PRODUCTION_SPECS[key]
+                    self.assertEqual(spec.model_dir, ROOT / "results/research_20_days/exports" / kind)
                     self.assertTrue(spec.description)
                     with TemporaryDirectory() as temp:
                         self.assertEqual(len(spec.missing_files(temp)), 4)
                         with self.assertRaises(FileNotFoundError):
                             load_model(key, temp)
-        self.assertEqual(MODELS["b_tuned"].model_dir, ROOT / "results/models")
+        self.assertEqual(PRODUCTION_SPECS["b_tuned"].model_dir, ROOT / "results/research_20_days/exports/sklearn")
 
     def test_pytorch_upload_ui_and_session_prediction(self):
         app = AppTest.from_file(str(ROOT / "deployment/prediction_workspace.py"), default_timeout=90).run()

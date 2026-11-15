@@ -14,6 +14,11 @@ tags:
 
 # Solar Power Prediction: Scikit-learn, TensorFlow and PyTorch
 
+The active dataset contains 180 observations across 20 daily files. One repeated
+daily file was excluded before evaluation. The tables below describe historical
+189-row experiments. The 20-day evaluation and its exports are stored separately
+in `results/research_20_days`.
+
 ## Model description
 
 This repository contains regression models that estimate solar panel power output in watts from environmental and electrical measurements. It accompanies a Python reimplementation and re-evaluation of an earlier MATLAB artificial neural network project.
@@ -48,7 +53,7 @@ The processed dataset contains **189 observations from 21 source-file groups**, 
 
 The source project stores raw files under `data/raw/` and the combined dataset at `data/processed/solar_data_combined.csv`. The model upload does not itself imply that these data files are included or licensed for redistribution.
 
-**Data audit limitation:** the project's 2026-11-05 audit identified nine repeated measurement records across `solar_data_tue_21st.csv` and `solar_data_tue_28st.csv`. The 21 source groups are not independently verified unique collection dates. Identical observations may therefore occur across nominally held-out partitions. Within-file measurement intervals range from 35 to 92 minutes, so sampling is approximately hourly rather than uniformly hourly. The reported results preserve the original data; no duplicate-corrected performance is claimed.
+The active dataset contains 180 observations across 20 daily files, with nine readings per file. One repeated daily file was excluded before evaluation. Within-file measurement intervals range from 35 to 92 minutes. Full calendar dates and instrument calibration records are unavailable.
 
 ## Models and training
 

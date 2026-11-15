@@ -7,7 +7,7 @@ import streamlit as st
 import manuscript_content as content
 import manuscript_figures as figures
 from manuscript_data import (COMPARISON, RUN_PATHS, load_evidence, score, result_table,
-                             dataset_table, track_table, model_table, diagnostic_predictions)
+                             dataset_table, track_table, model_table, diagnostic_predictions, track_summary)
 from research_data import ROOT, REPOSITORY_TREE
 
 
@@ -70,13 +70,16 @@ def _article():
     st.markdown(f"[Python code]({content.REPOSITORY}) · [Original MATLAB study]({content.ORIGINAL}) · "
                 "[Original preprint](https://doi.org/10.2139/ssrn.4771898) · "
                 f"[Dataset and preparation]({REPOSITORY_TREE}data)")
-    st.caption("Research manuscript: fixed saved experiments. Predict uses saved models; Train / Experiment fits session models. Uploads never replace the evidence below.")
+    st.caption("Research manuscript based on saved experiments. Predict uses saved models; Train / Experiment fits session models. Uploads never replace the evidence below.")
+    if not (ROOT / "manuscript/publication_ready.json").is_file():
+        st.warning("Manuscript results are not available yet.")
+        return
     with st.expander("Article contents", expanded=False):
         st.markdown("\n\n".join(f"[{label}](#{anchor})" for anchor, label in content.SECTIONS))
     try:
         evidence = load_evidence()
     except (FileNotFoundError, ValueError, KeyError, OSError) as exc:
-        st.error(f"Verified manuscript evidence is unavailable: {exc}. No substitute metrics are displayed.")
+        st.warning(f"Manuscript results are unavailable: {exc}.")
         return
     a = evidence["audit"]
     heading("abstract", "Abstract")
@@ -96,20 +99,18 @@ def _article():
     st.markdown(f"The processed dataset contains **{a['rows']} observations in {a['groups']} source-file groups**, "
                 f"with {a['readings_min']}–{a['readings_max']} readings per group. The project README attributes collection "
                 "to Olabisi Onabanjo University, Ogun State, Nigeria, using solar panels and measurement instruments. "
-                "The raw daily CSVs accompany the processed dataset. Project documentation dates completion to 2023; "
+                "The raw daily CSVs accompany the processed dataset. "
                 "location and completion are not independently institutionally certified here. "
                 "The exact measurement dates cannot be reconstructed from the placeholder 1900 timestamps.")
     st.markdown(f"Consecutive within-file intervals range from **{a['interval_min']:g} to {a['interval_max']:g} minutes**. "
                 f"There are {a['missing']} missing cells and {a['duplicate_records']} exact full-record duplicates when source identity is included. "
                 "These counts do not establish independence or instrument accuracy.")
-    st.warning(f"November 5, 2026 provenance finding: {a['duplicate_measurements']} repeated measurement records appear under different filenames "
-               f"({', '.join(a['duplicate_sources'])}). The November 13 follow-up confirms these files in outer folds 1 and 7 respectively in saved predictions. "
-               "Identical measurement copies cross training/test boundaries when either fold is held out; the effect on reported error remains unmeasured. "
-               "The experiments group by filename, so 21 identifiers do not establish 21 unique days. "
-               "Saved data and results have been retained unchanged; resolving provenance and re-evaluating performance is future work.")
+    st.markdown("One repeated daily file was excluded before evaluation. "
+                "The active data contain no exact repeated measurement records when filename identity is excluded. "
+                "Earlier experiments are retained separately as historical results.")
     table(1, "Observed variables, units and empirical ranges; all stored rows retained.", dataset_table(evidence),
           "data/processed/solar_data_combined.csv. Hour is decimal time; irradiance units follow repository documentation.")
-    figure(2, "Distribution of measured electrical power across all stored observations, including repeated records.",
+    figure(2, "Distribution of measured electrical power across all stored observations, after removal of the repeated daily file.",
            figures.power_distribution(evidence["dataset"]),
            f"Measured power spans {evidence['dataset'].power.min():.2f}–{evidence['dataset'].power.max():.2f} W. "
            "This is the observed operating range, not evidence of behaviour at night or across other installations.",
@@ -121,12 +122,15 @@ def _article():
     st.caption("P: electrical power (W); V: voltage (V); I: current (A).")
     st.markdown(content.REASSESSMENT)
     st.subheader("3.4 Experimental tracks")
+    st.markdown("Table 2 defines the two feature sets. Track A includes electrical measurements; "
+                "Track B excludes current and voltage and adds observation hour. Both estimate power "
+                "at the time of measurement, so model comparisons are made within each track.")
     table(2, "Feature sets and legitimate task interpretations.", track_table(), "src/features.py; electrical physics uses only current and voltage in Track A.")
     st.subheader("3.5 Data preparation and preprocessing")
     st.markdown(content.PREPROCESSING)
     st.subheader("3.6 Models and baselines")
-    table(3, "Training configurations for the matched S2 comparison; the mean sanity check is not a ranked experiment.",
-          model_table(evidence), "src/models.py; src/models_tf.py; src/models_torch.py; both S2 config.json files; src/evaluate.py.")
+    table(3, "Training configurations for the matched-framework comparison; the mean sanity check is not a ranked experiment.",
+          model_table(evidence), "src/models.py; src/models_tf.py; src/models_torch.py; both selected-run config.json files; src/evaluate.py.")
     st.markdown("Both neural frameworks use MSE on standardised targets plus hidden-kernel L2, excluding output kernels and biases. "
                 "The PyTorch implementation explicitly uses Glorot-uniform kernels, zero biases, seeded shuffled batches, "
                 "Adam epsilon 1e-7, no optimiser weight decay, and deterministic single-thread CPU execution. "
@@ -138,15 +142,15 @@ def _article():
             for candidate, rows in evidence["convergence"].items()}
     st.markdown(f"**S1/S2 convergence diagnostics.** Across both tracks, S1 had {caps['S1']} selected outer refit(s) "
                 f"at the epoch cap and S2 had {caps['S2']}. The README-documented selection rule preferred fewer total cap hits, "
-                "so S2 was selected using inner evidence. The screening threshold is fewer than 20% of "
+                f"so {evidence['selection']} was selected using the documented cap-count and inner-MAE rule. The screening threshold is fewer than 20% of "
                 "selected refits at the cap per track. Reaching the cap can indicate undertraining; "
                 "avoiding it or passing this screen does not prove convergence. These counts come from "
                 "the saved selected settings, not outer-test accuracy. The inspected evidence does not independently establish when the rule was decided.")
     figure(3, "One outer iteration of the nested grouped design; repeat for seven outer folds and each ANN seed.",
            figures.VALIDATION,
            "The outer test branch does not enter inner selection. Counts refer to filename groups, not verified independent dates; "
-           "identical measurement copies cross training/test boundaries for held-out folds 1 and 7. Inner branches rotate over three partitions.",
-           "src/train_ann.py; src/train_ann_tf.py; saved S2 configurations and fold assignments.", diagram=True)
+           "test daily groups and identical measurement records are excluded from fitting. Inner branches rotate over three partitions.",
+           "src/train_ann.py; src/train_ann_tf.py; saved research configurations and fold assignments.", diagram=True)
     st.subheader("3.8 Metrics and aggregation")
     st.markdown("Let $y_i$ and $\\hat y_i$ be measured and predicted power in watts, $n$ the number of pooled held-out rows, "
                 "$\\bar y$ their measured mean and $S=\\{i:y_i\\ne0\\}$. Each seed pools all outer rows before scoring.")
@@ -162,10 +166,9 @@ def _article():
                 "`src/evaluate.py` is a synthetic metric check, not a fitted outer-training-mean baseline experiment.")
 
     heading("results", "4. Experimental results")
-    st.markdown("The following tables use the completed matched S2 collection. A read-only loader checks the summary against "
+    st.markdown("The following tables use the completed matched-framework collection. A read-only loader checks the summary against "
                 "per-seed metrics and recomputes those metrics from saved out-of-fold records. It also checks row identities, "
-                "targets and filename-group fold assignments. It does not train models. The audit qualification about duplicate "
-                "records applies to every interpretation of these scores.")
+                "targets and daily-group fold assignments. It does not train models.")
     if evidence["protocol"]["warnings"]:
         st.warning("Saved comparison warnings: " + "; ".join(evidence["protocol"]["warnings"]))
     st.subheader("4.1 Historical findings and comparability")
@@ -176,14 +179,12 @@ def _article():
         st.subheader(f"4.{number - 2} Track {track}")
         table(number, f"Track {track}: pooled out-of-fold performance, mean ± population standard deviation across seeds.",
               result_table(evidence, track), COMPARISON)
-        st.markdown((f"Linear regression has the lowest Track A mean MAE ({score(evidence, track, 'Linear'):.3f} W). "
-                     "The measured-current × measured-voltage baseline already gives low error without learning. This is electrical-input estimation."
-                     if track == "A" else
-                     f"The tuned scikit-learn ANN has the lowest Track B mean MAE ({score(evidence, track, 'Sklearn tuned'):.3f} W), "
-                     f"versus {score(evidence, track, 'Linear'):.3f} W for linear regression. The small difference is descriptive; "
-                     "no significance or external forecasting claim follows."))
+        st.markdown(track_summary(evidence, track))
     # Numbering follows the text's logical figure order: diagnostics introduce Fig. 4 before Fig. 5.
     st.subheader("4.4 Error diagnostics and framework variability")
+    st.markdown("Figures 4-7 show prediction agreement, mean error across seeds, signed residuals "
+                "and variation between daily groups. Table 6 reports per-seed framework scores. "
+                "The parity, residual and daily-error plots use all held-out predictions from seed 0.")
     track = st.selectbox("Diagnostic track (Figures 4, 6 and 7)", ["B", "A"], key="manuscript_track")
     predictions = diagnostic_predictions(evidence, track)
     figure(4, f"Measured versus predicted power, Track {track}, seed 0; each model includes every saved outer row. Dashed line: identity.",
@@ -192,7 +193,7 @@ def _article():
            "not a best-seed selection or an independent test of the full-data deployment weights.",
            "; ".join(f"{path}/predictions.csv" for path in RUN_PATHS.values()))
     metric = st.selectbox("Figure 5 comparison metric", ["MAE", "RMSE", "MAPE"], key="manuscript_metric")
-    figure(5, f"Matched S2 mean {metric} with ± one population seed standard deviation. Track panels use independent scales; bars start at zero.",
+    figure(5, f"Matched-framework mean {metric} with ± one population seed standard deviation. Track panels use independent scales; bars start at zero.",
            figures.comparison_chart(evidence["comparison"], metric),
            "Within-track comparisons hold feature availability fixed. Across-track bar lengths must not be read as a fair contest between equivalent tasks. "
            "Whiskers describe three-seed variation, not confidence intervals; near-zero baseline variation reflects repeated deterministic predictions.", COMPARISON)
@@ -205,14 +206,14 @@ def _article():
     figure(6, f"Signed residual histograms, Track {track}, seed 0. Residual = measured − predicted power; vertical scales vary by model.",
            figures.residual_chart(predictions),
            "Negative residuals indicate overestimation; positive residuals indicate underestimation. The distributions expose the balance and spread "
-           "of errors, but do not provide calibrated uncertainty intervals.", "Saved S2 predictions.csv files; same rows and models as Figure 4.")
+           "of errors, but do not provide calibrated uncertainty intervals.", "Saved research predictions.csv files; same rows and models as Figure 4.")
     figure(7, f"Within-source-group MAE, Track {track}, seed 0; filename order is categorical rather than chronological.",
            figures.daily_chart(predictions),
            "Group-level errors vary across the measurement conditions, which a single pooled score can hide. Each point averages the nine stored readings "
            "for one filename and model. These group metrics are descriptive and are not substituted for the pooled per-seed results.",
-           "Saved S2 predictions.csv files; mean absolute residual grouped by day_id and model.")
+           "Saved research predictions.csv files; mean absolute residual grouped by day_id and model.")
     st.download_button("Download matched research metrics", evidence["comparison"].to_csv(index=False),
-                       "manuscript_s2_metrics.csv", "text/csv")
+                       "manuscript_metrics.csv", "text/csv")
 
     heading("discussion", "5. Discussion")
     st.markdown(content.discussion(evidence))
@@ -224,11 +225,10 @@ def _article():
     for index, (citation, url) in enumerate(content.REFERENCES, 1):
         st.subheader(f"[{index}]", anchor=f"ref-{index}")
         st.markdown(f"{citation} [Source]({url})")
-    st.caption(content.REFERENCE_REVIEW)
     heading("reproducibility", "9. Research transparency and reproducibility")
     st.markdown(f"**Data availability.** [Raw daily CSVs]({REPOSITORY_TREE}data/raw) and "
                 f"[processed measurements]({REPOSITORY_TREE}data/processed/solar_data_combined.csv) are included in the repository. "
-                "Full calendar dates, instrument calibration records and the provenance of the repeated source file remain unresolved. "
+                "Full calendar dates and instrument calibration records remain unavailable; one repeated daily file was excluded. "
                 "No missing metadata are inferred from filenames.")
     st.markdown(f"**Code and artifacts.** [Python source]({REPOSITORY_TREE}src), "
                 f"[saved experiments]({REPOSITORY_TREE}results) and "
@@ -238,7 +238,7 @@ def _article():
     versions = [{"Recorded environment": name, "Python": cfg["python"], "scikit-learn": cfg["sklearn"],
                  "Framework": cfg.get("tensorflow", cfg.get("torch"))} for name, cfg in evidence["configs"].items()]
     st.caption("Recorded research-run versions (rather than inferred current runtime versions)")
-    st.dataframe(pd.DataFrame(versions), hide_index=True, width="stretch", alt="Recorded software versions for each S2 research run")
+    st.dataframe(pd.DataFrame(versions), hide_index=True, width="stretch", alt="Recorded software versions for each research run")
     st.markdown("Install the pinned deployment environment and run the app from the repository root:")
     st.code("python -m pip install -r deployment/requirements.txt\npython -m streamlit run deployment/app.py\npython -m unittest discover -s tests -v", language="bash")
     st.markdown("To reproduce S2 separately, use new, empty output paths. These commands fit models and are documentation only; "

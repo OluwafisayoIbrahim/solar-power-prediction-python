@@ -7,6 +7,7 @@ from unittest.mock import patch
 
 import pandas as pd
 from streamlit.testing.v1 import AppTest
+from model_fixtures import SavedModelFixtures
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -15,7 +16,7 @@ class Upload(BytesIO):
     name = "measurements.csv"
 
 
-class AppTests(unittest.TestCase):
+class AppTests(SavedModelFixtures, unittest.TestCase):
     def make_app(self):
         return AppTest.from_file(str(ROOT / "deployment/prediction_workspace.py"), default_timeout=90)
 

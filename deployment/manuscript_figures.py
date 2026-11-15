@@ -16,18 +16,18 @@ WORKFLOW = '''digraph {
   "Outer refit and held-out predictions" -> "Pooled per-seed metrics and comparison";
 }'''
 
-VALIDATION = '''digraph {
+VALIDATION = r'''digraph {
   graph [rankdir=TB, bgcolor="transparent"];
   node [shape=box, style=rounded, fontname="Arial"];
-  "21 source groups / 189 rows" -> "Outer training: 18 groups / 162 rows";
-  "21 source groups / 189 rows" -> "Outer test: 3 groups / 27 rows";
-  "Outer training: 18 groups / 162 rows" -> "Inner fit: 12 groups / 108 rows";
-  "Outer training: 18 groups / 162 rows" -> "Inner validation: 6 groups / 54 rows";
-  "Inner fit: 12 groups / 108 rows" -> "Select settings across 3 inner folds";
-  "Inner validation: 6 groups / 54 rows" -> "Select settings across 3 inner folds";
-  "Select settings across 3 inner folds" -> "Refit on all 18 outer training groups";
-  "Refit on all 18 outer training groups" -> "Score saved outer predictions";
-  "Outer test: 3 groups / 27 rows" -> "Score saved outer predictions";
+  "20 daily groups / 180 rows" -> "Outer training: 17 or 18 groups / 153 or 162 rows";
+  "20 daily groups / 180 rows" -> "Outer test: 3 groups / 27 rows (six folds)\n2 groups / 18 rows (one fold)";
+  "Outer training: 17 or 18 groups / 153 or 162 rows" -> "Inner fit: 11 or 12 groups / 99 or 108 rows";
+  "Outer training: 17 or 18 groups / 153 or 162 rows" -> "Inner validation: 5 or 6 groups / 45 or 54 rows";
+  "Inner fit: 11 or 12 groups / 99 or 108 rows" -> "Select settings across 3 inner folds";
+  "Inner validation: 5 or 6 groups / 45 or 54 rows" -> "Select settings across 3 inner folds";
+  "Select settings across 3 inner folds" -> "Refit on all outer training groups";
+  "Refit on all outer training groups" -> "Score saved outer predictions";
+  "Outer test: 3 groups / 27 rows (six folds)\n2 groups / 18 rows (one fold)" -> "Score saved outer predictions";
 }'''
 
 

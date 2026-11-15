@@ -14,7 +14,7 @@ measurements, reporting a Mean Absolute Percentage Error (MAPE) of 0.32%–0.60%
 
 Revisiting the project in Python surfaced a methodological issue with that
 original evaluation (see **Key finding** below). This repository reimplements
-the analysis with corrected, held-out validation, and reports what the ANN can
+the analysis with updated, held-out validation, and reports what the ANN can
 and cannot actually predict.
 
 The project now also compares a TensorFlow/Keras ANN with the scikit-learn
@@ -42,7 +42,7 @@ outer fold 1 or 7 is held out: saved predictions assign the two files to folds 1
 and 7 respectively. This was confirmed in the November 13, 2026 follow-up; the
 effect on reported error remains unmeasured.
 Recorded within-file intervals range from 35 to 92 minutes. Existing data and
-results are preserved; no duplicate-corrected performance is claimed. See the
+results are preserved; no duplicate-free performance is claimed. See the
 Streamlit Research Manuscript and its
 [evidence inventory](deployment/manuscript_evidence.json) for the audit and limitations.
 
@@ -507,8 +507,7 @@ CSVs cover each inner fold of the selected architecture; PNGs overlay those
 curves per outer fold, matching TensorFlow's existing format.
 
 After choosing S1 or S2 by the rule above, set `$chosen` accordingly. The
-command reads all training controls from that TF run to avoid accidental
-framework differences:
+command reads all training controls from that TF run to keep the framework settings consistent:
 
 ```powershell
 $chosen = "s2"  # Selected by the README-documented selection rule.
@@ -726,6 +725,6 @@ that the live wake-up flow works.
 
 ## Relationship to the original project
 
-This project corrects and extends an earlier undergraduate MATLAB project. The original repository has been updated with a
-note pointing to this correction. The original SSRN preprint has also been
+This project re-evaluates and extends an earlier undergraduate MATLAB project. The original repository has been updated with a
+note linking to this study. The original SSRN preprint has also been
 revised accordingly: [https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4771898].

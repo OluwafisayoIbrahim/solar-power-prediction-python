@@ -10,10 +10,11 @@ from features import TRACK_A_FEATURES, TRACK_B_FEATURES
 from research_data import ROOT, UNITS, dataset
 from evaluate import compute_metrics
 from check_convergence import convergence_summary
+from research_protocol import completed_collection, COLLECTION, verify_run
 
-RUN_PATHS = {"TensorFlow": "results/tensorflow/convergence_s2",
-             "PyTorch": "results/pytorch/parity_s2"}
-COMPARISON = "results/comparisons/parity_s2/comparison.csv"
+RUN_PATHS = (json.loads((COLLECTION / "completed.json").read_text(encoding="utf-8"))["runs"]
+             if (COLLECTION / "completed.json").is_file() else {})
+COMPARISON = "results/research_20_days/comparison/comparison.csv"
 METRICS = {"MAE": "W", "RMSE": "W", "MAPE": "%", "R2": "unitless"}
 MEASUREMENTS = ["time", "solar_irradiance", "temperature", "humidity", "current", "voltage", "power"]
 
@@ -72,15 +73,19 @@ def validate_predictions(predictions, metrics, cfg, frame):
                 raise ValueError(f"Saved {metric} disagrees with out-of-fold predictions: {key}")
 
 
-@st.cache_data(max_entries=1)
+@st.cache_data(max_entries=1, show_spinner=False)
 def load_evidence():
+    manifest = completed_collection()
+    if RUN_PATHS != manifest["runs"]:
+        raise ValueError("Research collection changed; reload the application")
     frame = dataset()
-    table = pd.read_csv(ROOT / COMPARISON)
-    protocol = json.loads((ROOT / "results/comparisons/parity_s2/protocol.json").read_text(encoding="utf-8"))
+    table = pd.read_csv(ROOT / manifest["comparison"])
+    protocol = json.loads((COLLECTION / "comparison/protocol.json").read_text(encoding="utf-8"))
     configs, predictions, seeds = {}, {}, {}
     if table.duplicated(["track", "model"]).any():
         raise ValueError("Ambiguous model rows in matched comparison")
     for framework, path in RUN_PATHS.items():
+        verify_run(ROOT / path, f"{framework} selected")
         cfg = json.loads((ROOT / path / "config.json").read_text(encoding="utf-8"))
         if cfg.get("smoke_test") or cfg["rows"] != len(frame):
             raise ValueError("The manuscript requires completed full-data research runs")
@@ -99,8 +104,8 @@ def load_evidence():
     controls = ["architectures", "activation", "epochs", "patience", "batch_size", "learning_rate",
                 "l2", "seeds", "tracks", "folds", "inner_folds", "rows"]
     if any(configs["TensorFlow"][key] != configs["PyTorch"][key] for key in controls):
-        raise ValueError("The manuscript's matched S2 configurations no longer agree")
-    convergence = {candidate: convergence_summary(ROOT / f"results/tensorflow/convergence_{candidate.lower()}")[1]
+        raise ValueError("The manuscript's matched-framework configurations no longer agree")
+    convergence = {candidate: convergence_summary(COLLECTION / f"tensorflow_{candidate.lower()}")[1]
                    for candidate in ("S1", "S2")}
     audit = audit_dataset(frame)
     # Cross-check the overlap against every saved track/model/seed in both runs.
@@ -114,12 +119,21 @@ def load_evidence():
     audit["duplicate_source_folds"] = duplicate_folds
     return {"dataset": frame, "audit": audit, "comparison": table,
             "convergence": convergence,
-            "configs": configs, "predictions": predictions, "seeds": seeds, "protocol": protocol}
+            "configs": configs, "predictions": predictions, "seeds": seeds, "protocol": protocol,
+            "selection": manifest["selected"]}
 
 
 def score(evidence, track, model, metric="MAE", stat="mean"):
     rows = evidence["comparison"]
     return float(rows[(rows.track == track) & (rows.model == model)].iloc[0][f"{metric}_{stat}"])
+
+
+def track_summary(evidence, track):
+    rows = evidence["comparison"].query("track == @track").sort_values(["MAE_mean", "model"])
+    best = rows.iloc[0]
+    return (f"Track {track}: {best.model} has the lowest mean MAE ({best.MAE_mean:.3f} W); "
+            f"linear regression has mean MAE {score(evidence, track, 'Linear'):.3f} W. "
+            "Differences are descriptive; no significance test is supplied.")
 
 
 def result_table(evidence, track):
@@ -154,7 +168,7 @@ def model_table(evidence):
         {"Model": "Linear (A, B)", "Architecture / selection": "Ordinary least squares; no tuning", "Training": "Training-partition input standardisation"},
         {"Model": "scikit-learn untuned (A, B)", "Architecture / selection": "10 tanh units; alpha=0.0001", "Training": "L-BFGS, max_iter=5000; input scaling"},
         {"Model": "scikit-learn tuned (A, B)", "Architecture / selection": "3 or 10 tanh units; alpha ∈ {0.1, 1, 10}", "Training": "3 inner grouped folds; L-BFGS; input scaling"},
-        {"Model": "TensorFlow / PyTorch S2 (A, B)", "Architecture / selection": f"{cfg['architectures']}; {cfg['activation']}; linear output",
+        {"Model": "TensorFlow / PyTorch selected (A, B)", "Architecture / selection": f"{cfg['architectures']}; {cfg['activation']}; linear output",
          "Training": f"Adam; lr={cfg['learning_rate']}; hidden-kernel L2={cfg['l2']}; batch={cfg['batch_size']}; cap={cfg['epochs']}; patience={cfg['patience']}; input/target scaling"},
         {"Model": "Mean prediction", "Architecture / selection": "Metric sanity check only (src/evaluate.py)", "Training": "No saved grouped-CV experiment; excluded from result rankings"}])
 
