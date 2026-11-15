@@ -14,6 +14,13 @@ tags:
 
 # Solar Power Prediction: Scikit-learn, TensorFlow and PyTorch
 
+> **Superseded release documentation.** The 189-row scores and exports below
+> included an accidentally duplicated daily file. Active research data now
+> contain 180 observations across 20 daily files. Full corrected experiments
+> are in progress in `results/corrected_20_days`; corrected exports have separate
+> locations and will become active only after completion checks. This card's
+> historical tables are retained for provenance, not corrected performance.
+
 ## Model description
 
 This repository contains regression models that estimate solar panel power output in watts from environmental and electrical measurements. It accompanies a Python reimplementation and re-evaluation of an earlier MATLAB artificial neural network project.

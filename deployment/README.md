@@ -1,5 +1,15 @@
 # Streamlit prediction app
 
+> **Correction status:** The active dataset has 180 rows across 20 daily files
+> after removal of an accidental duplicate. The 189-row results and S2 exports
+> documented below are superseded historical artifacts. Full corrected runs
+> are in progress; see [run status](../results/corrected_20_days/README.md).
+> The current registry points to `results/corrected_20_days/exports/{tensorflow,
+> pytorch,sklearn}` and withholds fitted predictors until `completed.json` is
+> verified. Physics remains available; historical models are explicitly labelled.
+> Manuscript findings are withheld until corrected content/PDF review is recorded.
+> Historical plots use the preserved 189-row snapshot rather than corrected row IDs.
+
 ## Research dashboard navigation
 
 The sidebar opens **Overview → Research Manuscript → Results Explorer → Predict →

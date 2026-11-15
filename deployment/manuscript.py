@@ -71,12 +71,17 @@ def _article():
                 "[Original preprint](https://doi.org/10.2139/ssrn.4771898) · "
                 f"[Dataset and preparation]({REPOSITORY_TREE}data)")
     st.caption("Research manuscript: fixed saved experiments. Predict uses saved models; Train / Experiment fits session models. Uploads never replace the evidence below.")
+    if not (ROOT / "manuscript/publication_ready.json").is_file():
+        st.warning("The corrected manuscript and PDF are being prepared from new experiments. "
+                   "The previous manuscript is superseded because it included an accidental duplicate daily file. "
+                   "Corrected findings will appear after all runs and document review are complete.")
+        return
     with st.expander("Article contents", expanded=False):
         st.markdown("\n\n".join(f"[{label}](#{anchor})" for anchor, label in content.SECTIONS))
     try:
         evidence = load_evidence()
     except (FileNotFoundError, ValueError, KeyError, OSError) as exc:
-        st.error(f"Verified manuscript evidence is unavailable: {exc}. No substitute metrics are displayed.")
+        st.warning(f"Corrected manuscript results are pending: {exc}. Superseded scores are withheld.")
         return
     a = evidence["audit"]
     heading("abstract", "Abstract")

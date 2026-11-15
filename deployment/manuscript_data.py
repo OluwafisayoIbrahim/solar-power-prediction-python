@@ -10,10 +10,11 @@ from features import TRACK_A_FEATURES, TRACK_B_FEATURES
 from research_data import ROOT, UNITS, dataset
 from evaluate import compute_metrics
 from check_convergence import convergence_summary
+from corrected_protocol import completed_collection, COLLECTION, verify_run
 
-RUN_PATHS = {"TensorFlow": "results/tensorflow/convergence_s2",
-             "PyTorch": "results/pytorch/parity_s2"}
-COMPARISON = "results/comparisons/parity_s2/comparison.csv"
+RUN_PATHS = (json.loads((COLLECTION / "completed.json").read_text(encoding="utf-8"))["runs"]
+             if (COLLECTION / "completed.json").is_file() else {})
+COMPARISON = "results/corrected_20_days/comparison/comparison.csv"
 METRICS = {"MAE": "W", "RMSE": "W", "MAPE": "%", "R2": "unitless"}
 MEASUREMENTS = ["time", "solar_irradiance", "temperature", "humidity", "current", "voltage", "power"]
 
@@ -74,13 +75,17 @@ def validate_predictions(predictions, metrics, cfg, frame):
 
 @st.cache_data(max_entries=1)
 def load_evidence():
+    manifest = completed_collection()
+    if RUN_PATHS != manifest["runs"]:
+        raise ValueError("Research collection changed; reload the application")
     frame = dataset()
-    table = pd.read_csv(ROOT / COMPARISON)
-    protocol = json.loads((ROOT / "results/comparisons/parity_s2/protocol.json").read_text(encoding="utf-8"))
+    table = pd.read_csv(ROOT / manifest["comparison"])
+    protocol = json.loads((COLLECTION / "comparison/protocol.json").read_text(encoding="utf-8"))
     configs, predictions, seeds = {}, {}, {}
     if table.duplicated(["track", "model"]).any():
         raise ValueError("Ambiguous model rows in matched comparison")
     for framework, path in RUN_PATHS.items():
+        verify_run(ROOT / path, f"{framework} selected")
         cfg = json.loads((ROOT / path / "config.json").read_text(encoding="utf-8"))
         if cfg.get("smoke_test") or cfg["rows"] != len(frame):
             raise ValueError("The manuscript requires completed full-data research runs")
@@ -100,7 +105,7 @@ def load_evidence():
                 "l2", "seeds", "tracks", "folds", "inner_folds", "rows"]
     if any(configs["TensorFlow"][key] != configs["PyTorch"][key] for key in controls):
         raise ValueError("The manuscript's matched S2 configurations no longer agree")
-    convergence = {candidate: convergence_summary(ROOT / f"results/tensorflow/convergence_{candidate.lower()}")[1]
+    convergence = {candidate: convergence_summary(COLLECTION / f"tensorflow_{candidate.lower()}")[1]
                    for candidate in ("S1", "S2")}
     audit = audit_dataset(frame)
     # Cross-check the overlap against every saved track/model/seed in both runs.
@@ -114,7 +119,8 @@ def load_evidence():
     audit["duplicate_source_folds"] = duplicate_folds
     return {"dataset": frame, "audit": audit, "comparison": table,
             "convergence": convergence,
-            "configs": configs, "predictions": predictions, "seeds": seeds, "protocol": protocol}
+            "configs": configs, "predictions": predictions, "seeds": seeds, "protocol": protocol,
+            "selection": manifest["selected"]}
 
 
 def score(evidence, track, model, metric="MAE", stat="mean"):

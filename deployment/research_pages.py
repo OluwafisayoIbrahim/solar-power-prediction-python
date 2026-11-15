@@ -4,7 +4,8 @@ import pandas as pd
 import streamlit as st
 import altair as alt
 from research_data import (ROOT, UNITS, DESCRIPTIONS, RUNS, dataset, csv, config,
-                           summary, errors, metric_values, repository_source, source_links)
+                           summary, errors, metric_values, repository_source, source_links,
+                           historical_dataset)
 from model_registry import MODELS, load_model
 from model_image import predictor_image
 
@@ -29,7 +30,19 @@ def overview():
     st.title(TITLE)
     st.markdown("A Python re-evaluation of an undergraduate MATLAB ANN study, examining how input availability, "
                 "simple baselines and validation design affect the interpretation of solar power estimates.")
-    evidence = load_evidence()
+    try:
+        if not (ROOT / "manuscript/publication_ready.json").is_file():
+            raise ValueError("Corrected research and manuscript review are in progress; no corrected model ranking is published yet")
+        evidence = load_evidence()
+    except (FileNotFoundError, ValueError) as exc:
+        frame = dataset()
+        st.warning(str(exc))
+        st.write(f"Corrected dataset: {len(frame)} observations, {frame.day_id.nunique()} daily groups. "
+                 "An accidentally repeated daily file was removed. Full research runs are in progress; "
+                 "superseded results are available separately in Results Explorer.")
+        st.metric("No-fitting current × voltage MAE (W)",
+                  f"{(frame.power - frame.current * frame.voltage).abs().mean():.4f}")
+        return
     audit = evidence["audit"]
     cfg = evidence["configs"]["TensorFlow"]
     for column, (label, value) in zip(st.columns(3), [
@@ -83,7 +96,7 @@ def dataset_explorer():
         col.metric(name, value)
     st.caption("Source: data/processed/solar_data_combined.csv. Source filenames identify measurement days. "
                "The 1900 timestamp year is a placeholder; calendar dates and seasonal coverage cannot be reconstructed.")
-    st.caption("The displayed collection-day count is a count of source files. Full-record duplicate checks include filenames; the manuscript separately identifies nine repeated measurements across two different filenames.")
+    st.caption("The corrected dataset excludes an accidentally repeated daily file and contains no exact repeated measurement records when filename identity is excluded.")
     st.dataframe(df[list(UNITS)].agg(["min", "max"]).T.assign(unit=pd.Series(UNITS)), width="stretch")
     st.dataframe(df.isna().sum().rename("Missing values"), width="stretch")
     days = st.multiselect("Measurement days", sorted(df.day_id.unique()), default=sorted(df.day_id.unique())[:2])
@@ -119,7 +132,7 @@ def dataset_explorer():
     st.caption("time: recorded measurement time, with a placeholder date. source_file/day_id: source measurement-day identifier.")
     track_note()
     with st.expander("Dataset limitations"):
-        st.write("Small sample; 21 days at one installation; seasonal coverage is not established. Consecutive readings may be correlated. "
+        st.write("Small sample; 20 daily files at one installation; seasonal coverage is not established. Consecutive readings may be correlated. "
                  "Different installations, weather regimes and seasons require independent validation.")
 
 def learning_curves():
@@ -137,13 +150,23 @@ def learning_curves():
 
 def experiments():
     st.title("Results Explorer")
+    st.warning("Historical 189-row experiments are superseded because they included an accidental duplicate daily file. They are preserved for comparison and are not corrected results.")
     track_note()
     with st.expander("Original research summary figures"):
         st.graphviz_chart('digraph { rankdir=LR; node [shape=box]; "Data collection" -> "Preparation" -> "Feature selection" -> "Training" -> "Grouped cross-validation" -> "Evaluation" -> "Comparison"; }')
         st.image(str(ROOT / "results/figures/model_comparison_bars.png"), caption="Original baseline/scikit-learn comparison; matched S2 scores are shown separately below.")
-    view = st.selectbox("Experiment collection", ["Matched TensorFlow/PyTorch S2", "Historical TensorFlow", "Original scikit-learn / baselines"])
+    view = st.selectbox("Experiment collection", ["Corrected 20-day research", "Matched TensorFlow/PyTorch S2 (superseded)", "Historical TensorFlow", "Original scikit-learn / baselines"])
     run = None
-    if view.startswith("Matched"):
+    if view.startswith("Corrected"):
+        from corrected_protocol import completed_collection
+        try:
+            manifest = completed_collection()
+        except (FileNotFoundError, ValueError) as exc:
+            st.info(str(exc))
+            return
+        table = csv(manifest["comparison"])
+        st.caption("Completed corrected runs; pooled per-seed scores, followed by means and population standard deviations.")
+    elif view.startswith("Matched"):
         table = csv("results/comparisons/parity_s2/comparison.csv")
         st.caption("Source: results/comparisons/parity_s2/comparison.csv; means and population standard deviations across seeds, not confidence intervals.")
         with st.expander("Matched experiment settings"):
@@ -186,7 +209,9 @@ def experiments():
         predictions = csv(str(path.relative_to(ROOT)))
         st.caption(str(path.relative_to(ROOT)))
     else:
-        prediction_run = run or st.selectbox("Prediction framework", ["TensorFlow S2", "PyTorch S2"])
+        prediction_run = run or st.selectbox("Prediction framework", (
+            ["Corrected TensorFlow selected", "Corrected PyTorch selected"] if view.startswith("Corrected")
+            else ["TensorFlow S2", "PyTorch S2"]))
         predictions = csv(f"results/{RUNS[prediction_run]}/predictions.csv")
         prediction_track = st.selectbox("Prediction track", sorted(predictions.track.unique()))
         predictions = predictions[predictions.track == prediction_track]
@@ -194,7 +219,8 @@ def experiments():
         seed = st.selectbox("Prediction seed", sorted(predictions.seed.unique()))
         predictions = predictions[(predictions.model == model) & (predictions.seed == seed)]
         if "hour" not in predictions:
-            predictions = predictions.merge(dataset()[["day_id", "hour"]].assign(row=lambda d: d.index), on=["row", "day_id"], validate="many_to_one")
+            reference = dataset() if "corrected_20_days" in RUNS[prediction_run] else historical_dataset()
+            predictions = predictions.merge(reference[["day_id", "hour"]].assign(row=lambda d: d.index), on=["row", "day_id"], validate="many_to_one")
         st.caption(f"Source: results/{RUNS[prediction_run]}/predictions.csv; seed {seed}; held-out days only.")
     if predictions.empty:
         st.info("No saved predictions for this selection.")

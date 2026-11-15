@@ -1,5 +1,15 @@
 # Solar Power Forecasting: Python Reimplementation
 
+> **Duplicate correction in progress.** An accidentally repeated daily file has
+> been removed from the active data: 180 observations, 20 daily files, nine
+> readings per file, and no exact repeated measurements excluding filenames.
+> All 189-row experiment scores and model bundles described below are
+> **superseded historical results**. Full corrected S1/S2 runs are in progress;
+> no corrected framework ranking or updated manuscript/PDF is claimed yet.
+> See [corrected-run status and outputs](results/corrected_20_days/README.md).
+> The new no-fitting electrical-product MAE is 1.114574 W. Nothing has been
+> merged, published to model hosting, or redeployed by this correction.
+
 The saved models are available on Hugging Face: [OluwafisayoIbrahim/solar-power-prediction](https://huggingface.co/OluwafisayoIbrahim/solar-power-prediction).
 
 A Python reimplementation and re-evaluation of an earlier MATLAB feedforward-ANN

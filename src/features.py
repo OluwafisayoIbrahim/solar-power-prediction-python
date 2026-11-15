@@ -43,6 +43,10 @@ def load_processed_data(
 
     df = pd.read_csv(data_path)
 
+    if data_path.resolve() == PROCESSED_DATA_PATH.resolve():
+        from load_data import validate_research_data
+        validate_research_data(df)
+
     return df
 
 

@@ -5,6 +5,7 @@ architecture is refitted on all outer training days for the median best epoch.
 """
 
 import argparse
+import hashlib
 from datetime import datetime, timezone
 import json
 from pathlib import Path
@@ -169,7 +170,10 @@ def run_comparison(args, framework, version, label, fit, predict, select):
     curves.mkdir()
     metadata = vars(args).copy()
     metadata.update(output=str(output), python=platform.python_version(),
-                    sklearn=sklearn.__version__, rows=len(df))
+                    sklearn=sklearn.__version__, rows=len(df), groups=int(df.day_id.nunique()),
+                    training_data_sha256=hashlib.sha256(
+                        (base.parent / 'data/processed/solar_data_combined.csv').read_bytes()).hexdigest(),
+                    dataset_status="corrected_accidental_duplicate_removed")
     metadata["torch" if framework == "pytorch" else framework] = version
     (output / "config.json").write_text(json.dumps(metadata, indent=2), encoding="utf-8")
     metrics, predictions, selections = [], [], []
