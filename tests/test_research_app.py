@@ -1,4 +1,4 @@
-"""Exercise the corrected-data transition without substituting historical scores."""
+"""Exercise the updated-data transition without substituting historical scores."""
 from pathlib import Path
 import sys
 import unittest
@@ -7,18 +7,18 @@ from streamlit.testing.v1 import AppTest
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path[:0] = [str(ROOT / "deployment"), str(ROOT / "src")]
-from corrected_protocol import COLLECTION, verify_run
+from research_protocol import COLLECTION, verify_run
 from model_registry import MODELS
 from model_statistics import research_scores
 
 
-class CorrectedAppTests(unittest.TestCase):
+class ResearchAppTests(unittest.TestCase):
     def test_registry_uses_fresh_exports_and_labels_history(self):
         for spec in MODELS.values():
             if spec.research_run:
                 self.assertIn("superseded", spec.label)
             elif spec.kind != "physics":
-                self.assertIn("corrected_20_days", spec.model_dir.as_posix())
+                self.assertIn("research_20_days", spec.model_dir.as_posix())
 
     def test_manuscript_and_overview_do_not_present_partial_results(self):
         app = AppTest.from_file(str(ROOT / "deployment/app.py"), default_timeout=90).run()
@@ -28,7 +28,7 @@ class CorrectedAppTests(unittest.TestCase):
         self.assertFalse(app.exception, str(app.exception))
         self.assertFalse(app.error, str(app.error))
         if not (ROOT / "manuscript/publication_ready.json").is_file():
-            self.assertTrue(any("corrected manuscript" in item.value.lower() for item in app.warning))
+            self.assertTrue(any("updated manuscript" in item.value.lower() for item in app.warning))
             self.assertEqual(len(app.dataframe), 0)
         if not (COLLECTION / "completed.json").is_file():
             with self.assertRaisesRegex(ValueError, "incomplete"):
@@ -48,8 +48,8 @@ class CorrectedAppTests(unittest.TestCase):
 
     def test_completed_research_is_reconciled_if_available(self):
         if not (COLLECTION / "completed.json").is_file():
-            self.skipTest("Full corrected research runs are still in progress; no replacement scores accepted")
-        from corrected_protocol import completed_collection
+            self.skipTest("Full updated research runs are still in progress; no replacement scores accepted")
+        from research_protocol import completed_collection
         for framework, path in completed_collection()["runs"].items():
             verify_run(ROOT / path, f"{framework} selected")
 

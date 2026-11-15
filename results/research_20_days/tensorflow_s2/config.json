@@ -11,7 +11,7 @@
   "activation": "tanh",
   "epochs": 1000,
   "patience": 30,
-  "batch_size": 32,
+  "batch_size": 16,
   "learning_rate": 0.01,
   "l2": 0.0001,
   "seeds": [
@@ -25,13 +25,13 @@
   ],
   "folds": 7,
   "inner_folds": 3,
-  "output": "results\\corrected_20_days\\tensorflow_s1",
+  "output": "results\\research_20_days\\tensorflow_s2",
   "smoke_test": false,
   "python": "3.13.1",
   "sklearn": "1.9.1",
   "rows": 180,
   "groups": 20,
   "training_data_sha256": "2c8266628be154f1da7e191ac1c8bfb6da8de15c4183bba8a24a49dcffcd8e1a",
-  "dataset_status": "corrected_accidental_duplicate_removed",
+  "dataset_status": "accidental_duplicate_removed",
   "tensorflow": "2.21.0"
 }

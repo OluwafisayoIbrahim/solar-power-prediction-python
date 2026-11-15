@@ -4,7 +4,7 @@ import streamlit as st
 from model_registry import MODELS
 from research_data import csv, config, RUNS, source_links
 from research_pages import model_details
-from corrected_protocol import completed_collection, ROOT
+from research_protocol import completed_collection, ROOT
 import json
 
 RESEARCH_LABELS = {
@@ -52,7 +52,7 @@ def render_model_statistics(loaded):
         st.dataframe(variation, hide_index=True, width="stretch", column_config={
             name: st.column_config.NumberColumn(format="%.6f")
             for name in ("Mean", "Seed standard deviation")})
-        collection = spec.research_run or "Corrected 20-day collection"
+        collection = spec.research_run or "20-day collection"
         st.caption(f"{collection} grouped cross-validation: metrics pool held-out predictions per seed. "
                    "Seed standard deviations are not confidence intervals. These scores evaluate "
                    "the training procedure, not an independent test of the final saved weights.")

@@ -1,4 +1,4 @@
-"""Finish corrected experiments after S1/S2; never promote partial evidence.
+"""Finish updated experiments after S1/S2; never promote partial evidence.
 
 Run with the project virtualenv. --stage sklearn is independent of TF selection.
 --stage frameworks waits for the two separately launched full TensorFlow jobs,
@@ -15,7 +15,7 @@ import time
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
-from corrected_protocol import COLLECTION, data_digest, choose_tensorflow, verify_run
+from research_protocol import COLLECTION, data_digest, choose_tensorflow, verify_run
 
 
 def write_json(path, value):
@@ -82,7 +82,7 @@ def frameworks(wait_hours):
     deadline = time.monotonic() + wait_hours * 3600
     while not all((path / "comparison.csv").is_file() for path in (s1, s2)):
         if time.monotonic() > deadline:
-            raise TimeoutError("TensorFlow S1/S2 incomplete; no corrected evidence promoted")
+            raise TimeoutError("TensorFlow S1/S2 incomplete; no updated evidence promoted")
         write_json(COLLECTION / "progress.json", {
             "stage": "waiting_for_full_tensorflow_s1_s2", "complete": False,
             "training_data_sha256": data_digest(),
@@ -113,14 +113,14 @@ def frameworks(wait_hours):
                 "--output", COLLECTION / "exports/pytorch")
     marker = COLLECTION / "sklearn_exports_complete.json"
     if not marker.is_file() or json.loads(marker.read_text())["training_data_sha256"] != data_digest():
-        raise ValueError("Corrected sklearn exports are incomplete")
+        raise ValueError("Updated sklearn exports are incomplete")
     manifest = {
         "status": "complete", "training_data_sha256": data_digest(), "rows": 180, "groups": 20,
         "selected": selection["selected"],
         "runs": {"TensorFlow": selected.relative_to(ROOT).as_posix(),
                  "PyTorch": pytorch.relative_to(ROOT).as_posix()},
         "comparison": (comparison / "comparison.csv").relative_to(ROOT).as_posix(),
-        "exports": {kind: f"results/corrected_20_days/exports/{kind}"
+        "exports": {kind: f"results/research_20_days/exports/{kind}"
                     for kind in ["tensorflow", "pytorch", "sklearn"]},
         "editorial_reference": "manuscript/editorial_reference_superseded.zip",
         "manuscript_pdf_status": "pending_update_and_visual_review",

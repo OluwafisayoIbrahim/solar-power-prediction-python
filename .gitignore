@@ -5,8 +5,8 @@ __pycache__/
 *.pyc
 .ipynb_checkpoints/
 results/smoke/
-results/corrected_20_days/*.log
-results/corrected_20_days/progress.json
+results/research_20_days/*.log
+results/research_20_days/progress.json
 results/models/*.joblib
 !results/models/track_b_x_scaler.joblib
 !results/models/track_b_y_scaler.joblib

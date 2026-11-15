@@ -2,13 +2,13 @@
 
 > **Correction status:** The active dataset has 180 rows across 20 daily files
 > after removal of an accidental duplicate. The 189-row results and S2 exports
-> documented below are superseded historical artifacts. Full corrected runs
-> are in progress; see [run status](../results/corrected_20_days/README.md).
-> The current registry points to `results/corrected_20_days/exports/{tensorflow,
+> documented below are superseded historical artifacts. Full updated runs
+> are in progress; see [run status](../results/research_20_days/README.md).
+> The current registry points to `results/research_20_days/exports/{tensorflow,
 > pytorch,sklearn}` and withholds fitted predictors until `completed.json` is
 > verified. Physics remains available; historical models are explicitly labelled.
-> Manuscript findings are withheld until corrected content/PDF review is recorded.
-> Historical plots use the preserved 189-row snapshot rather than corrected row IDs.
+> Manuscript findings are withheld until updated content/PDF review is recorded.
+> Historical plots use the preserved 189-row snapshot rather than updated row IDs.
 
 ## Research dashboard navigation
 
@@ -81,7 +81,7 @@ respectively. Identical copies cross training/test boundaries when either fold
 is held out. The effect on reported error remains unmeasured. Intervals range from 35 to 92 minutes;
 measurements are approximately hourly. Data and historical metrics are preserved.
 Resolving provenance and publishing a duplicate-aware re-evaluation are separate
-research tasks. No corrected performance is claimed in this UI change.
+research tasks. No updated performance is claimed in this UI change.
 
 The original MATLAB README and `NeuralNet.m` were inspected at commit
 `578401bb0d106c53f0e152380441a8338854ed57`. The README does not state an input count;

@@ -37,10 +37,10 @@ RUNS = {"Original TensorFlow (300 epochs)": "tensorflow/20261014T104851616874Z",
         "Historical TensorFlow Track A (1000 epochs)": "tensorflow/20261019T100248937256Z",
         "TensorFlow S1": "tensorflow/convergence_s1",
         "TensorFlow S2": "tensorflow/convergence_s2", "PyTorch S2": "pytorch/parity_s2"}
-_completed = ROOT / "results/corrected_20_days/completed.json"
+_completed = ROOT / "results/research_20_days/completed.json"
 if _completed.is_file():
     for _framework, _path in json.loads(_completed.read_text(encoding="utf-8"))["runs"].items():
-        RUNS[f"Corrected {_framework} selected"] = str(PurePosixPath(_path).relative_to("results"))
+        RUNS[f"{_framework} selected (20-day)"] = str(PurePosixPath(_path).relative_to("results"))
 
 @st.cache_data
 def dataset():
@@ -49,7 +49,7 @@ def dataset():
 
 @st.cache_data(max_entries=1)
 def historical_dataset():
-    """Reference rows for superseded predictions; never join them to corrected rows."""
+    """Reference rows for superseded predictions; never join them to updated rows."""
     return add_day_id(pd.read_csv(ROOT / "data/historical/solar_data_combined_189.csv"))
 
 @st.cache_data

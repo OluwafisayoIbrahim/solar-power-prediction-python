@@ -7,7 +7,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 import pandas as pd
 from sklearn.model_selection import GroupKFold
-from corrected_protocol import COLLECTION, data_digest
+from research_protocol import COLLECTION, data_digest
 from features import add_day_id, load_processed_data
 from load_data import MEASUREMENT_COLUMNS, validate_research_data
 from evaluate import compute_metrics

@@ -14,11 +14,11 @@ sys.path.insert(0, str(ROOT / "src"))
 from features import add_day_id, load_processed_data
 from load_data import (MEASUREMENT_COLUMNS, load_all_solar_data, preprocess_data,
                        validate_research_data)
-from corrected_protocol import choose_tensorflow, data_digest, verify_run
+from research_protocol import choose_tensorflow, data_digest, verify_run
 from evaluate import compute_metrics
 
 
-class CorrectedDataTests(unittest.TestCase):
+class ResearchDataTests(unittest.TestCase):
     def test_selection_uses_cap_hits_then_inner_evidence_without_outer_files(self):
         with tempfile.TemporaryDirectory() as directory:
             paths = [Path(directory) / name for name in ["s1", "s2"]]
@@ -42,11 +42,11 @@ class CorrectedDataTests(unittest.TestCase):
             rows.to_csv(paths[0] / "selected_settings.csv", index=False)
             self.assertEqual(choose_tensorflow(*paths)["selected"], "S1")
 
-    def test_historical_runs_cannot_be_promoted_as_corrected(self):
-        with self.assertRaisesRegex(ValueError, "Not a full corrected"):
+    def test_historical_runs_cannot_be_promoted_as_updated(self):
+        with self.assertRaisesRegex(ValueError, "Not a full updated"):
             verify_run(ROOT / "results/tensorflow/convergence_s2", "TensorFlow selected")
 
-    def test_corrected_prediction_reconciliation_rejects_corruption(self):
+    def test_research_prediction_reconciliation_rejects_corruption(self):
         # Synthetic predictions exist only in a temporary test directory.
         frame = add_day_id(load_processed_data())
         folds = np.zeros(180, dtype=int)

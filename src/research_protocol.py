@@ -1,4 +1,4 @@
-"""Shared, fail-closed provenance for the duplicate-corrected research collection."""
+"""Shared, fail-closed provenance for the duplicate-free research collection."""
 import hashlib
 import json
 from pathlib import Path
@@ -13,7 +13,7 @@ from evaluate import compute_metrics
 from sklearn.model_selection import GroupKFold
 
 ROOT = Path(__file__).resolve().parents[1]
-COLLECTION = ROOT / "results/corrected_20_days"
+COLLECTION = ROOT / "results/research_20_days"
 
 
 def data_digest():
@@ -30,7 +30,7 @@ def choose_tensorflow(s1, s2):
                 or cfg.get("inner_folds") != 3 or cfg.get("seeds") != [0, 1, 2]
                 or cfg.get("tracks") != ["A", "B"]
                 or cfg.get("training_data_sha256") != data_digest()):
-            raise ValueError("Selection requires full corrected research settings")
+            raise ValueError("Selection requires full updated research settings")
         candidates[name] = {
             "cap_hits": sum(row["cap_hits"] for row in summary),
             "mean_inner_mae": float(np.mean([row["mean_inner_mae"] for row in summary])),
@@ -44,7 +44,7 @@ def choose_tensorflow(s1, s2):
 
 
 def verify_run(path, label):
-    """Reconcile every row, split and per-seed/summary metric with corrected data."""
+    """Reconcile every row, split and per-seed/summary metric with updated data."""
     path = Path(path)
     cfg = json.loads((path / "config.json").read_text(encoding="utf-8"))
     frame = add_day_id(load_processed_data())
@@ -53,7 +53,7 @@ def verify_run(path, label):
             or cfg.get("training_data_sha256") != data_digest()
             or cfg.get("folds") != 7 or cfg.get("inner_folds") != 3
             or cfg.get("seeds") != [0, 1, 2] or cfg.get("tracks") != ["A", "B"]):
-        raise ValueError("Not a full corrected research run")
+        raise ValueError("Not a full updated research run")
     predictions = pd.read_csv(path / "predictions.csv")
     metrics = pd.read_csv(path / "metrics_per_seed.csv")
     summary = pd.read_csv(path / "comparison.csv")
@@ -79,7 +79,7 @@ def verify_run(path, label):
                 or not np.array_equal(rows.fold, folds)
                 or not np.allclose(rows.measured, frame.power, rtol=0, atol=1e-10)
                 or not np.isfinite(rows.predicted).all()):
-            raise ValueError("Saved predictions differ from corrected data or fold assignments")
+            raise ValueError("Saved predictions differ from updated data or fold assignments")
         recorded = metrics.set_index(keys).loc[key]
         for metric, value in compute_metrics(rows.measured.to_numpy(), rows.predicted.to_numpy()).items():
             if not np.isclose(recorded[metric], value, rtol=1e-8, atol=1e-9):
@@ -97,7 +97,7 @@ def completed_collection():
     """Never fall back to 189-row historical or partial research evidence."""
     path = COLLECTION / "completed.json"
     if not path.is_file():
-        raise ValueError("Corrected experiments are incomplete; historical 189-row results are superseded")
+        raise ValueError("Updated experiments are incomplete; historical 189-row results are superseded")
     manifest = json.loads(path.read_text(encoding="utf-8"))
     if manifest.get("training_data_sha256") != data_digest():
         raise ValueError("Completed research collection does not match the active dataset")

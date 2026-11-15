@@ -16,10 +16,10 @@ tags:
 
 > **Superseded release documentation.** The 189-row scores and exports below
 > included an accidentally duplicated daily file. Active research data now
-> contain 180 observations across 20 daily files. Full corrected experiments
-> are in progress in `results/corrected_20_days`; corrected exports have separate
+> contain 180 observations across 20 daily files. Full updated experiments
+> are in progress in `results/research_20_days`; updated exports have separate
 > locations and will become active only after completion checks. This card's
-> historical tables are retained for provenance, not corrected performance.
+> historical tables are retained for provenance, not updated performance.
 
 ## Model description
 
@@ -55,7 +55,7 @@ The processed dataset contains **189 observations from 21 source-file groups**, 
 
 The source project stores raw files under `data/raw/` and the combined dataset at `data/processed/solar_data_combined.csv`. The model upload does not itself imply that these data files are included or licensed for redistribution.
 
-**Data audit limitation:** the project's 2026-11-05 audit identified nine repeated measurement records across `solar_data_tue_21st.csv` and `solar_data_tue_28st.csv`. The 21 source groups are not independently verified unique collection dates. Identical observations may therefore occur across nominally held-out partitions. Within-file measurement intervals range from 35 to 92 minutes, so sampling is approximately hourly rather than uniformly hourly. The reported results preserve the original data; no duplicate-corrected performance is claimed.
+**Data audit limitation:** the project's 2026-11-05 audit identified nine repeated measurement records across `solar_data_tue_21st.csv` and `solar_data_tue_28st.csv`. The 21 source groups are not independently verified unique collection dates. Identical observations may therefore occur across nominally held-out partitions. Within-file measurement intervals range from 35 to 92 minutes, so sampling is approximately hourly rather than uniformly hourly. The reported results preserve the original data; no duplicate-free performance is claimed.
 
 ## Models and training
 

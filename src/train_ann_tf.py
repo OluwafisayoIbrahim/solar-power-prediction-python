@@ -173,7 +173,7 @@ def run_comparison(args, framework, version, label, fit, predict, select):
                     sklearn=sklearn.__version__, rows=len(df), groups=int(df.day_id.nunique()),
                     training_data_sha256=hashlib.sha256(
                         (base.parent / 'data/processed/solar_data_combined.csv').read_bytes()).hexdigest(),
-                    dataset_status="corrected_accidental_duplicate_removed")
+                    dataset_status="accidental_duplicate_removed")
     metadata["torch" if framework == "pytorch" else framework] = version
     (output / "config.json").write_text(json.dumps(metadata, indent=2), encoding="utf-8")
     metrics, predictions, selections = [], [], []

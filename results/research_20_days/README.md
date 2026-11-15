@@ -1,4 +1,4 @@
-# Duplicate-corrected research collection — in progress
+# Research on 20 daily files — in progress
 
 The active data contain 180 observations across 20 daily CSVs. The researcher
 confirmed that `solar_data_tue_28st.csv` was an accidental second save of the
@@ -11,7 +11,7 @@ All older research outputs are superseded because they included the duplicate.
 
 - `dataset_audit.json`: dataset checksum, row/group counts and outer fold sizes.
 - `physics_metrics_per_seed.csv` and `physics_predictions.csv`: the no-fitting
-  electrical-product baseline on all corrected records (MAE 1.114574 W).
+  electrical-product baseline on all updated records (MAE 1.114574 W).
 - `exports/sklearn`: six new full-data inference predictors, each reloaded and
   checked against the pre-save predictions. The original seven-fold full-data
   final-selection grid is retained for tuned model exports. Inference fits do
@@ -19,6 +19,8 @@ All older research outputs are superseded because they included the duplicate.
 
 ## Full runs
 
+Partial runs started before the naming change are preserved in `attempt_01`;
+they are incomplete and excluded from research evidence. The active
 `tensorflow_s1` and `tensorflow_s2` are fresh full research runs, not smoke tests.
 Both tracks, seeds 0/1/2, seven outer folds and three inner folds are retained.
 The original feature sets, implementations and grids are unchanged. TensorFlow
@@ -38,8 +40,8 @@ one has 2 groups/18 rows and trains on 18 groups/162 rows. For 17 training
 groups, inner fitting uses 11 or 12 groups and validation uses 6 or 5; for
 18 groups, inner fitting uses 12 and validation uses 6.
 
-`scripts/complete_corrected_research.py --stage frameworks` waits for the two
-full TensorFlow jobs, validates their corrected identities and metrics, then
+`scripts/complete_research.py --stage frameworks` waits for the two
+full TensorFlow jobs, validates their updated identities and metrics, then
 chooses by fewer selected-refit cap hits, lower equal-track mean inner MAE,
 and finally S1 for an exact tie. It never selects using outer-test scores.
 It then runs `pytorch_selected`, writes `comparison`, and exports/reloads
@@ -54,16 +56,16 @@ attempt. The completion worker times out after 24 hours without promoting
 incomplete evidence. Keep the computer awake while these CPU jobs run.
 
 ```powershell
-.\.venv\Scripts\python.exe scripts/audit_corrected_dataset.py
-.\.venv\Scripts\python.exe -m unittest discover -s tests -p test_corrected_data.py -v
-.\.venv\Scripts\python.exe -m unittest discover -s tests -p test_corrected_app.py -v
+.\.venv\Scripts\python.exe scripts/audit_dataset.py
+.\.venv\Scripts\python.exe -m unittest discover -s tests -p test_research_data.py -v
+.\.venv\Scripts\python.exe -m unittest discover -s tests -p test_research_app.py -v
 ```
 
 ## Publication still required
 
 The supplied latest editorial source is preserved in
 `manuscript/editorial_reference_superseded.zip`. It includes the old results
-and is **not** a corrected deliverable. After completed runs, update every
+and is **not** a updated deliverable. After completed runs, update every
 affected result, rank, statement, table, diagram and figure in the manuscript
 and app. Render the editable LaTeX, inspect every PDF page, reconcile the
 evidence inventory and update the existing completed-research regression

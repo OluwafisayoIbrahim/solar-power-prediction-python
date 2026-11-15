@@ -4,9 +4,9 @@
 > been removed from the active data: 180 observations, 20 daily files, nine
 > readings per file, and no exact repeated measurements excluding filenames.
 > All 189-row experiment scores and model bundles described below are
-> **superseded historical results**. Full corrected S1/S2 runs are in progress;
-> no corrected framework ranking or updated manuscript/PDF is claimed yet.
-> See [corrected-run status and outputs](results/corrected_20_days/README.md).
+> **superseded historical results**. Full updated S1/S2 runs are in progress;
+> no updated framework ranking or updated manuscript/PDF is claimed yet.
+> See [updated-run status and outputs](results/research_20_days/README.md).
 > The new no-fitting electrical-product MAE is 1.114574 W. Nothing has been
 > merged, published to model hosting, or redeployed by this correction.
 
@@ -24,7 +24,7 @@ measurements, reporting a Mean Absolute Percentage Error (MAPE) of 0.32%–0.60%
 
 Revisiting the project in Python surfaced a methodological issue with that
 original evaluation (see **Key finding** below). This repository reimplements
-the analysis with corrected, held-out validation, and reports what the ANN can
+the analysis with updated, held-out validation, and reports what the ANN can
 and cannot actually predict.
 
 The project now also compares a TensorFlow/Keras ANN with the scikit-learn
@@ -52,7 +52,7 @@ outer fold 1 or 7 is held out: saved predictions assign the two files to folds 1
 and 7 respectively. This was confirmed in the November 13, 2026 follow-up; the
 effect on reported error remains unmeasured.
 Recorded within-file intervals range from 35 to 92 minutes. Existing data and
-results are preserved; no duplicate-corrected performance is claimed. See the
+results are preserved; no duplicate-free performance is claimed. See the
 Streamlit Research Manuscript and its
 [evidence inventory](deployment/manuscript_evidence.json) for the audit and limitations.
 
