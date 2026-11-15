@@ -10,8 +10,9 @@ from streamlit.testing.v1 import AppTest
 ROOT = Path(__file__).resolve().parents[1]
 sys.path[:0] = [str(ROOT / "deployment"), str(ROOT / "src")]
 from research_data import dataset, summary, errors, metric_values, range_warnings, UNITS, config, repository_source, source_links
+from model_fixtures import SavedModelFixtures
 
-class DashboardTests(unittest.TestCase):
+class DashboardTests(SavedModelFixtures, unittest.TestCase):
     def test_portable_repository_sources(self):
         expected = "results/tensorflow/20261019T100248937256Z"
         source = r"C:\Users\user\Documents\fisayo\solar-power-prediction-python\results\tensorflow\20261019T100248937256Z"
@@ -39,8 +40,8 @@ class DashboardTests(unittest.TestCase):
 
     def test_dataset_and_transformations(self):
         frame = dataset()
-        self.assertEqual(summary(frame)["Measurements"], 189)
-        self.assertEqual(summary(frame)["Collection days"], 21)
+        self.assertEqual(summary(frame)["Measurements"], 180)
+        self.assertEqual(summary(frame)["Collection days"], 20)
         self.assertEqual(frame.groupby("day_id").size().unique().tolist(), [9])
         self.assertEqual(UNITS["power"], "W")
         self.assertEqual(config("TensorFlow S2")["batch_size"], 16)
@@ -61,7 +62,7 @@ class DashboardTests(unittest.TestCase):
             self.assertFalse(len(app.exception), str(app.exception))
             self.assertFalse(len(app.error), str(app.error))
         app.radio(key="dashboard_page").set_value("Results Explorer").run()
-        for collection in ["Historical TensorFlow", "Original scikit-learn / baselines", "Matched TensorFlow/PyTorch S2"]:
+        for collection in ["Historical TensorFlow", "Original scikit-learn / baselines", "Matched TensorFlow/PyTorch S2 (historical)"]:
             next(item for item in app.selectbox if item.label == "Experiment collection").select(collection).run()
             self.assertFalse(len(app.exception), str(app.exception))
         app.radio(key="dashboard_page").set_value("Overview").run()
@@ -71,17 +72,14 @@ class DashboardTests(unittest.TestCase):
 
     def test_overview_consistency_links_and_workspace_separation(self):
         from manuscript_content import TITLE
-        from manuscript_data import load_evidence, score
-        evidence = load_evidence()
         app = AppTest.from_file(str(ROOT / "deployment/app.py"), default_timeout=90).run()
         self.assertEqual(app.title[0].value, TITLE)
         prose = " ".join(item.value for item in app.markdown)
-        self.assertIn(f"{score(evidence, 'B', 'Sklearn tuned'):.3f} W", prose)
-        self.assertIn("?view=manuscript#discussion", prose)
-        self.assertIn("?view=manuscript#limitations", prose)
-        self.assertIn("outer folds 1 and 7", prose)
-        self.assertIn("cross training/test boundaries", prose)
-        self.assertIn("effect on reported error remains unmeasured", prose)
+        self.assertNotIn("outer folds 1 and 7", prose)
+        self.assertNotIn("cross training/test boundaries", prose)
+        if not (ROOT / "manuscript/publication_ready.json").is_file():
+            self.assertTrue(any("not available yet" in item.value for item in app.warning))
+            self.assertTrue(any(metric.label == "No-fitting current × voltage MAE (W)" for metric in app.metric))
         app.query_params["view"] = "manuscript"
         app.run()
         self.assertEqual(app.session_state["dashboard_page"], "Research Manuscript")

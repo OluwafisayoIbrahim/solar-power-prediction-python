@@ -247,7 +247,7 @@ not evidence of superior weather-only forecasting.
 **RQ2 - baseline comparisons.** {track_summary(evidence, 'A')} {track_summary(evidence, 'B')}
 Rankings depend on the metric and must be interpreted within each track's information setting.
 
-**RQ3 ? held-out days.** Each test daily group and its measurements are excluded from fitting.
+**RQ3 - held-out days.** Each test daily group and its measurements are excluded from fitting.
 Model selection is nested within the outer training days. One repeated daily file was excluded
 before evaluation. There is no controlled experiment isolating the effect of changing the
 split strategy. External-site or future-horizon performance cannot be inferred from these results.

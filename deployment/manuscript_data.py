@@ -73,7 +73,7 @@ def validate_predictions(predictions, metrics, cfg, frame):
                 raise ValueError(f"Saved {metric} disagrees with out-of-fold predictions: {key}")
 
 
-@st.cache_data(max_entries=1)
+@st.cache_data(max_entries=1, show_spinner=False)
 def load_evidence():
     manifest = completed_collection()
     if RUN_PATHS != manifest["runs"]:

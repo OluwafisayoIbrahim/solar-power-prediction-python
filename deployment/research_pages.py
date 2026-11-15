@@ -9,7 +9,7 @@ from research_data import (ROOT, UNITS, DESCRIPTIONS, RUNS, dataset, csv, config
 from model_registry import MODELS, load_model
 from model_image import predictor_image
 
-@st.cache_resource
+@st.cache_resource(show_spinner=False)
 def saved_model(key):
     return load_model(key)
 
@@ -30,6 +30,7 @@ def overview():
     st.title(TITLE)
     st.markdown("A Python re-evaluation of an undergraduate MATLAB ANN study, examining how input availability, "
                 "simple baselines and validation design affect the interpretation of solar power estimates.")
+    overview_navigation()
     try:
         if not (ROOT / "manuscript/publication_ready.json").is_file():
             raise ValueError("Research results are not available yet.")
@@ -66,6 +67,10 @@ def overview():
     st.markdown(track_summary(evidence, "B"))
     st.caption("One repeated daily file was excluded before evaluation. Small sample size, "
                "uncertain temporal coverage and absent external validation limit generalisation.")
+
+
+def overview_navigation():
+    from manuscript_content import ORIGINAL, REPOSITORY
     st.subheader("Explore the application")
     with st.container(horizontal=True):
         for label, destination in [
@@ -79,6 +84,7 @@ def overview():
                 f"[Original MATLAB research]({ORIGINAL}) · "
                 "[Original SSRN preprint](https://doi.org/10.2139/ssrn.4771898). "
                 "The preprint concerns the original study; the Python re-evaluation is documented in the manuscript.")
+
 
 
 def dataset_explorer():
