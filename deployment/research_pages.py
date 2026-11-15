@@ -25,7 +25,7 @@ def histogram(values, label):
 
 def overview():
     from manuscript_content import TITLE, ORIGINAL, REPOSITORY
-    from manuscript_data import load_evidence, score
+    from manuscript_data import load_evidence, score, track_summary
 
     st.title(TITLE)
     st.markdown("A Python re-evaluation of an undergraduate MATLAB ANN study, examining how input availability, "
@@ -60,19 +60,12 @@ def overview():
                 "with scikit-learn, TensorFlow/Keras and PyTorch networks using grouped validation, nested selection "
                 "where applicable, and repeated ANN seeds. [Read the methods](?view=manuscript#methods).")
     st.subheader("Key findings")
-    st.markdown(
-        f"- **Electrical inputs change the task.** The measured-power versus current × voltage difference averages "
-        f"{audit['power_iv_mae']:.3f} W. Low Track A error does not establish weather-only forecasting. "
-        "[Interpretation](?view=manuscript#discussion).\n"
-        f"- **Complexity does not consistently improve performance.** Linear regression leads Track A by mean MAE "
-        f"({score(evidence, 'A', 'Linear'):.3f} W). Track B tuned scikit-learn MAE is "
-        f"{score(evidence, 'B', 'Sklearn tuned'):.3f} W versus {score(evidence, 'B', 'Linear'):.3f} W for linear regression; "
-        "the small difference is descriptive, not statistically established. [Results](?view=manuscript#results).\n"
-        f"- **Generalisation remains qualified.** {audit['duplicate_measurements']} measurement records repeat under "
-        "different filenames assigned to outer folds 1 and 7. Identical copies cross training/test boundaries "
-        "when either fold is held out; the effect on reported error remains unmeasured. No external or future-horizon "
-        "forecasting validation is established. [Limitations](?view=manuscript#limitations).")
-    st.caption("Findings use the same checked S2 evidence as the manuscript. Full methods, references and scientific qualifications are in the report.")
+    st.markdown(f"The no-fitting electrical-product baseline has mean MAE {audit['power_iv_mae']:.3f} W. "
+                "Both tracks estimate power from contemporaneous measurements.")
+    st.markdown(track_summary(evidence, "A"))
+    st.markdown(track_summary(evidence, "B"))
+    st.caption("An accidentally repeated daily file was removed before evaluation. Small sample size, "
+               "uncertain temporal coverage and absent external validation limit generalisation.")
     st.subheader("Explore the application")
     with st.container(horizontal=True):
         for label, destination in [
@@ -245,7 +238,7 @@ def experiments():
     daily = residuals[residuals.day_id == day].sort_values("hour")
     st.line_chart(daily, x="hour", y=["measured", "predicted"])
     st.dataframe(pd.DataFrame([metric_values(daily.measured, daily.predicted)]), hide_index=True)
-    st.caption("Daily metrics are descriptive; published scores pool held-out predictions per seed. Small differences on 21 days do not establish significance. Baselines offer a check on whether network complexity helps.")
+    st.caption("Daily metrics are descriptive; published scores pool held-out predictions per seed. Small differences in this dataset do not establish significance. Baselines offer a check on whether network complexity helps.")
     learning_curves()
 
 def model_details(loaded):
@@ -318,7 +311,7 @@ def models():
             st.info(f"Research metrics unavailable: {exc}")
     if scores:
         st.dataframe(pd.DataFrame(scores), hide_index=True, width="stretch")
-        st.caption("Historical and S2 runs have different training settings; inspect each source before comparing their scores.")
+        st.caption("Historical and active research runs have different training settings; inspect each source before comparing their scores.")
     st.write("An epoch is one pass over training data. Adam updates network weights using gradients; sklearn ANNs use L-BFGS. "
              "L2 discourages large weights. Inner-validation early stopping selects useful training durations. Reaching an epoch cap can indicate undertraining; avoiding it does not prove convergence.")
     learning_curves()

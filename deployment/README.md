@@ -12,6 +12,15 @@
 
 ## Research dashboard navigation
 
+All seven views use neutral research names. Overview and Research Manuscript
+withhold model findings while full experiments and document review are pending.
+Results Explorer separates the 20-day collection from superseded historical
+collections. Dataset Explorer reads the active 180-row dataset. Predict, Train /
+Experiment and Model Explorer use the shared registry and show availability
+messages until the completed collection is verified; physics remains available.
+The active evidence inventory records pending work separately from
+`manuscript_evidence_historical.json`.
+
 The sidebar opens **Overview → Research Manuscript → Results Explorer → Predict →
 Train / Experiment**, followed by Dataset Explorer and Model Explorer.
 

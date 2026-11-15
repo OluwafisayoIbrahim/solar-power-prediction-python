@@ -1,5 +1,5 @@
 """Manuscript prose and verified bibliography, separate from Streamlit rendering."""
-from manuscript_data import score
+from manuscript_data import score, track_summary
 
 TITLE = "Re-evaluating neural networks for solar power estimation: features, baselines and held-out-day validation"
 AUTHOR = "Oluwafisayo Ibrahim"
@@ -52,7 +52,7 @@ that horizon; weather measurements, weather forecasts and electrical measurement
 prediction problems [[2]](#ref-2).
 
 Project documentation describes the original undergraduate investigation as completed at
-Olabisi Onabanjo University in 2023; this is not independent institutional certification. It
+Olabisi Onabanjo University; this is not independent institutional certification. It
 implemented a MATLAB feedforward ANN to estimate power from measured conditions [[1]](#ref-1).
 The subsequent Python study revisited its task definition, evaluation and baseline comparisons.
 It asks whether low errors reflect useful generalisation or access to electrical measurements
@@ -86,8 +86,7 @@ information that is legitimately available [[4]](#ref-4). Current and voltage ar
 inputs for electrical estimation, but unavailable shortcuts for a weather-only deployment.
 This feature-availability issue differs from fitting preprocessing on test observations.
 Roberts et al. explain why validation must respect dependence structures [[5]](#ref-5).
-Here, source-file grouping is used to separate nominal measurement days; the duplicate-file
-finding below limits the interpretation of that separation.
+Here, daily grouping separates measurement days after an accidentally repeated daily file was removed.
 
 **Selection bias and baseline comparisons.** Cawley and Talbot show that finite-sample model
 selection can itself overfit and bias evaluation [[6]](#ref-6). The Python experiments separate
@@ -150,9 +149,11 @@ linear check; manuscript scores instead use the saved grouped-CV outputs.
 """
 
 VALIDATION = """
-Seven outer `GroupKFold` partitions hold out three source-file groups (27 rows) and fit on
-18 groups (162 rows). Each row receives one outer prediction per model and seed. Three
-inner grouped folds divide those 18 groups into 12 fitting and six validation groups.
+Seven outer `GroupKFold` partitions evaluate 180 observations across 20 daily files. Six folds
+hold out three groups (27 rows) and train on 17 groups (153 rows); one holds out two groups
+(18 rows) and trains on 18 groups (162 rows). Each row receives one outer prediction per model
+and seed. Three inner grouped folds use 11 or 12 fitting groups and six or five validation
+groups when the outer training set has 17 groups; with 18 groups, they use 12 and six.
 The tuned scikit-learn MLP selects hidden size and alpha by mean inner MAE; its untuned
 reference has fixed settings. Linear regression has no nested search; the physics product
 has no fitted parameters.
@@ -166,25 +167,22 @@ scores. Outer test rows do not choose the architecture or epochs.
 Seeds 0, 1 and 2 vary ANN initialisation. Scores pool all outer predictions per seed before
 computing a mean and population standard deviation across seeds. Deterministic baselines
 repeat the same values across these records. These are not confidence intervals or
-independent dataset replications. The nominal day grouping reduces same-file overlap,
-but the duplicate-source issue prevents a claim of complete observational independence.
+independent dataset replications. Training and test partitions share neither a daily group
+nor an exact measurement record. This does not establish independence across sites or seasons.
 
 S1 and S2 were compared using the README-documented selection rule and inner evidence.
-The inspected evidence does not independently establish when the rule was decided. S2 was selected.
+The inspected evidence does not independently establish when the rule was decided. The active
+setting is chosen by total cap hits, then equal-track mean inner MAE, then S1 for an exact tie.
 Historical outer scores had already been inspected,
 so this remains a development study requiring independent confirmation. Matching framework
 settings does not make random initialisations or floating-point operations identical.
 """
 
 LIMITATIONS = """
-**Sample size and effective independence.** Only 189 rows and 21 source-file identifiers
-are available. Nine measurement records repeat under two different identifiers. File-based
-grouping keeps each filename intact, but the saved predictions assign
-`solar_data_tue_21st.csv` to outer fold 1 and `solar_data_tue_28st.csv` to outer fold 7.
-Identical measurement copies therefore cross training/test boundaries when either fold is
-held out. This confirms overlap; its effect on reported error remains unmeasured.
-This report preserves the published outputs rather
-than silently deduplicating data or claiming corrected performance.
+**Sample size and effective independence.** Only 180 observations across 20 daily files are
+available. An accidentally repeated daily file was removed before evaluation. The retained
+records contain no exact repeated measurements when filename identity is excluded.
+The small sample and potentially correlated readings still limit generalisation.
 
 **Temporal and geographic coverage.** Collection is attributed to one university installation
 in the project documentation. The processed timestamps contain a placeholder date, and source
@@ -215,9 +213,7 @@ and records grouped, nested evaluation across three neural-network implementatio
 saved results do not justify a general claim that ANNs are superior to linear regression,
 nor that this system forecasts future solar generation.
 
-**Proposed work, not completed experiments.** First resolve the duplicate-file provenance
-and predefine an evaluation that keeps identical observations together. Re-evaluation would
-be a separate scientific change with newly versioned outputs. Collect longer records across
+**Proposed work, not completed experiments.** Collect longer records across
 seasons and installations, preserve full timestamps and instrument metadata, and evaluate
 external datasets. Define one-hour-ahead or day-ahead tasks using only inputs available before
 the target time. Compare justified temporal and tree-based baselines; assess uncertainty
@@ -228,24 +224,18 @@ where the available measurements and physical model warrant it.
 
 def abstract(evidence):
     a = evidence["audit"]
-    return f"""Solar power models require evaluation that reflects the information available at prediction time.
-This study re-examines an undergraduate MATLAB artificial-neural-network investigation through
-a Python comparison of feature configurations, baselines and validation procedures. The available
-dataset contains {a['rows']} observations assigned to {a['groups']} source-file groups, nominally measurement days.
-Track A includes irradiance, current, voltage, temperature and humidity; Track B excludes electrical
-measurements and includes observation hour. Linear regression, a Track A electrical-product baseline,
-and scikit-learn, TensorFlow/Keras and PyTorch networks are assessed using seven outer grouped folds,
-nested selection where applicable, and three ANN seeds. Metrics pool held-out predictions per seed.
-In matched S2 experiments, Track A linear regression attains mean MAE {score(evidence, 'A', 'Linear'):.3f} W,
-compared with {score(evidence, 'A', 'TensorFlow selected'):.3f} W for TensorFlow and {score(evidence, 'A', 'PyTorch selected'):.3f} W for PyTorch.
-Track B tuned scikit-learn MAE is {score(evidence, 'B', 'Sklearn tuned'):.3f} W versus {score(evidence, 'B', 'Linear'):.3f} W for linear regression;
-advantages are small and metric dependent. Electrical-input accuracy consequently does not establish
-weather-only forecasting, and network complexity does not consistently improve estimation. An artifact
-audit identifies {a['duplicate_measurements']} repeated measurement records under different filenames, limiting the
-independence implied by file-based grouping. The study contributes transparent task definition and
-reproducible comparisons, while small sample size, uncertain temporal coverage, duplicated records
-and absent external validation constrain generalisation. Neither track establishes future-horizon
-forecasting capability."""
+    return f"""{track_summary(evidence, 'A')} {track_summary(evidence, 'B')}
+This re-evaluation compares electrical and environmental inputs (Track A) with environmental
+inputs and observation hour (Track B), using {a['rows']} observations across {a['groups']} daily files.
+Linear regression, a no-fitting voltage/current product baseline, and scikit-learn,
+TensorFlow/Keras and PyTorch networks are evaluated using seven outer grouped folds,
+three inner folds where applicable, and seeds 0, 1 and 2. Metrics pool held-out predictions
+per seed before aggregation. The no-fitting V x I baseline has mean MAE
+{a['power_iv_mae']:.3f} W. Electrical-input accuracy reflects richer contemporaneous information.
+Small sample size, uncertain temporal coverage and absent external validation limit
+generalisation. Both tracks estimate power from measurements at the target time;
+neither establishes future-horizon forecasting capability."""
+
 
 
 def discussion(evidence):
@@ -254,21 +244,13 @@ and the electrical product is {evidence['audit']['power_iv_mae']:.3f} W. Track A
 whereas Track B cannot. Lower Track A errors reflect richer contemporaneous information; they are
 not evidence of superior weather-only forecasting.
 
-**RQ2 — complexity does not guarantee improvement.** Linear regression has the lowest matched Track A
-mean MAE ({score(evidence, 'A', 'Linear'):.3f} W). Track B's tuned scikit-learn ANN improves mean MAE by
-{score(evidence, 'B', 'Linear') - score(evidence, 'B', 'Sklearn tuned'):.3f} W over linear regression, but this small
-descriptive difference has no supplied significance test. PyTorch's Track B mean RMSE
-({score(evidence, 'B', 'PyTorch selected', 'RMSE'):.3f} W) exceeds linear regression's
-({score(evidence, 'B', 'Linear', 'RMSE'):.3f} W), illustrating metric-dependent rankings.
+**RQ2 - baseline comparisons.** {track_summary(evidence, 'A')} {track_summary(evidence, 'B')}
+Rankings depend on the metric and must be interpreted within each track's information setting.
 
-**RQ3 — held-out groups, with a qualification.** The Python protocol excludes each test filename from
-fitting and nests model selection, improving the experimental design relative to the documented
-historical reuse and observation-level splits. There is no controlled experiment here isolating the
-effect of changing split strategy. The repeated files occupy outer folds 1 and 7, so identical
-measurement copies cross training/test boundaries when either fold is held out; the error effect
-remains unmeasured. These scores
-cannot be described as wholly independent-day validation. External-site or chronological forecasting
-performance cannot be inferred from them.
+**RQ3 ? held-out days.** Each test daily group and its measurements are excluded from fitting.
+Model selection is nested within the outer training days. The accidental repeat was removed
+before evaluation. There is no controlled experiment isolating the effect of changing the
+split strategy. External-site or future-horizon performance cannot be inferred from these results.
 
 **RQ4 — implementation comparison, not a universal framework ranking.** TensorFlow and PyTorch use
 matching recorded settings, reference data and outer assignments. Their error and seed variation

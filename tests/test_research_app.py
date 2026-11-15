@@ -2,6 +2,8 @@
 from pathlib import Path
 import sys
 import unittest
+import json
+import pandas as pd
 
 from streamlit.testing.v1 import AppTest
 
@@ -10,9 +12,31 @@ sys.path[:0] = [str(ROOT / "deployment"), str(ROOT / "src")]
 from research_protocol import COLLECTION, verify_run
 from model_registry import MODELS
 from model_statistics import research_scores
+from manuscript_data import track_summary
 
 
 class ResearchAppTests(unittest.TestCase):
+    def test_all_seven_dashboard_pages_open_without_errors(self):
+        app = AppTest.from_file(str(ROOT / "deployment/app.py"), default_timeout=90).run()
+        pages = list(app.radio(key="dashboard_page").options)
+        self.assertEqual(len(pages), 7)
+        for page in pages:
+            with self.subTest(page=page):
+                app.radio(key="dashboard_page").set_value(page).run()
+                self.assertFalse(app.exception, str(app.exception))
+                self.assertFalse(app.error, str(app.error))
+
+    def test_rankings_follow_evidence_and_inventory_separates_history(self):
+        # Temporary in-memory values test ranking behavior, not research results.
+        rows = pd.DataFrame([dict(track="A", model="Linear", MAE_mean=2.),
+                             dict(track="A", model="TensorFlow selected", MAE_mean=1.)])
+        self.assertIn("TensorFlow selected has the lowest mean MAE", track_summary({"comparison": rows}, "A"))
+        rows.loc[0, "MAE_mean"] = 0.5
+        self.assertIn("Linear has the lowest mean MAE", track_summary({"comparison": rows}, "A"))
+        inventory = json.loads((ROOT / "deployment/manuscript_evidence.json").read_text(encoding="utf-8"))
+        self.assertEqual((inventory["dataset"]["rows"], inventory["dataset"]["groups"]), (180, 20))
+        self.assertTrue((ROOT / inventory["historical_inventory"]).is_file())
+
     def test_registry_uses_fresh_exports_and_labels_history(self):
         for spec in MODELS.values():
             if spec.research_run:

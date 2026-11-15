@@ -104,7 +104,7 @@ def load_evidence():
     controls = ["architectures", "activation", "epochs", "patience", "batch_size", "learning_rate",
                 "l2", "seeds", "tracks", "folds", "inner_folds", "rows"]
     if any(configs["TensorFlow"][key] != configs["PyTorch"][key] for key in controls):
-        raise ValueError("The manuscript's matched S2 configurations no longer agree")
+        raise ValueError("The manuscript's matched-framework configurations no longer agree")
     convergence = {candidate: convergence_summary(COLLECTION / f"tensorflow_{candidate.lower()}")[1]
                    for candidate in ("S1", "S2")}
     audit = audit_dataset(frame)
@@ -126,6 +126,14 @@ def load_evidence():
 def score(evidence, track, model, metric="MAE", stat="mean"):
     rows = evidence["comparison"]
     return float(rows[(rows.track == track) & (rows.model == model)].iloc[0][f"{metric}_{stat}"])
+
+
+def track_summary(evidence, track):
+    rows = evidence["comparison"].query("track == @track").sort_values(["MAE_mean", "model"])
+    best = rows.iloc[0]
+    return (f"Track {track}: {best.model} has the lowest mean MAE ({best.MAE_mean:.3f} W); "
+            f"linear regression has mean MAE {score(evidence, track, 'Linear'):.3f} W. "
+            "Differences are descriptive; no significance test is supplied.")
 
 
 def result_table(evidence, track):
@@ -160,7 +168,7 @@ def model_table(evidence):
         {"Model": "Linear (A, B)", "Architecture / selection": "Ordinary least squares; no tuning", "Training": "Training-partition input standardisation"},
         {"Model": "scikit-learn untuned (A, B)", "Architecture / selection": "10 tanh units; alpha=0.0001", "Training": "L-BFGS, max_iter=5000; input scaling"},
         {"Model": "scikit-learn tuned (A, B)", "Architecture / selection": "3 or 10 tanh units; alpha ∈ {0.1, 1, 10}", "Training": "3 inner grouped folds; L-BFGS; input scaling"},
-        {"Model": "TensorFlow / PyTorch S2 (A, B)", "Architecture / selection": f"{cfg['architectures']}; {cfg['activation']}; linear output",
+        {"Model": "TensorFlow / PyTorch selected (A, B)", "Architecture / selection": f"{cfg['architectures']}; {cfg['activation']}; linear output",
          "Training": f"Adam; lr={cfg['learning_rate']}; hidden-kernel L2={cfg['l2']}; batch={cfg['batch_size']}; cap={cfg['epochs']}; patience={cfg['patience']}; input/target scaling"},
         {"Model": "Mean prediction", "Architecture / selection": "Metric sanity check only (src/evaluate.py)", "Training": "No saved grouped-CV experiment; excluded from result rankings"}])
 
