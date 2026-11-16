@@ -2,14 +2,14 @@
 
 The active dataset contains 180 observations across 20 daily files. One repeated
 daily file was excluded before evaluation. The dashboard uses the completed 20-day collection exclusively. Model exports are stored in
-`results/research_20_days/exports`. The completed research collection and all
+`results/exports`. The completed research collection and all
 final model exports passed prediction, metric and save/reload checks.
 
 ## Research dashboard navigation
 
 All seven views use neutral research names. Overview and Research Manuscript
 present the completed 20-day experiments and reviewed manuscript.
-Results Explorer reads only `results/research_20_days/comparison/comparison.csv` and the corresponding saved predictions. Dataset Explorer reads the 180-row dataset. Predict and Model Explorer load eleven predictors from `results/research_20_days/exports/`. The active evidence inventory identifies the same completed runs.
+Results Explorer reads only `results/comparison/comparison.csv` and the corresponding saved predictions. Dataset Explorer reads the 180-row dataset. Predict and Model Explorer load eleven predictors from `results/exports/`. The active evidence inventory identifies the same completed runs.
 
 The sidebar opens **Overview → Research Manuscript → Results Explorer → Predict →
 Train / Experiment**, followed by Dataset Explorer and Model Explorer.
@@ -110,7 +110,7 @@ checks before changing claims or the chosen research collection. The current
 manuscript has six numbered tables and seven numbered figures; equations are
 rendered with native LaTeX and references use matching numbered links.
 
-Research pages require `data/processed/solar_data_combined.csv` and `results/research_20_days/`, including the completed manifest, matched comparison, both selected runs, S1/S2 convergence evidence, and final exports. Keep each run's configuration, predictions and learning-curve CSVs with its metrics. The placeholder date does not establish calendar coverage. Charts use held-out predictions, not fitted-model predictions.
+Research pages require `data/processed/solar_data_combined.csv` and `results/`, including the completed manifest, matched comparison, both selected runs, S1/S2 convergence evidence, and final exports. Keep each run's configuration, predictions and learning-curve CSVs with its metrics. The placeholder date does not establish calendar coverage. Charts use held-out predictions, not fitted-model predictions.
 
 No new packages are required; interactive charts use Streamlit's existing Altair
 dependency. Missing artifacts display an unavailable-view message. Upload metrics
@@ -233,19 +233,19 @@ Include the deployment folder, the full `src/` folder and these artifacts:
 
 | Model family | Active artifact directory | Required files per track |
 |---|---|---|
-| TensorFlow S2 | `results/research_20_days/exports/tensorflow` | `.keras`, x/y scalers, TF metadata |
-| PyTorch S2 | `results/research_20_days/exports/pytorch` | `.pt` state dictionary, x/y scalers, torch metadata |
-| scikit-learn | `results/research_20_days/exports/sklearn` | tuned ANN, untuned ANN and linear `.joblib` pipelines |
+| TensorFlow S2 | `results/exports/tensorflow` | `.keras`, x/y scalers, TF metadata |
+| PyTorch S2 | `results/exports/pytorch` | `.pt` state dictionary, x/y scalers, torch metadata |
+| scikit-learn | `results/exports/sklearn` | tuned ANN, untuned ANN and linear `.joblib` pipelines |
 
-The registry chooses these directories explicitly. Architecture, epoch counts, parameter counts and source runs are read from each current export's metadata. The app's learning-curve selector uses `tensorflow_s1`, `tensorflow_s2` and `pytorch_selected` within `results/research_20_days`.
+The registry chooses these directories explicitly. Architecture, epoch counts, parameter counts and source runs are read from each current export's metadata. The app's learning-curve selector uses `tensorflow_s1`, `tensorflow_s2` and `pytorch_selected` within `results`.
 Missing predictors are marked and cannot make predictions. No dataset is
 required for inference/upload training. Only load trusted model/scaler files.
 
 To regenerate missing baseline exports locally, run `python src/export_baseline_models.py`.
 To recreate an S2 TensorFlow model, use the completed comparison and an empty
 output directory:
-`python src/train_final_tf.py --track A --run results/research_20_days/tensorflow_s2 --output PATH_TO_EMPTY_DIRECTORY`.
-For PyTorch use `src/train_final_torch.py` with `--run results/research_20_days/pytorch_selected`.
+`python src/train_final_tf.py --track A --run results/tensorflow_s2 --output PATH_TO_EMPTY_DIRECTORY`.
+For PyTorch use `src/train_final_torch.py` with `--run results/pytorch_selected`.
 Repeat with `--track B` for Track B. Do not rerun exports into existing folders.
 Existing artifacts are preserved. The initial Track A untuned ANN export reached
 its 5,000-iteration limit and emitted a convergence warning.

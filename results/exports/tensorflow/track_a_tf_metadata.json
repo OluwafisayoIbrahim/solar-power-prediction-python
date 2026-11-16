@@ -19,7 +19,7 @@
   "selection": "Most frequent inner-selected architecture across all seeds/folds; candidate order breaks ties; median epochs for that architecture.",
   "architecture_votes": 11,
   "selection_folds": 21,
-  "source_run": "C:\\Users\\user\\Documents\\fisayo\\solar-power-prediction-python\\results\\research_20_days\\tensorflow_s2",
+  "source_run": "C:\\Users\\user\\Documents\\fisayo\\solar-power-prediction-python\\results\\tensorflow_s2",
   "rows": 180,
   "training_data_sha256": "785ff62ca458e447221c036ceb5dea3b00fe2a76f78c87533c98aac9c54f1744",
   "activation": "tanh",

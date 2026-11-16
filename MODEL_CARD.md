@@ -44,7 +44,7 @@ Values are mean +/- population standard deviation across seeds, calculated from 
 
 ## Artifacts and inference
 
-Active exports are under `results/research_20_days/exports/{sklearn,tensorflow,pytorch}`. Each final export passed save/reload prediction equality checks. Metadata records features, settings and dataset provenance. The former 21-day exports have been removed from the repository working tree. The Hugging Face repository may retain that earlier release; this change does not publish new Hub artifacts.
+Active exports are under `results/exports/{sklearn,tensorflow,pytorch}`. Each final export passed save/reload prediction equality checks. Metadata records features, settings and dataset provenance. The former 21-day exports have been removed from the repository working tree. The Hugging Face repository may retain that earlier release; this change does not publish new Hub artifacts.
 
 ```python
 import sys
@@ -62,4 +62,4 @@ Use the Streamlit app or the helpers in `src/predict_tf.py` and `src/predict_tor
 
 The data are attributed to one university installation. Full calendar dates and calibration records are unavailable. No exact measurement records repeat in the active dataset, but small sample size and potentially correlated readings limit independence. No external validation, significance tests or calibrated uncertainty intervals are supplied. Linear outputs can be implausible outside the observed range. Access to electrical inputs changes the task; lower Track A errors do not establish weather-only forecasting accuracy.
 
-Evidence: `results/research_20_days/comparison/`, `selection.json`, `completed.json`, and `deployment/manuscript_evidence.json`. The original MATLAB study and preprint are distinct from this Python evaluation.
+Evidence: `results/comparison/`, `selection.json`, `completed.json`, and `deployment/manuscript_evidence.json`. The original MATLAB study and preprint are distinct from this Python evaluation.

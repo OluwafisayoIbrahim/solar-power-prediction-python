@@ -138,9 +138,9 @@ def main():
                    'Collect longer records across', text)
     text = text.replace('Full calendar dates, instrument calibration records and the provenance of the repeated source file remain unresolved.',
         'Full calendar dates and instrument calibration records remain unavailable. One repeated daily file was excluded; no missing metadata are inferred from filenames.')
-    for old, new in [('results/tensorflow/convergence_s2', 'results/research_20_days/tensorflow_s2'),
-                     ('results/pytorch/parity_s2', 'results/research_20_days/pytorch_selected'),
-                     ('results/comparisons/parity_s2', 'results/research_20_days/comparison')]:
+    for old, new in [('results/tensorflow/convergence_s2', 'results/tensorflow_s2'),
+                     ('results/pytorch/parity_s2', 'results/pytorch_selected'),
+                     ('results/comparisons/parity_s2', 'results/comparison')]:
         text = text.replace(old.replace('/', '/\\allowbreak{}').replace('_', r'\_'),
                             new.replace('/', '/\\allowbreak{}').replace('_', r'\_'))
     tables = {1: dataset_table(evidence), 2: track_table(), 3: model_table(evidence),

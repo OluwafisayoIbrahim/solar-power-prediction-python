@@ -25,5 +25,5 @@ Mean +/- population standard deviation over seeds; not confidence intervals.
 - PyTorch selected, Track A: 0/21 at cap 1000.
 - PyTorch selected, Track B: 0/21 at cap 1000.
 
-TensorFlow source: `C:\Users\user\Documents\fisayo\solar-power-prediction-python\results\research_20_days\tensorflow_s2`
-PyTorch source: `C:\Users\user\Documents\fisayo\solar-power-prediction-python\results\research_20_days\pytorch_selected`
+TensorFlow source: `C:\Users\user\Documents\fisayo\solar-power-prediction-python\results\tensorflow_s2`
+PyTorch source: `C:\Users\user\Documents\fisayo\solar-power-prediction-python\results\pytorch_selected`

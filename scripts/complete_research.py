@@ -139,7 +139,7 @@ def frameworks(wait_hours):
         "runs": {"TensorFlow": selected.relative_to(ROOT).as_posix(),
                  "PyTorch": pytorch.relative_to(ROOT).as_posix()},
         "comparison": (comparison / "comparison.csv").relative_to(ROOT).as_posix(),
-        "exports": {kind: f"results/research_20_days/exports/{kind}"
+        "exports": {kind: f"results/exports/{kind}"
                     for kind in ["tensorflow", "pytorch", "sklearn"]},
         "editorial_reference": "manuscript/editorial_reference_superseded.zip",
         "manuscript_pdf_status": "pending_update_and_visual_review",

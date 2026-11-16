@@ -13,7 +13,7 @@ from evaluate import compute_metrics
 from sklearn.model_selection import GroupKFold
 
 ROOT = Path(__file__).resolve().parents[1]
-COLLECTION = ROOT / "results/research_20_days"
+COLLECTION = ROOT / "results"
 
 
 def data_digest():

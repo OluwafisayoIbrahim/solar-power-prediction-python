@@ -33,9 +33,9 @@ DESCRIPTIONS = {"solar_irradiance": "Incident solar radiation per unit area",
                 "temperature": "Ambient temperature", "humidity": "Relative humidity",
                 "current": "Measured electrical current", "voltage": "Measured electrical voltage",
                 "power": "Measured power output", "hour": "Decimal measurement time of day"}
-RUNS = {"TensorFlow S2": "research_20_days/tensorflow_s2",
-        "PyTorch S2": "research_20_days/pytorch_selected",
-        "TensorFlow S1": "research_20_days/tensorflow_s1"}
+RUNS = {"TensorFlow S2": "tensorflow_s2",
+        "PyTorch S2": "pytorch_selected",
+        "TensorFlow S1": "tensorflow_s1"}
 
 @st.cache_data(show_spinner=False)
 def dataset():

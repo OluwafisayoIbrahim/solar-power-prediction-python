@@ -5,9 +5,10 @@ __pycache__/
 *.pyc
 .ipynb_checkpoints/
 results/smoke/
-results/research_20_days/*.log
-results/research_20_days/progress.json
-results/research_20_days/attempt_01/
-results/research_20_days/*.tmp
+results/*.log
+results/progress.json
+results/attempt_01/
+results/*.tmp
 manuscript/source/*.log
 tmp/pdfs/
+tmp/research_notes/

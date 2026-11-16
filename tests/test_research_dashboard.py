@@ -14,8 +14,8 @@ from model_fixtures import SavedModelFixtures
 
 class DashboardTests(SavedModelFixtures, unittest.TestCase):
     def test_portable_repository_sources(self):
-        expected = "results/research_20_days/tensorflow_s2"
-        source = r"C:\Users\user\Documents\fisayo\solar-power-prediction-python\results\research_20_days\tensorflow_s2"
+        expected = "results/tensorflow_s2"
+        source = r"C:\Users\user\Documents\fisayo\solar-power-prediction-python\results\tensorflow_s2"
         self.assertEqual(repository_source(source), expected)
         self.assertEqual(repository_source("/home/app/project/" + expected), expected)
         self.assertEqual(repository_source(expected), expected)

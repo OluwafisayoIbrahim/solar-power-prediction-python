@@ -252,7 +252,7 @@ def _article():
             f"python src/train_ann_torch.py {flags} --output results/reproduction/torch_s2\n"
             "python src/compare_frameworks.py --tf-run results/reproduction/tf_s2 --torch-run results/reproduction/torch_s2 --output results/reproduction/comparison_s2", language="bash")
     st.markdown("Additional baseline reports can be regenerated with `src/save_results.py`, `src/save_predictions.py` and "
-                "`src/plots.py`; those scripts write under `results/research_20_days/reports`. The README documents S1/S2 selection, "
+                "`src/plots.py`; those scripts write under `results/reports`. The README documents S1/S2 selection, "
                 "convergence diagnostics and final exports. Use the committed outputs to read this manuscript without rerunning research.")
     st.markdown("**Declarations and availability gaps.** No verified funding declaration, ethics approval, conflict-of-interest statement "
                 "or additional acknowledgement is supplied here. Those details are undocumented in the inspected research files. "

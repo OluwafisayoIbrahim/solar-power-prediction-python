@@ -22,7 +22,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 
 RESULTS_DIR = (
     PROJECT_ROOT
-    / "results/research_20_days/reports"
+    / "results/reports"
     / "metrics"
 )
 

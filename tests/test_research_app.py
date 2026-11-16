@@ -21,10 +21,10 @@ class ResearchAppTests(unittest.TestCase):
         from research_data import RUNS
         self.assertEqual(len(MODELS), 11)
         for path in RUNS.values():
-            self.assertTrue(path.startswith("research_20_days/"))
+            self.assertIn(path, {"tensorflow_s1", "tensorflow_s2", "pytorch_selected"})
             cfg = json.loads((ROOT / "results" / path / "config.json").read_text())
             self.assertEqual((cfg["rows"], cfg["groups"]), (180, 20))
-        for old in ["comparisons", "exports", "figures", "metrics", "models",
+        for old in ["research_20_days", "comparisons", "figures", "metrics", "models",
                     "predictions", "pytorch", "tensorflow"]:
             self.assertFalse((ROOT / "results" / old).exists(), old)
 
@@ -58,7 +58,7 @@ class ResearchAppTests(unittest.TestCase):
             self.assertFalse(spec.research_run)
             self.assertNotIn("historical", spec.label)
             if spec.kind != "physics":
-                self.assertIn("research_20_days", spec.model_dir.as_posix())
+                self.assertTrue(spec.model_dir.is_relative_to(ROOT / "results/exports"))
 
     def test_manuscript_and_overview_do_not_present_partial_results(self):
         app = AppTest.from_file(str(ROOT / "deployment/app.py"), default_timeout=90).run()

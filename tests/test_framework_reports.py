@@ -47,7 +47,7 @@ def fixture(path, framework, **changes):
 class ReportTests(unittest.TestCase):
     def test_current_convergence_and_tf_defaults(self):
         for candidate, counts in [("s1", [2, 0]), ("s2", [0, 0])]:
-            cfg, rows = convergence_summary(ROOT / "results/research_20_days" / ("tensorflow_" + candidate))
+            cfg, rows = convergence_summary(ROOT / "results" / ("tensorflow_" + candidate))
             self.assertEqual(cfg["rows"], 180)
             self.assertEqual([r["cap_hits"] for r in rows], counts)
         self.assertEqual(parse_args([]).epochs, 300)

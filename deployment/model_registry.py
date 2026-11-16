@@ -13,14 +13,14 @@ from predict_tf import load_tf_model, predict_measurements
 from predict_torch import artifact_names, load_torch_model, predict_measurements as predict_torch
 
 ROOT = Path(__file__).resolve().parents[1]
-MODEL_DIR = ROOT / "results/research_20_days/exports"
+MODEL_DIR = ROOT / "results/exports"
 
 
 def require_exports(kind):
     if kind in ("tensorflow", "pytorch"):
         completed_collection()
         return
-    path = ROOT / "results/research_20_days/sklearn_exports_complete.json"
+    path = ROOT / "results/sklearn_exports_complete.json"
     if not path.is_file():
         raise ValueError("Scikit-learn models are not available yet")
     metadata = json.loads(path.read_text(encoding="utf-8"))
@@ -65,7 +65,7 @@ class ModelSpec:
     def model_dir(self):
         if self.artifact_directory:
             return ROOT / self.artifact_directory
-        return ROOT / "results/research_20_days/exports" / (
+        return ROOT / "results/exports" / (
             self.kind if self.kind in ("tensorflow", "pytorch") else "sklearn")
 
     def missing_files(self, directory=None):

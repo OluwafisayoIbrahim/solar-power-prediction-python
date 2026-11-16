@@ -26,7 +26,7 @@ workspace_view = globals().get("WORKSPACE_VIEW", "combined")
 st.title("Train / Experiment" if workspace_view == "train" else "Predict")
 st.caption("Fit a session model with a separate holdout; these experiments do not replace the research manuscript."
            if workspace_view == "train" else "Interactive demonstration | Power from measured conditions")
-if not (ROOT / "results/research_20_days/completed.json").is_file():
+if not (ROOT / "results/completed.json").is_file():
     st.warning("Research models are not available yet. "
                ""
                "The electrical-product baseline remains available.")

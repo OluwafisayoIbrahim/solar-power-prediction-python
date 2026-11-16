@@ -337,7 +337,7 @@ Sklearn tuned & 1.069 $\pm$ 0.060 & 1.393 $\pm$ 0.089 & 0.413 $\pm$ 0.026 & 0.99
 Sklearn untuned & 1.304 $\pm$ 0.538 & 3.580 $\pm$ 3.118 & 0.505 $\pm$ 0.214 & 0.970 $\pm$ 0.039 \\
 TensorFlow selected & 1.334 $\pm$ 0.159 & 1.863 $\pm$ 0.297 & 0.515 $\pm$ 0.059 & 0.995 $\pm$ 0.002 \\
 \bottomrule\end{tabularx}
-\par\smallskip{\scriptsize Source: results/\allowbreak{}research\_20\_days/\allowbreak{}comparison/\allowbreak{}comparison.csv}
+\par\smallskip{\scriptsize Source: results/\allowbreak{}comparison/\allowbreak{}comparison.csv}
 \end{table*}
 
 Track A: Linear has the lowest mean MAE (0.978 W); linear regression has mean MAE 0.978 W. Differences are descriptive; no significance test is supplied. The electrical-product baseline already gives low error without learning.
@@ -359,7 +359,7 @@ Sklearn tuned & 12.179 $\pm$ 0.037 & 15.633 $\pm$ 0.278 & 4.865 $\pm$ 0.012 & 0.
 Sklearn untuned & 14.044 $\pm$ 0.267 & 18.890 $\pm$ 1.219 & 5.584 $\pm$ 0.136 & 0.521 $\pm$ 0.063 \\
 TensorFlow selected & 11.951 $\pm$ 0.317 & 14.989 $\pm$ 0.372 & 4.761 $\pm$ 0.107 & 0.700 $\pm$ 0.015 \\
 \bottomrule\end{tabularx}
-\par\smallskip{\scriptsize Source: results/\allowbreak{}research\_20\_days/\allowbreak{}comparison/\allowbreak{}comparison.csv}
+\par\smallskip{\scriptsize Source: results/\allowbreak{}comparison/\allowbreak{}comparison.csv}
 \end{table*}
 
 Track B: Linear has the lowest mean MAE (11.835 W); linear regression has mean MAE 11.835 W. Differences are descriptive; no significance test is supplied.
@@ -372,7 +372,7 @@ Figures~\ref{fig:4}--\ref{fig:7} show prediction agreement, mean absolute error 
 
 \includegraphics[width=\columnwidth]{figures/figure_4}
 
-\caption{Measured versus predicted power, Track B, seed 0; each model includes every saved outer row. Dashed line: identity. Scatter around the identity line shows individual errors that pooled averages conceal. This disclosed seed is a diagnostic illustration, not a best-seed selection or an independent test of the full-data deployment weights.\newline\textit{Source:} results/\allowbreak{}research\_20\_days/\allowbreak{}tensorflow\_s2/\allowbreak{}predictions.csv; results/\allowbreak{}research\_20\_days/\allowbreak{}pytorch\_selected/\allowbreak{}predictions.csv}
+\caption{Measured versus predicted power, Track B, seed 0; each model includes every saved outer row. Dashed line: identity. Scatter around the identity line shows individual errors that pooled averages conceal. This disclosed seed is a diagnostic illustration, not a best-seed selection or an independent test of the full-data deployment weights.\newline\textit{Source:} results/\allowbreak{}tensorflow\_s2/\allowbreak{}predictions.csv; results/\allowbreak{}pytorch\_selected/\allowbreak{}predictions.csv}
 
 \label{fig:4}
 
@@ -382,7 +382,7 @@ Figures~\ref{fig:4}--\ref{fig:7} show prediction agreement, mean absolute error 
 
 \includegraphics[width=\columnwidth]{figures/figure_5}
 
-\caption{Matched S2 mean MAE with $\pm$ one population seed standard deviation. Track panels use independent scales; bars start at zero. Within-track comparisons hold feature availability fixed. Across-track bar lengths must not be read as a fair contest between equivalent tasks. Whiskers describe three-seed variation, not confidence intervals; near-zero baseline variation reflects repeated deterministic predictions.\newline\textit{Source:} results/\allowbreak{}research\_20\_days/\allowbreak{}comparison/\allowbreak{}comparison.csv}
+\caption{Matched S2 mean MAE with $\pm$ one population seed standard deviation. Track panels use independent scales; bars start at zero. Within-track comparisons hold feature availability fixed. Across-track bar lengths must not be read as a fair contest between equivalent tasks. Whiskers describe three-seed variation, not confidence intervals; near-zero baseline variation reflects repeated deterministic predictions.\newline\textit{Source:} results/\allowbreak{}comparison/\allowbreak{}comparison.csv}
 
 \label{fig:5}
 
@@ -410,7 +410,7 @@ B & 0 & PyTorch selected & 12.263 & 15.167 & 4.895 & 0.693 & PyTorch \\
 B & 1 & PyTorch selected & 12.166 & 15.232 & 4.852 & 0.690 & PyTorch \\
 B & 2 & PyTorch selected & 11.665 & 14.681 & 4.672 & 0.712 & PyTorch \\
 \bottomrule\end{tabularx}
-\par\smallskip{\scriptsize Source: results/\allowbreak{}research\_20\_days/\allowbreak{}tensorflow\_s2/\allowbreak{}metrics\_per\_seed.csv; results/\allowbreak{}research\_20\_days/\allowbreak{}pytorch\_selected/\allowbreak{}metrics\_per\_seed.csv}
+\par\smallskip{\scriptsize Source: results/\allowbreak{}tensorflow\_s2/\allowbreak{}metrics\_per\_seed.csv; results/\allowbreak{}pytorch\_selected/\allowbreak{}metrics\_per\_seed.csv}
 \end{table*}
 
 \begin{figure}[!t]\centering

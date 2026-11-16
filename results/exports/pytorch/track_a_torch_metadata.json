@@ -19,7 +19,7 @@
   "seed": 0,
   "architecture_votes": 11,
   "selection_folds": 21,
-  "source_run": "C:\\Users\\user\\Documents\\fisayo\\solar-power-prediction-python\\results\\research_20_days\\pytorch_selected",
+  "source_run": "C:\\Users\\user\\Documents\\fisayo\\solar-power-prediction-python\\results\\pytorch_selected",
   "rows": 180,
   "selection": "Most frequent inner-selected architecture; candidate order breaks ties; median epochs for that architecture.",
   "training_data_sha256": "785ff62ca458e447221c036ceb5dea3b00fe2a76f78c87533c98aac9c54f1744",

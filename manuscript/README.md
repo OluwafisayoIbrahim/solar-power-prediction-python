@@ -8,7 +8,7 @@ preserved. This bundle uses superseded 189-row results and is not an updated
 scientific output.
 
 The updated LaTeX/PDF follows the completed experiments under
-`results/research_20_days`, retaining the supplied editorial improvements
+`results`, retaining the supplied editorial improvements
 and including the recalculated no-fitting voltage/current product in the abstract.
 No collection month/year can be inferred from filenames. Small differences
 remain descriptive without a significance analysis. All affected findings,

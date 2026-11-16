@@ -165,6 +165,10 @@ def experiments():
         name: st.column_config.NumberColumn(format="%.3f")
         for name in shown.columns if name.endswith(("_mean", "_std"))})
     st.download_button("Download displayed metrics", shown.to_csv(index=False), "research_metrics.csv", "text/csv")
+    portfolio_bundle = ROOT / "results/portfolio_plots.zip"
+    if portfolio_bundle.is_file():
+        st.download_button("Download portfolio plots (PNG + SVG)", portfolio_bundle.read_bytes(),
+                           "portfolio_plots.zip", "application/zip")
     st.markdown("Explore the saved evidence below. [Full interpretation](?view=manuscript#discussion) "
                 "and [validation limitations](?view=manuscript#limitations) are in the manuscript.")
     metric = st.selectbox("Comparison metric", ["MAE", "RMSE", "MAPE", "R2"])

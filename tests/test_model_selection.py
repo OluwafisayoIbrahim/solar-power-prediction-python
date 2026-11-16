@@ -85,19 +85,19 @@ class ModelTests(SavedModelFixtures, unittest.TestCase):
                 key = f"{track}_{kind}"
                 with self.subTest(model=key):
                     spec = PRODUCTION_SPECS[key]
-                    self.assertEqual(spec.model_dir, ROOT / "results/research_20_days/exports" / kind)
+                    self.assertEqual(spec.model_dir, ROOT / "results/exports" / kind)
                     self.assertTrue(spec.description)
                     with TemporaryDirectory() as temp:
                         self.assertEqual(len(spec.missing_files(temp)), 4)
                         with self.assertRaises(FileNotFoundError):
                             load_model(key, temp)
-        self.assertEqual(PRODUCTION_SPECS["b_tuned"].model_dir, ROOT / "results/research_20_days/exports/sklearn")
+        self.assertEqual(PRODUCTION_SPECS["b_tuned"].model_dir, ROOT / "results/exports/sklearn")
 
     def test_pytorch_upload_ui_and_session_prediction(self):
         app = AppTest.from_file(str(ROOT / "deployment/prediction_workspace.py"), default_timeout=90).run()
         app.selectbox(key="prediction_model").select("b_pytorch").run()
         app.selectbox(key="diagram_model").select("b_pytorch").run()
-        self.assertTrue(any("research_20_days/pytorch_selected" in caption.value for caption in app.caption))
+        self.assertTrue(any("pytorch_selected" in caption.value for caption in app.caption))
         app.radio(key="model_source").set_value("Train from uploaded data").run()
         upload = BytesIO(self.frame.to_csv(index=False).encode())
         upload.name = "training.csv"
@@ -131,8 +131,8 @@ class ModelTests(SavedModelFixtures, unittest.TestCase):
         for key in ["a_tensorflow", "b_tensorflow", "a_pytorch", "b_pytorch"]:
             loaded = load_model(key)
             self.assertEqual(loaded.metadata["rows"], 180)
-            self.assertIn("research_20_days", research_scores(loaded.spec).source_run)
-            self.assertIn("research_20_days/exports", loaded.spec.model_dir.as_posix())
+            self.assertIn("results/", research_scores(loaded.spec).source_run)
+            self.assertIn("exports", loaded.spec.model_dir.as_posix())
 
     def test_cached_model_without_description(self):
         cached = load_model("a_physics")

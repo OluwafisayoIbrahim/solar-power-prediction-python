@@ -162,7 +162,7 @@ def run_comparison(args, framework, version, label, fit, predict, select):
     if any(len(np.unique(groups[tr])) < max(args.inner_folds, 3) for tr, _ in splits):
         raise SystemExit("Not enough outer training days for inner CV")
     stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ")
-    base = Path(__file__).resolve().parents[1] / "results/research_20_days/reproductions"
+    base = Path(__file__).resolve().parents[1] / "results/reproductions"
     output = args.output or (base / "smoke" / framework / stamp if args.smoke_test
                              else base / framework / stamp)
     output.mkdir(parents=True, exist_ok=False)

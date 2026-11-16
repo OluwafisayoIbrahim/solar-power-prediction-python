@@ -20,7 +20,7 @@ from train_ann_tf import fit_tf, predict_tf
 from predict_tf import load_tf_model, predict_measurements
 
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_RUN = ROOT / "results/research_20_days/tensorflow_s2"
+DEFAULT_RUN = ROOT / "results/tensorflow_s2"
 
 
 def final_settings(config, settings, track, model_label="TensorFlow selected"):
@@ -49,7 +49,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--run", type=Path, default=DEFAULT_RUN)
     parser.add_argument("--track", choices=["A", "B"], default="B")
-    parser.add_argument("--output", type=Path, default=ROOT / "results/research_20_days/exports/tensorflow")
+    parser.add_argument("--output", type=Path, default=ROOT / "results/exports/tensorflow")
     args = parser.parse_args()
     config = json.loads((args.run / "config.json").read_text(encoding="utf-8"))
     if not (args.run / "comparison.csv").is_file():

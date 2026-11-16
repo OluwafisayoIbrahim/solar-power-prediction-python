@@ -33,7 +33,7 @@ Seven outer grouped folds hold out complete daily files: six test partitions hav
 
 Linear regression has the lowest mean MAE in both tracks. The no-fitting current x voltage baseline has MAE **1.115 W**, RMSE **1.254 W**, MAPE **0.424%**, and R2 **0.997898**. Comparisons remain descriptive; no significance test or external validation is supplied.
 
-The main results are in `results/research_20_days/comparison/`. The dashboard uses this collection exclusively. The former 21-day result directories and model exports have been removed from the working tree; earlier commits retain their history.
+The main results are in `results/comparison/`. The dashboard uses this collection exclusively. The former 21-day result directories and model exports have been removed from the working tree; earlier commits retain their history.
 
 ## Neural training settings
 
@@ -50,6 +50,11 @@ S2 was selected by fewer selected-refit epoch-cap hits: **0 for S2 versus 2 for 
 Use new output directories when reproducing runs. Final inference models are fitted on all 180 observations, independently of the held-out scores above. TensorFlow/PyTorch final exports use the most frequent inner-selected architecture and its median selected epoch count, with seed 0. All exports passed save/reload prediction equality checks. Their metadata records the active dataset digest.
 
 ## Streamlit and manuscript
+
+Portfolio charts are in [`results/plots/`](results/plots/), with high-resolution
+PNG and scalable SVG versions. Download [`portfolio_plots.zip`](results/portfolio_plots.zip)
+or use the download button in Results Explorer. Regenerate them with
+`python src/plots.py` after installing `vl-convert-python`.
 
 ```powershell
 .\.venv\Scripts\python.exe -m pip install -r requirements.txt

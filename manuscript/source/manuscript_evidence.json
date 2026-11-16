@@ -75,18 +75,18 @@
       "claim": "Active dataset and no-fitting electrical-product baseline",
       "sources": [
         "data/processed/solar_data_combined.csv",
-        "results/research_20_days/dataset_audit.json",
-        "results/research_20_days/physics_predictions.csv"
+        "results/dataset_audit.json",
+        "results/physics_predictions.csv"
       ],
       "verification": "180 observations, 20 daily groups, nine readings per group and no exact repeated measurements excluding filename identity. One repeated daily file was excluded."
     },
     {
       "claim": "Matched TensorFlow S2 and PyTorch evaluation and final inference exports",
       "sources": [
-        "results/research_20_days/comparison/comparison.csv",
-        "results/research_20_days/comparison/protocol.json",
-        "results/research_20_days/selection.json",
-        "results/research_20_days/completed.json"
+        "results/comparison/comparison.csv",
+        "results/comparison/protocol.json",
+        "results/selection.json",
+        "results/completed.json"
       ],
       "verification": "Seven outer folds, three inner folds, both tracks and seeds 0, 1, 2. All final exports passed prediction equality after reload."
     }
@@ -240,8 +240,8 @@
     "training_data_sha256": "2c8266628be154f1da7e191ac1c8bfb6da8de15c4183bba8a24a49dcffcd8e1a"
   },
   "runs": {
-    "TensorFlow": "results/research_20_days/tensorflow_s2",
-    "PyTorch": "results/research_20_days/pytorch_selected"
+    "TensorFlow": "results/tensorflow_s2",
+    "PyTorch": "results/pytorch_selected"
   },
   "manuscript": {
     "pdf": "manuscript/source/manuscript.pdf",

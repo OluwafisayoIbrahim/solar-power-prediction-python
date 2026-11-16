@@ -1,0 +1,19 @@
+{
+  "status": "complete",
+  "training_data_sha256": "2c8266628be154f1da7e191ac1c8bfb6da8de15c4183bba8a24a49dcffcd8e1a",
+  "rows": 180,
+  "groups": 20,
+  "selected": "S2",
+  "runs": {
+    "TensorFlow": "results/tensorflow_s2",
+    "PyTorch": "results/pytorch_selected"
+  },
+  "comparison": "results/comparison/comparison.csv",
+  "exports": {
+    "tensorflow": "results/exports/tensorflow",
+    "pytorch": "results/exports/pytorch",
+    "sklearn": "results/exports/sklearn"
+  },
+  "editorial_reference": "manuscript/editorial_reference_superseded.zip",
+  "manuscript_pdf_status": "content_and_visual_review_complete"
+}
