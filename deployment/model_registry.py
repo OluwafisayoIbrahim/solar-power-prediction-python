@@ -16,6 +16,18 @@ ROOT = Path(__file__).resolve().parents[1]
 MODEL_DIR = ROOT / "results/models"
 
 
+def require_exports(kind):
+    if kind in ("tensorflow", "pytorch"):
+        completed_collection()
+        return
+    path = ROOT / "results/research_20_days/sklearn_exports_complete.json"
+    if not path.is_file():
+        raise ValueError("Scikit-learn models are not available yet")
+    metadata = json.loads(path.read_text(encoding="utf-8"))
+    if metadata.get("training_data_sha256") != data_digest():
+        raise ValueError("Model exports do not match the active dataset")
+
+
 @dataclass(frozen=True)
 class ModelSpec:
     key: str
@@ -59,9 +71,9 @@ class ModelSpec:
     def missing_files(self, directory=None):
         if directory is None and not self.artifact_directory and self.kind != "physics":
             try:
-                completed_collection()
+                require_exports(self.kind)
             except (FileNotFoundError, ValueError):
-                return ["completed updated research collection (pending)"]
+                return ["model exports pending"]
         directory = self.model_dir if directory is None else Path(directory)
         if self.kind == "physics":
             return []
@@ -126,7 +138,7 @@ def load_model(key, directory=None):
     spec = MODELS[key]
     active_export = directory is None and not spec.artifact_directory and spec.kind != "physics"
     if active_export:
-        completed_collection()
+        require_exports(spec.kind)
     directory = spec.model_dir if directory is None else Path(directory)
     missing = spec.missing_files(directory)
     if missing:

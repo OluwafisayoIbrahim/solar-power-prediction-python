@@ -1,0 +1,83 @@
+{
+  "selected": "S2",
+  "candidates": {
+    "S1": {
+      "cap_hits": 2,
+      "mean_inner_mae": 6.2167407709892055,
+      "tracks": [
+        {
+          "track": "A",
+          "model": "TensorFlow selected",
+          "selections": 21,
+          "cap": 1000,
+          "cap_hits": 2,
+          "min": 125,
+          "median": 357.0,
+          "max": 1000,
+          "votes": {
+            "(10,)": 10,
+            "(16, 8)": 11
+          },
+          "mean_inner_mae": 1.1894027738307675,
+          "passes_threshold": true
+        },
+        {
+          "track": "B",
+          "model": "TensorFlow selected",
+          "selections": 21,
+          "cap": 1000,
+          "cap_hits": 0,
+          "min": 9,
+          "median": 23.0,
+          "max": 66,
+          "votes": {
+            "(10,)": 7,
+            "(16, 8)": 14
+          },
+          "mean_inner_mae": 11.244078768147643,
+          "passes_threshold": true
+        }
+      ]
+    },
+    "S2": {
+      "cap_hits": 0,
+      "mean_inner_mae": 6.237024601312332,
+      "tracks": [
+        {
+          "track": "A",
+          "model": "TensorFlow selected",
+          "selections": 21,
+          "cap": 1000,
+          "cap_hits": 0,
+          "min": 78,
+          "median": 158.0,
+          "max": 847,
+          "votes": {
+            "(10,)": 10,
+            "(16, 8)": 11
+          },
+          "mean_inner_mae": 1.295935837769776,
+          "passes_threshold": true
+        },
+        {
+          "track": "B",
+          "model": "TensorFlow selected",
+          "selections": 21,
+          "cap": 1000,
+          "cap_hits": 0,
+          "min": 5,
+          "median": 14.0,
+          "max": 56,
+          "votes": {
+            "(10,)": 8,
+            "(16, 8)": 13
+          },
+          "mean_inner_mae": 11.17811336485489,
+          "passes_threshold": true
+        }
+      ]
+    }
+  },
+  "rule": "Fewer total selected-refit cap hits; then lower equal-track mean inner MAE; exact tie S1. No outer scores used.",
+  "training_data_sha256": "2c8266628be154f1da7e191ac1c8bfb6da8de15c4183bba8a24a49dcffcd8e1a"
+}

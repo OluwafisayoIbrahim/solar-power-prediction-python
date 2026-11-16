@@ -82,6 +82,28 @@ class ResearchAppTests(unittest.TestCase):
         for framework, path in completed_collection()["runs"].items():
             verify_run(ROOT / path, f"{framework} selected")
 
+    def test_current_exports_predict_all_active_measurements(self):
+        if not (COLLECTION / "completed.json").is_file():
+            self.skipTest("Current inference exports are not complete")
+        import numpy as np
+        from model_registry import load_model
+        from research_data import dataset
+        from research_protocol import data_digest
+        frame = dataset()
+        for key, spec in MODELS.items():
+            if spec.research_run:
+                continue
+            with self.subTest(model=key):
+                self.assertFalse(spec.missing_files())
+                model = load_model(key)
+                predictions = model.predict(frame)
+                self.assertEqual(predictions.shape, (180,))
+                self.assertTrue(np.isfinite(predictions).all())
+                if spec.kind != "physics":
+                    self.assertEqual(model.metadata["rows"], 180)
+                    self.assertEqual(model.metadata.get("research_dataset_sha256",
+                                     model.metadata.get("training_data_sha256")), data_digest())
+
 
 if __name__ == "__main__":
     unittest.main()

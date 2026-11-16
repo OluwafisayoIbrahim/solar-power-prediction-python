@@ -7,6 +7,10 @@ __pycache__/
 results/smoke/
 results/research_20_days/*.log
 results/research_20_days/progress.json
+results/research_20_days/attempt_01/
+results/research_20_days/*.tmp
+manuscript/source/*.log
+tmp/pdfs/
 results/models/*.joblib
 !results/models/track_b_x_scaler.joblib
 !results/models/track_b_y_scaler.joblib

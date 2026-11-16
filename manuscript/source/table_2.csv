@@ -1,0 +1,3 @@
+Track,Inputs,Interpretation
+A — electrical-input replication,"solar_irradiance, current, voltage, temperature, humidity",Power estimation with measured current and voltage
+B — environmental/time,"solar_irradiance, temperature, humidity, hour",Power estimation from contemporaneous environmental conditions and time

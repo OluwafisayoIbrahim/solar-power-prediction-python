@@ -1,0 +1,21 @@
+{
+  "dataset": {
+    "rows": 180,
+    "daily_groups": 20,
+    "repeated_measurements": 0
+  },
+  "tensorflow_selection": "S2",
+  "full_suite": {
+    "tests": 62,
+    "skipped": 8,
+    "result": "passed"
+  },
+  "current_app_checks": {
+    "tests": 7,
+    "result": "passed",
+    "coverage": "All seven pages and all eleven current predictors"
+  },
+  "dependency_check": "passed",
+  "pdf_pages": 9,
+  "model_reloads": "All active final exports verified"
+}

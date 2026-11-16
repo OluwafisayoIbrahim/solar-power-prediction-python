@@ -12,6 +12,7 @@ from pathlib import Path
 import subprocess
 import sys
 import time
+import tempfile
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
@@ -20,9 +21,18 @@ from research_protocol import COLLECTION, data_digest, choose_tensorflow, verify
 
 def write_json(path, value):
     path.parent.mkdir(parents=True, exist_ok=True)
-    temporary = path.with_suffix(".tmp")
-    temporary.write_text(json.dumps(value, indent=2), encoding="utf-8")
-    temporary.replace(path)
+    with tempfile.NamedTemporaryFile(mode="w", encoding="utf-8", dir=path.parent,
+                                     suffix=".tmp", delete=False) as stream:
+        json.dump(value, stream, indent=2)
+        temporary = Path(stream.name)
+    for attempt in range(20):
+        try:
+            temporary.replace(path)
+            break
+        except PermissionError:
+            if attempt == 19:
+                raise
+            time.sleep(0.25)
 
 
 def command(script, *args):
@@ -99,7 +109,16 @@ def frameworks(wait_hours):
     flags = ["--tracks", "A", "B", "--seeds", "0", "1", "2", "--epochs", "1000",
              "--learning-rate", "0.01", "--batch-size", str(batch), "--patience", "30"]
     write_json(COLLECTION / "progress.json", {"stage": "pytorch", "complete": False, **selection})
-    command("src/train_ann_torch.py", *flags, "--output", pytorch)
+    if (pytorch / "comparison.csv").is_file():
+        config = verify_run(pytorch, "PyTorch selected")
+        expected = {"epochs": 1000, "learning_rate": 0.01, "batch_size": batch,
+                    "patience": 30, "activation": "tanh", "l2": 0.0001,
+                    "architectures": [[10], [16, 8]]}
+        if any(config.get(key) != value for key, value in expected.items()):
+            raise ValueError("Existing PyTorch settings differ from selected protocol")
+        print("Using verified completed PyTorch run", flush=True)
+    else:
+        command("src/train_ann_torch.py", *flags, "--output", pytorch)
     verify_run(pytorch, "PyTorch selected")
     comparison = COLLECTION / "comparison"
     command("src/compare_frameworks.py", "--tf-run", selected, "--torch-run", pytorch, "--output", comparison)

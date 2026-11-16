@@ -1,0 +1,143 @@
+{
+  "tensorflow": {
+    "architectures": [
+      [
+        10
+      ],
+      [
+        16,
+        8
+      ]
+    ],
+    "activation": "tanh",
+    "epochs": 1000,
+    "patience": 30,
+    "batch_size": 16,
+    "learning_rate": 0.01,
+    "l2": 0.0001,
+    "seeds": [
+      0,
+      1,
+      2
+    ],
+    "tracks": [
+      "A",
+      "B"
+    ],
+    "folds": 7,
+    "inner_folds": 3,
+    "output": "results\\research_20_days\\tensorflow_s2",
+    "smoke_test": false,
+    "python": "3.13.1",
+    "sklearn": "1.9.1",
+    "rows": 180,
+    "groups": 20,
+    "training_data_sha256": "2c8266628be154f1da7e191ac1c8bfb6da8de15c4183bba8a24a49dcffcd8e1a",
+    "dataset_status": "repeated_daily_file_excluded",
+    "tensorflow": "2.21.0"
+  },
+  "pytorch": {
+    "architectures": [
+      [
+        10
+      ],
+      [
+        16,
+        8
+      ]
+    ],
+    "activation": "tanh",
+    "epochs": 1000,
+    "patience": 30,
+    "batch_size": 16,
+    "learning_rate": 0.01,
+    "l2": 0.0001,
+    "seeds": [
+      0,
+      1,
+      2
+    ],
+    "tracks": [
+      "A",
+      "B"
+    ],
+    "folds": 7,
+    "inner_folds": 3,
+    "output": "results\\research_20_days\\pytorch_selected",
+    "smoke_test": false,
+    "python": "3.13.1",
+    "sklearn": "1.9.1",
+    "rows": 180,
+    "groups": 20,
+    "training_data_sha256": "2c8266628be154f1da7e191ac1c8bfb6da8de15c4183bba8a24a49dcffcd8e1a",
+    "dataset_status": "repeated_daily_file_excluded",
+    "torch": "2.9.1+cpu"
+  },
+  "warnings": [],
+  "convergence": [
+    {
+      "track": "A",
+      "model": "TensorFlow selected",
+      "selections": 21,
+      "cap": 1000,
+      "cap_hits": 0,
+      "min": 78,
+      "median": 158.0,
+      "max": 847,
+      "votes": {
+        "(10,)": 10,
+        "(16, 8)": 11
+      },
+      "mean_inner_mae": 1.295935837769776,
+      "passes_threshold": true
+    },
+    {
+      "track": "B",
+      "model": "TensorFlow selected",
+      "selections": 21,
+      "cap": 1000,
+      "cap_hits": 0,
+      "min": 5,
+      "median": 14.0,
+      "max": 56,
+      "votes": {
+        "(10,)": 8,
+        "(16, 8)": 13
+      },
+      "mean_inner_mae": 11.17811336485489,
+      "passes_threshold": true
+    },
+    {
+      "track": "A",
+      "model": "PyTorch selected",
+      "selections": 21,
+      "cap": 1000,
+      "cap_hits": 0,
+      "min": 52,
+      "median": 144.0,
+      "max": 212,
+      "votes": {
+        "(10,)": 10,
+        "(16, 8)": 11
+      },
+      "mean_inner_mae": 1.2699370953954028,
+      "passes_threshold": true
+    },
+    {
+      "track": "B",
+      "model": "PyTorch selected",
+      "selections": 21,
+      "cap": 1000,
+      "cap_hits": 0,
+      "min": 7,
+      "median": 28.0,
+      "max": 78,
+      "votes": {
+        "(16, 8)": 18,
+        "(10,)": 3
+      },
+      "mean_inner_mae": 10.949837526028752,
+      "passes_threshold": true
+    }
+  ]
+}

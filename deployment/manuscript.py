@@ -263,5 +263,8 @@ def _article():
         st.json(inventory)
     st.download_button("Download evidence inventory", json.dumps(inventory, indent=2),
                        "manuscript_evidence.json", "application/json")
-    st.caption("PDF export is deferred: a reliable paginated export with equations, figures and references needs a separate render-and-verify workflow. This page is the current manuscript presentation.")
+    st.download_button("Download manuscript PDF", (ROOT / "manuscript/source/manuscript.pdf").read_bytes(),
+                       "solar_manuscript.pdf", "application/pdf")
+    st.download_button("Download editable LaTeX bundle", (ROOT / "manuscript/solar_manuscript_latex.zip").read_bytes(),
+                       "solar_manuscript_latex.zip", "application/zip")
     st.markdown("[Back to article contents](#abstract)")

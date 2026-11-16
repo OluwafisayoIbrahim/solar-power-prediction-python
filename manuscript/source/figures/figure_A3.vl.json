@@ -1,0 +1,466 @@
+{
+  "config": {
+    "view": {
+      "continuousWidth": 300,
+      "continuousHeight": 300
+    },
+    "axis": {
+      "labelFontSize": 12,
+      "titleFontSize": 13
+    },
+    "font": "Times New Roman",
+    "legend": {
+      "labelFontSize": 12,
+      "titleFontSize": 13
+    }
+  },
+  "data": {
+    "name": "data-c24118badcd143e5731cf13c83e31498"
+  },
+  "mark": {
+    "type": "point",
+    "filled": true,
+    "size": 40
+  },
+  "encoding": {
+    "color": {
+      "field": "model",
+      "title": "Model",
+      "type": "nominal"
+    },
+    "tooltip": [
+      {
+        "field": "day_id",
+        "type": "nominal"
+      },
+      {
+        "field": "model",
+        "type": "nominal"
+      },
+      {
+        "field": "MAE (W)",
+        "format": ".3f",
+        "type": "quantitative"
+      }
+    ],
+    "x": {
+      "field": "MAE (W)",
+      "scale": {
+        "zero": true
+      },
+      "title": "Within-group MAE (W)",
+      "type": "quantitative"
+    },
+    "y": {
+      "field": "day_id",
+      "title": "Source-file day group (not calendar order)",
+      "type": "nominal"
+    }
+  },
+  "height": 430,
+  "$schema": "https://vega.github.io/schema/vega-lite/v6.4.1.json",
+  "datasets": {
+    "data-c24118badcd143e5731cf13c83e31498": [
+      {
+        "day_id": "solar_data_fri_10th.csv",
+        "model": "Linear",
+        "MAE (W)": 0.6316451740810641
+      },
+      {
+        "day_id": "solar_data_fri_10th.csv",
+        "model": "PyTorch selected",
+        "MAE (W)": 1.3505971950954871
+      },
+      {
+        "day_id": "solar_data_fri_10th.csv",
+        "model": "Sklearn tuned",
+        "MAE (W)": 0.5412776181836862
+      },
+      {
+        "day_id": "solar_data_fri_10th.csv",
+        "model": "TensorFlow selected",
+        "MAE (W)": 1.1515768093533028
+      },
+      {
+        "day_id": "solar_data_fri_17th.csv",
+        "model": "Linear",
+        "MAE (W)": 1.7178085433022925
+      },
+      {
+        "day_id": "solar_data_fri_17th.csv",
+        "model": "PyTorch selected",
+        "MAE (W)": 4.809885796440966
+      },
+      {
+        "day_id": "solar_data_fri_17th.csv",
+        "model": "Sklearn tuned",
+        "MAE (W)": 1.1754832533531783
+      },
+      {
+        "day_id": "solar_data_fri_17th.csv",
+        "model": "TensorFlow selected",
+        "MAE (W)": 3.2649328613281217
+      },
+      {
+        "day_id": "solar_data_fri_24th.csv",
+        "model": "Linear",
+        "MAE (W)": 0.7311044972386974
+      },
+      {
+        "day_id": "solar_data_fri_24th.csv",
+        "model": "PyTorch selected",
+        "MAE (W)": 0.9669561767578077
+      },
+      {
+        "day_id": "solar_data_fri_24th.csv",
+        "model": "Sklearn tuned",
+        "MAE (W)": 1.0737732581181882
+      },
+      {
+        "day_id": "solar_data_fri_24th.csv",
+        "model": "TensorFlow selected",
+        "MAE (W)": 1.267424045138897
+      },
+      {
+        "day_id": "solar_data_fri_31st.csv",
+        "model": "Linear",
+        "MAE (W)": 0.6989704845406443
+      },
+      {
+        "day_id": "solar_data_fri_31st.csv",
+        "model": "PyTorch selected",
+        "MAE (W)": 0.3625566270616376
+      },
+      {
+        "day_id": "solar_data_fri_31st.csv",
+        "model": "Sklearn tuned",
+        "MAE (W)": 1.4694120664651646
+      },
+      {
+        "day_id": "solar_data_fri_31st.csv",
+        "model": "TensorFlow selected",
+        "MAE (W)": 0.5448471408420263
+      },
+      {
+        "day_id": "solar_data_mon_13th.csv",
+        "model": "Linear",
+        "MAE (W)": 1.3748476859861525
+      },
+      {
+        "day_id": "solar_data_mon_13th.csv",
+        "model": "PyTorch selected",
+        "MAE (W)": 1.3873162163628574
+      },
+      {
+        "day_id": "solar_data_mon_13th.csv",
+        "model": "Sklearn tuned",
+        "MAE (W)": 1.4365268098462611
+      },
+      {
+        "day_id": "solar_data_mon_13th.csv",
+        "model": "TensorFlow selected",
+        "MAE (W)": 0.9389104546441003
+      },
+      {
+        "day_id": "solar_data_mon_20th.csv",
+        "model": "Linear",
+        "MAE (W)": 0.6425755480218116
+      },
+      {
+        "day_id": "solar_data_mon_20th.csv",
+        "model": "PyTorch selected",
+        "MAE (W)": 2.9011663140191026
+      },
+      {
+        "day_id": "solar_data_mon_20th.csv",
+        "model": "Sklearn tuned",
+        "MAE (W)": 0.9453264808826324
+      },
+      {
+        "day_id": "solar_data_mon_20th.csv",
+        "model": "TensorFlow selected",
+        "MAE (W)": 0.5922653537326489
+      },
+      {
+        "day_id": "solar_data_mon_27th.csv",
+        "model": "Linear",
+        "MAE (W)": 0.6424224804040585
+      },
+      {
+        "day_id": "solar_data_mon_27th.csv",
+        "model": "PyTorch selected",
+        "MAE (W)": 1.9260585530598873
+      },
+      {
+        "day_id": "solar_data_mon_27th.csv",
+        "model": "Sklearn tuned",
+        "MAE (W)": 0.4441734411277783
+      },
+      {
+        "day_id": "solar_data_mon_27th.csv",
+        "model": "TensorFlow selected",
+        "MAE (W)": 1.5112602403428734
+      },
+      {
+        "day_id": "solar_data_mon_6th.csv",
+        "model": "Linear",
+        "MAE (W)": 1.7164152998217428
+      },
+      {
+        "day_id": "solar_data_mon_6th.csv",
+        "model": "PyTorch selected",
+        "MAE (W)": 1.7596061197916855
+      },
+      {
+        "day_id": "solar_data_mon_6th.csv",
+        "model": "Sklearn tuned",
+        "MAE (W)": 1.5940442641547368
+      },
+      {
+        "day_id": "solar_data_mon_6th.csv",
+        "model": "TensorFlow selected",
+        "MAE (W)": 2.1326462131076513
+      },
+      {
+        "day_id": "solar_data_thu_16th.csv",
+        "model": "Linear",
+        "MAE (W)": 0.927409652669973
+      },
+      {
+        "day_id": "solar_data_thu_16th.csv",
+        "model": "PyTorch selected",
+        "MAE (W)": 2.274207628038182
+      },
+      {
+        "day_id": "solar_data_thu_16th.csv",
+        "model": "Sklearn tuned",
+        "MAE (W)": 1.05103286129102
+      },
+      {
+        "day_id": "solar_data_thu_16th.csv",
+        "model": "TensorFlow selected",
+        "MAE (W)": 1.308448893229158
+      },
+      {
+        "day_id": "solar_data_thu_23rd.csv",
+        "model": "Linear",
+        "MAE (W)": 1.2900454344183458
+      },
+      {
+        "day_id": "solar_data_thu_23rd.csv",
+        "model": "PyTorch selected",
+        "MAE (W)": 1.158617553710921
+      },
+      {
+        "day_id": "solar_data_thu_23rd.csv",
+        "model": "Sklearn tuned",
+        "MAE (W)": 1.0062949978650566
+      },
+      {
+        "day_id": "solar_data_thu_23rd.csv",
+        "model": "TensorFlow selected",
+        "MAE (W)": 1.1006968858506905
+      },
+      {
+        "day_id": "solar_data_thu_30th.csv",
+        "model": "Linear",
+        "MAE (W)": 0.5897281829795828
+      },
+      {
+        "day_id": "solar_data_thu_30th.csv",
+        "model": "PyTorch selected",
+        "MAE (W)": 0.3650252278645875
+      },
+      {
+        "day_id": "solar_data_thu_30th.csv",
+        "model": "Sklearn tuned",
+        "MAE (W)": 0.9962248030359717
+      },
+      {
+        "day_id": "solar_data_thu_30th.csv",
+        "model": "TensorFlow selected",
+        "MAE (W)": 0.36377977159289304
+      },
+      {
+        "day_id": "solar_data_thu_9th.csv",
+        "model": "Linear",
+        "MAE (W)": 1.1195492770731523
+      },
+      {
+        "day_id": "solar_data_thu_9th.csv",
+        "model": "PyTorch selected",
+        "MAE (W)": 0.7681972249349024
+      },
+      {
+        "day_id": "solar_data_thu_9th.csv",
+        "model": "Sklearn tuned",
+        "MAE (W)": 1.4638541229579372
+      },
+      {
+        "day_id": "solar_data_thu_9th.csv",
+        "model": "TensorFlow selected",
+        "MAE (W)": 0.7185507541232646
+      },
+      {
+        "day_id": "solar_data_tue_14th.csv",
+        "model": "Linear",
+        "MAE (W)": 0.6142744001958439
+      },
+      {
+        "day_id": "solar_data_tue_14th.csv",
+        "model": "PyTorch selected",
+        "MAE (W)": 2.6939479573567677
+      },
+      {
+        "day_id": "solar_data_tue_14th.csv",
+        "model": "Sklearn tuned",
+        "MAE (W)": 0.6737731289108871
+      },
+      {
+        "day_id": "solar_data_tue_14th.csv",
+        "model": "TensorFlow selected",
+        "MAE (W)": 0.6228323703342021
+      },
+      {
+        "day_id": "solar_data_tue_21st.csv",
+        "model": "Linear",
+        "MAE (W)": 1.4599311302632745
+      },
+      {
+        "day_id": "solar_data_tue_21st.csv",
+        "model": "PyTorch selected",
+        "MAE (W)": 1.607315809461811
+      },
+      {
+        "day_id": "solar_data_tue_21st.csv",
+        "model": "Sklearn tuned",
+        "MAE (W)": 1.8833411753270184
+      },
+      {
+        "day_id": "solar_data_tue_21st.csv",
+        "model": "TensorFlow selected",
+        "MAE (W)": 2.3504908582899273
+      },
+      {
+        "day_id": "solar_data_tue_28th.csv",
+        "model": "Linear",
+        "MAE (W)": 1.1796731752479213
+      },
+      {
+        "day_id": "solar_data_tue_28th.csv",
+        "model": "PyTorch selected",
+        "MAE (W)": 1.5635812038845467
+      },
+      {
+        "day_id": "solar_data_tue_28th.csv",
+        "model": "Sklearn tuned",
+        "MAE (W)": 1.0253433612478458
+      },
+      {
+        "day_id": "solar_data_tue_28th.csv",
+        "model": "TensorFlow selected",
+        "MAE (W)": 0.8381307644314278
+      },
+      {
+        "day_id": "solar_data_tue_7th.csv",
+        "model": "Linear",
+        "MAE (W)": 0.7879333405522035
+      },
+      {
+        "day_id": "solar_data_tue_7th.csv",
+        "model": "PyTorch selected",
+        "MAE (W)": 0.6606129964192904
+      },
+      {
+        "day_id": "solar_data_tue_7th.csv",
+        "model": "Sklearn tuned",
+        "MAE (W)": 1.1360942987635383
+      },
+      {
+        "day_id": "solar_data_tue_7th.csv",
+        "model": "TensorFlow selected",
+        "MAE (W)": 0.8865363905164985
+      },
+      {
+        "day_id": "solar_data_wed_15th.csv",
+        "model": "Linear",
+        "MAE (W)": 0.6927453025004822
+      },
+      {
+        "day_id": "solar_data_wed_15th.csv",
+        "model": "PyTorch selected",
+        "MAE (W)": 0.8818610975477523
+      },
+      {
+        "day_id": "solar_data_wed_15th.csv",
+        "model": "Sklearn tuned",
+        "MAE (W)": 0.7554482102219361
+      },
+      {
+        "day_id": "solar_data_wed_15th.csv",
+        "model": "TensorFlow selected",
+        "MAE (W)": 0.9601601833767417
+      },
+      {
+        "day_id": "solar_data_wed_22nd.csv",
+        "model": "Linear",
+        "MAE (W)": 0.8995038150868785
+      },
+      {
+        "day_id": "solar_data_wed_22nd.csv",
+        "model": "PyTorch selected",
+        "MAE (W)": 0.9796843804253557
+      },
+      {
+        "day_id": "solar_data_wed_22nd.csv",
+        "model": "Sklearn tuned",
+        "MAE (W)": 1.8306385730798493
+      },
+      {
+        "day_id": "solar_data_wed_22nd.csv",
+        "model": "TensorFlow selected",
+        "MAE (W)": 0.8040245225694522
+      },
+      {
+        "day_id": "solar_data_wed_29th.csv",
+        "model": "Linear",
+        "MAE (W)": 0.6406701276434413
+      },
+      {
+        "day_id": "solar_data_wed_29th.csv",
+        "model": "PyTorch selected",
+        "MAE (W)": 1.0315587022569415
+      },
+      {
+        "day_id": "solar_data_wed_29th.csv",
+        "model": "Sklearn tuned",
+        "MAE (W)": 1.3588398505266923
+      },
+      {
+        "day_id": "solar_data_wed_29th.csv",
+        "model": "TensorFlow selected",
+        "MAE (W)": 1.1791418457031126
+      },
+      {
+        "day_id": "solar_data_wed_8th.csv",
+        "model": "Linear",
+        "MAE (W)": 1.197144886835531
+      },
+      {
+        "day_id": "solar_data_wed_8th.csv",
+        "model": "PyTorch selected",
+        "MAE (W)": 1.9287195502387122
+      },
+      {
+        "day_id": "solar_data_wed_8th.csv",
+        "model": "Sklearn tuned",
+        "MAE (W)": 0.8594607052805796
+      },
+      {
+        "day_id": "solar_data_wed_8th.csv",
+        "model": "TensorFlow selected",
+        "MAE (W)": 0.9112408447265573
+      }
+    ]
+  }
+}

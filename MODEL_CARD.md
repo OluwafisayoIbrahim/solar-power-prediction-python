@@ -14,177 +14,52 @@ tags:
 
 # Solar Power Prediction: Scikit-learn, TensorFlow and PyTorch
 
-The active dataset contains 180 observations across 20 daily files. One repeated
-daily file was excluded before evaluation. The tables below describe historical
-189-row experiments. The 20-day evaluation and its exports are stored separately
-in `results/research_20_days`.
+The active models use **180 observations across 20 daily files**. One repeated daily file was excluded before evaluation. Historical 189-row models and results remain stored separately.
 
-## Model description
+## Task and intended use
 
-This repository contains regression models that estimate solar panel power output in watts from environmental and electrical measurements. It accompanies a Python reimplementation and re-evaluation of an earlier MATLAB artificial neural network project.
+These regression models estimate solar power in watts from contemporaneous measurements. They support research and teaching; future-horizon forecasts, other sites, grid operations and safety controls have not been validated.
 
-The release includes linear regression, tuned and untuned scikit-learn neural networks, and TensorFlow/Keras and PyTorch neural networks. Two input tracks show how access to current and voltage changes the prediction task.
+Track A uses `solar_irradiance`, `current`, `voltage`, `temperature`, `humidity`. Track B uses `solar_irradiance`, `temperature`, `humidity`, `hour`. Current and voltage use amperes and volts; humidity uses a 0-100 scale and hour is decimal time. Preserve the saved feature order. Inputs must be finite.
 
-**These models estimate power from measurements taken at the same time. They have not been validated for future power forecasting.**
+## Training and evaluation
 
-## Inputs and outputs
+Linear regression and tuned/untuned scikit-learn MLPs are compared with TensorFlow and PyTorch networks. Neural framework candidates are `(10,)` and `(16, 8)`, tanh, Adam learning rate 0.01, hidden-kernel L2 0.0001, maximum 1,000 epochs, patience 30 and selected batch size 16. Seven outer grouped folds and three inner grouped folds separate evaluation from selection. Seeds are 0, 1 and 2. S2 was selected using cap hits, then inner MAE; outer scores were excluded from selection.
 
-| Track | Required features, in order | Interpretation |
-|---|---|---|
-| A | `solar_irradiance`, `current`, `voltage`, `temperature`, `humidity` | Replicates the electrical and environmental input setting. Current and voltage already nearly determine the target through `power = current * voltage`. |
-| B | `solar_irradiance`, `temperature`, `humidity`, `hour` | Estimates power from measured environmental conditions and hour of day without current or voltage. |
-
-Output: one predicted power value in **watts (W)** per input row.
-
-Use the source dataset's measurement units and conventions. `current` and `voltage` represent amperes and volts; humidity is represented on a 0–100 scale. `hour` is numeric hour of day, including fractions, such as `12.5` for 12:30. Inputs must be finite numeric values. Preserve the feature order when passing arrays to scikit-learn models; the TensorFlow and PyTorch helpers select columns using saved metadata.
-
-## Intended use
-
-- Research and teaching about solar power regression on small tabular datasets.
-- Comparing linear regression and neural networks under a shared grouped evaluation protocol.
-- Examining how electrical inputs can create a shortcut when predicting power.
-- Experimental estimation under conditions comparable to the collection setting.
-
-Validate on independent data from the intended installation before operational use. These models have not been established as reliable for grid dispatch, safety controls, financial planning, other sites or panel configurations, nighttime conditions, or long-term forecasting.
-
-## Training data and provenance
-
-The processed dataset contains **189 observations from 21 source-file groups**, with nine measurements per group nominally covering 08:00–16:00. Measurements were collected using pyranometers, solar panels and multimeters at Olabisi Onabanjo University. The project records environmental measurements, current, voltage, time and power.
-
-The source project stores raw files under `data/raw/` and the combined dataset at `data/processed/solar_data_combined.csv`. The model upload does not itself imply that these data files are included or licensed for redistribution.
-
-The active dataset contains 180 observations across 20 daily files, with nine readings per file. One repeated daily file was excluded before evaluation. Within-file measurement intervals range from 35 to 92 minutes. Full calendar dates and instrument calibration records are unavailable.
-
-## Models and training
-
-| Model family | Training approach |
-|---|---|
-| Linear regression | Standardized inputs followed by linear regression. |
-| Untuned scikit-learn ANN | One hidden layer with 10 units, `tanh`, `lbfgs`, and L2 penalty `0.0001`. |
-| Tuned scikit-learn ANN | Hidden size from `{3, 10}` and L2 penalty from `{0.1, 1, 10}`, selected within grouped cross-validation for evaluation. |
-| TensorFlow ANN, S2 | Hidden layers `(10,)` or `(16, 8)`, `tanh`, linear output, Adam, learning rate `0.01`, L2 `0.0001`, batch size `16`, and an epoch cap of `1000`. |
-| PyTorch ANN, S2 | Matching architecture candidates and selection controls, with an explicit CPU training loop. |
-
-For TensorFlow and PyTorch evaluation, three inner grouped folds select architecture. Early stopping uses validation MAE with patience 30; scaling is fitted within training partitions. S2 was selected using the project's declared epoch-cap screening rule rather than the lowest outer-test error. The broader research process had already inspected historical results, so these comparisons still require independent confirmation.
-
-The published deployment models are refitted on all 189 observations. The tuned scikit-learn final-fit script selects settings using seven grouped folds and refits with seed 0. The S2 export scripts choose the most frequently selected architecture across the research folds and seeds, then use its median selected epoch count for a seed-0 final fit. Consult each bundle's metadata for the actual architecture and epoch count.
-
-## Evaluation
-
-Evaluation uses seven outer `GroupKFold` folds over filename-derived day groups, with three groups held out per fold. Neural-network experiments use seeds 0, 1 and 2. For each seed, metrics are calculated on pooled out-of-fold predictions over all 189 rows, then averaged across seeds. These are grouped holdouts, not chronological forecasts.
-
-The following results are rounded values from the project's committed baseline and matched S2 comparison reports. They describe the evaluation procedures, **not an independent test of the final models refitted on all observations**. The repeated-record issue above limits their interpretation.
-
-| Track | Model | MAE (W) | RMSE (W) | MAPE (%) | R² |
+| Track | Model | MAE (W) | RMSE (W) | MAPE (%) | R2 |
 |---|---|---:|---:|---:|---:|
-| A | Physics: current × voltage | 1.168 | 1.321 | 0.445 | 0.998 |
-| A | Linear regression | 0.992 | 1.245 | 0.382 | 0.998 |
-| A | Scikit-learn ANN, untuned | 1.319 | 3.814 | 0.518 | 0.978 |
-| A | Scikit-learn ANN, tuned | 1.141 | 1.574 | 0.442 | 0.997 |
-| A | TensorFlow ANN, S2 | 1.545 | 2.108 | 0.594 | 0.994 |
-| A | PyTorch ANN, S2 | 1.575 | 2.135 | 0.606 | 0.994 |
-| B | Linear regression | 12.165 | 15.149 | 4.854 | 0.701 |
-| B | Scikit-learn ANN, untuned | 14.302 | 23.980 | 5.698 | 0.191 |
-| B | Scikit-learn ANN, tuned | 11.965 | 15.089 | 4.786 | 0.703 |
-| B | TensorFlow ANN, S2 | 12.131 | 15.283 | 4.854 | 0.695 |
-| B | PyTorch ANN, S2 | 11.981 | 15.310 | 4.809 | 0.694 |
+| A | Linear | 0.978 +/- 0.000 | 1.235 +/- 0.000 | 0.377 +/- 0.000 | 0.998 +/- 0.000 |
+| A | Physics | 1.115 +/- 0.000 | 1.254 +/- 0.000 | 0.424 +/- 0.000 | 0.998 +/- 0.000 |
+| A | PyTorch selected | 1.624 +/- 0.148 | 2.405 +/- 0.145 | 0.622 +/- 0.062 | 0.992 +/- 0.001 |
+| A | Sklearn tuned | 1.069 +/- 0.060 | 1.393 +/- 0.089 | 0.413 +/- 0.026 | 0.997 +/- 0.000 |
+| A | Sklearn untuned | 1.304 +/- 0.538 | 3.580 +/- 3.118 | 0.505 +/- 0.214 | 0.970 +/- 0.039 |
+| A | TensorFlow selected | 1.334 +/- 0.159 | 1.863 +/- 0.297 | 0.515 +/- 0.059 | 0.995 +/- 0.002 |
+| B | Linear | 11.835 +/- 0.000 | 14.928 +/- 0.000 | 4.724 +/- 0.000 | 0.702 +/- 0.000 |
+| B | PyTorch selected | 12.032 +/- 0.262 | 15.027 +/- 0.246 | 4.806 +/- 0.097 | 0.698 +/- 0.010 |
+| B | Sklearn tuned | 12.179 +/- 0.037 | 15.633 +/- 0.278 | 4.865 +/- 0.012 | 0.673 +/- 0.012 |
+| B | Sklearn untuned | 14.044 +/- 0.267 | 18.890 +/- 1.219 | 5.584 +/- 0.136 | 0.521 +/- 0.063 |
+| B | TensorFlow selected | 11.951 +/- 0.317 | 14.989 +/- 0.372 | 4.761 +/- 0.107 | 0.700 +/- 0.015 |
 
-The physics baseline has no learned parameters and no model artifact. Track A's low errors mainly reflect the relationship between power, current and voltage. Track B provides a more informative test of estimation without those electrical inputs; its tuned ANN performs similarly to linear regression on this dataset. Seed variation measures sensitivity to initialization and is not a confidence interval for generalization.
+Values are mean +/- population standard deviation across seeds, calculated from pooled held-out predictions per seed. Six outer test folds contain 27 rows and one contains 18. These are daily grouped holdouts, not chronological forecasts. Final inference weights are fitted on all 180 observations and do not have a separate deployment test set.
 
-Historical TensorFlow models are also included when `results/models/` is uploaded. Their results and training budgets differ from S2; the S2 TensorFlow rows above apply only to `results/exports/tf_s2/`.
+## Artifacts and inference
 
-## Repository files
-
-Paths below assume the project folder structure is preserved on the Hub. In filenames, `{a,b}` means that separate Track A and Track B files exist.
-
-| Path | Contents |
-|---|---|
-| `results/models/track_{a,b}_ann_final.joblib` | Tuned scikit-learn predictors, including preprocessing. |
-| `results/models/track_{a,b}_ann_untuned.joblib` | Untuned scikit-learn predictors, including preprocessing. |
-| `results/models/track_{a,b}_linear_final.joblib` | Linear-regression pipelines, including preprocessing. |
-| `results/exports/tf_s2/` | S2 `.keras` models, input and target scalers, and JSON metadata. |
-| `results/exports/torch_s2/` | S2 PyTorch `.pt` state dictionaries, input and target scalers, and JSON metadata. |
-| `results/models/*.keras` | Historical TensorFlow models with their associated scalers and metadata in the same directory. |
-| `src/` | Model definitions, prediction helpers, training and evaluation code. |
-| `requirements.txt` | Project dependency versions and CPU PyTorch package index. |
-
-Keep each TensorFlow or PyTorch model together with its input scaler, target scaler and metadata. The neural-network output must be transformed back to watts with the target scaler. Scikit-learn predictors already contain their preprocessing and should receive unscaled inputs.
-
-## Usage
-
-Replace `YOUR_USERNAME/solar-power-prediction` with the actual Hub repository ID. Install `huggingface_hub` and the project dependencies in a compatible environment. For private repositories, authenticate locally with `hf auth login` first.
-
-### Scikit-learn: Track B
-
-```python
-import joblib
-import numpy as np
-from huggingface_hub import hf_hub_download
-
-model_path = hf_hub_download(
-    repo_id="OluwafisayoIbrahim/solar-power-prediction",
-    filename="results/models/track_b_ann_final.joblib",
-)
-model = joblib.load(model_path)
-
-measurements = np.array([[850.0, 31.0, 65.0, 12.5]])
-power_watts = model.predict(measurements)
-print(f"Predicted power: {power_watts[0]:.2f} W")
-```
-
-### TensorFlow or PyTorch: Track B
-
-Download the artifacts and the project's helper code:
+Active exports are under `results/research_20_days/exports/{sklearn,tensorflow,pytorch}`. Each final export passed save/reload prediction equality checks. Metadata records features, settings and dataset provenance. Earlier artifacts under `results/models` and `results/exports` describe historical 189-row models. The Hugging Face repository may retain that earlier release; this change does not publish new Hub artifacts.
 
 ```python
 import sys
-from pathlib import Path
-
 import pandas as pd
-from huggingface_hub import snapshot_download
+sys.path[:0] = ['src', 'deployment']
+from model_registry import load_model
 
-root = Path(snapshot_download(
-    repo_id="OluwafisayoIbrahim/solar-power-prediction",
-    allow_patterns=["src/*.py", "results/exports/*/*"],
-))
-sys.path.insert(0, str(root / "src"))
-
-measurements = pd.DataFrame([{
-    "solar_irradiance": 850.0,
-    "temperature": 31.0,
-    "humidity": 65.0,
-    "hour": 12.5,
-}])
-
-from predict_tf import load_tf_model, predict_measurements
-
-tf_bundle = load_tf_model("B", root / "results/exports/tf_s2")
-print("TensorFlow power (W):", predict_measurements(tf_bundle, measurements))
-
-from predict_torch import load_torch_model
-from predict_torch import predict_measurements as predict_with_torch
-
-torch_bundle = load_torch_model("B", root / "results/exports/torch_s2")
-print("PyTorch power (W):", predict_with_torch(torch_bundle, measurements))
+measurements = pd.DataFrame([dict(solar_irradiance=850., temperature=31., humidity=65., hour=12.5)])
+# The Streamlit Predict view also accepts single readings and batch uploads.
 ```
 
-For Track A, select track `"A"` and supply its five required feature columns. The PyTorch loader reconstructs the project-specific `TorchANN` architecture and loads its state dictionary on CPU with `weights_only=True`.
+Use the Streamlit app or the helpers in `src/predict_tf.py` and `src/predict_torch.py` with the corresponding active export directory. Only load trusted model bundles. Serialized estimators may depend on the recorded package versions.
 
-## Reproducibility and limitations
+## Limitations and provenance
 
-- The collection is small and limited to one measurement setting. Performance across seasons, sites, hardware and extreme conditions has not been established.
-- The repeated records and uncertain date provenance may make grouped validation optimistic. A duplicate-aware re-evaluation and an independent dataset are needed.
-- Track A benefits from target-related electrical inputs and should not be presented as evidence of weather-based forecasting accuracy.
-- No lagged inputs or future-weather forecasts are used. Grouped validation does not establish future forecasting performance.
-- The untuned Track B ANN has substantial seed sensitivity and recorded convergence warnings.
-- Linear outputs are not physically constrained; predictions can be implausible outside the observed data range.
-- Framework parity does not imply identical random draws or numerical behavior.
-- Final exports are trained on all observations and have no separate held-out deployment test set.
+The data are attributed to one university installation. Full calendar dates and calibration records are unavailable. No exact measurement records repeat in the active dataset, but small sample size and potentially correlated readings limit independence. No external validation, significance tests or calibrated uncertainty intervals are supplied. Linear outputs can be implausible outside the observed range. Access to electrical inputs changes the task; lower Track A errors do not establish weather-only forecasting accuracy.
 
-Recorded environments include Python `3.13.1`, scikit-learn `1.9.1`, NumPy `2.5.3`, TensorFlow `2.21.0`, and CPU PyTorch `2.9.1+cpu`. Use the included dependency file and per-model metadata to reproduce the relevant environment. Serialized estimators may be incompatible with different dependency versions. Only load trusted `.joblib` artifacts or execute trusted downloaded Python code.
-
-## Evidence and attribution
-
-The model card is based on the source project's `README.md`, `deployment/model_registry.py`, `deployment/manuscript_evidence.json`, saved export metadata, `results/metrics/model_comparison.csv`, and `results/comparisons/parity_s2/comparison.md`. These evidence files remain in the source codebase unless separately uploaded to the Hub.
-
-The earlier MATLAB project is [ANN-Forecasting-for-Solar-Power](https://github.com/OluwafisayoIbrahim/ANN-Forecasting-for-Solar-Power). Its reported results are distinct from this Python re-evaluation.
+Evidence: `results/research_20_days/comparison/`, `selection.json`, `completed.json`, and `deployment/manuscript_evidence.json`. The original MATLAB study and preprint are distinct from this Python evaluation.

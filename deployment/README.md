@@ -3,18 +3,18 @@
 The active dataset contains 180 observations across 20 daily files. One repeated
 daily file was excluded before evaluation. Historical experiments use 189
 observations and are available separately. Model exports are stored in
-`results/research_20_days/exports`. Availability depends on completion of the
-research runs; the no-fitting electrical-product baseline remains available.
+`results/research_20_days/exports`. The completed research collection and all
+final model exports passed prediction, metric and save/reload checks.
 
 ## Research dashboard navigation
 
 All seven views use neutral research names. Overview and Research Manuscript
-withhold model findings while full experiments and document review are pending.
+present the completed 20-day experiments and reviewed manuscript.
 Results Explorer separates the 20-day collection from superseded historical
 collections. Dataset Explorer reads the active 180-row dataset. Predict, Train /
 Experiment and Model Explorer use the shared registry and show availability
-messages until the completed collection is verified; physics remains available.
-The active evidence inventory records pending work separately from
+messages if artifacts are absent or do not match the active dataset.
+The active evidence inventory records completed work separately from
 `manuscript_evidence_historical.json`.
 
 The sidebar opens **Overview → Research Manuscript → Results Explorer → Predict →
@@ -107,10 +107,10 @@ classification of Tracks A/B as contemporaneous estimation is this project's
 interpretation of its features and protocol. The README-documented selection
 rule is not independently established as predeclared.
 
-No packages, weights or experiment outputs are added or changed for this manuscript.
-Reliable PDF export is deferred pending a separate pagination/render-verification
-workflow; the Streamlit article is the current presentation. All legacy charts,
-downloads and operational views remain available.
+The manuscript includes a downloadable nine-page PDF and editable LaTeX bundle.
+All pages were rendered and visually reviewed after the tables and figures were
+regenerated from the completed 20-day experiments. Historical charts, downloads
+and operational views remain available separately.
 
 Run the focused checks with `python -m unittest discover -s tests -p test_manuscript.py -v`.
 When adding a new verified experiment, update the source mapping and run these
