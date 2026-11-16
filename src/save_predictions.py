@@ -14,7 +14,7 @@ from features import (
 from train_ann import SEEDS, out_of_fold_predictions
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-PRED_DIR = PROJECT_ROOT / "results" / "predictions"
+PRED_DIR = PROJECT_ROOT / "results/research_20_days/reports" / "predictions"
 N_SPLITS = 7
 
 

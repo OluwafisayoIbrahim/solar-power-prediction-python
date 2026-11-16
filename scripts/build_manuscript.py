@@ -85,7 +85,7 @@ def main():
         'Here, daily grouping separates measurement days after one repeated daily file was excluded.', text)
     text = replace(r'\\par\\noindent Nine measurement records.*?\\par',
         'One repeated daily file was excluded before evaluation. The active dataset contains no exact repeated '
-        'measurement records when filename identity is excluded. Earlier experiments are retained separately as historical results.', text)
+        'measurement records when filename identity is excluded. The dashboard presents the resulting 20-day evaluation.', text)
     text = text.replace('including repeated records.', 'after exclusion of the repeated daily file.')
     text = replace(r'Seven outer \\texttt\{GroupKFold\}.*?The tuned scikit-learn MLP',
         r'Seven outer \texttt{GroupKFold} partitions evaluate 180 observations across 20 daily files. '

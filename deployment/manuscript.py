@@ -107,7 +107,7 @@ def _article():
                 "These counts do not establish independence or instrument accuracy.")
     st.markdown("One repeated daily file was excluded before evaluation. "
                 "The active data contain no exact repeated measurement records when filename identity is excluded. "
-                "Earlier experiments are retained separately as historical results.")
+                "The dashboard presents the resulting 20-day evaluation.")
     table(1, "Observed variables, units and empirical ranges; all stored rows retained.", dataset_table(evidence),
           "data/processed/solar_data_combined.csv. Hour is decimal time; irradiance units follow repository documentation.")
     figure(2, "Distribution of measured electrical power across all stored observations, after removal of the repeated daily file.",
@@ -173,8 +173,7 @@ def _article():
         st.warning("Saved comparison warnings: " + "; ".join(evidence["protocol"]["warnings"]))
     st.subheader("4.1 Historical findings and comparability")
     st.markdown("The original preprint's numerical findings are not reproduced as a verified table here because its full text "
-                "and historical prediction records were unavailable to this audit. The existing Results explorer retains original "
-                "Python and historical TensorFlow outputs. Those runs have different training settings and are not silently merged into S2.")
+                "and historical prediction records were unavailable to this audit. The Results Explorer presents only the completed 20-day Python evaluation.")
     for number, track in [(4, "A"), (5, "B")]:
         st.subheader(f"4.{number - 2} Track {track}")
         table(number, f"Track {track}: pooled out-of-fold performance, mean ± population standard deviation across seeds.",
@@ -252,8 +251,8 @@ def _article():
     st.code(f"python src/train_ann_tf.py {flags} --output results/reproduction/tf_s2\n"
             f"python src/train_ann_torch.py {flags} --output results/reproduction/torch_s2\n"
             "python src/compare_frameworks.py --tf-run results/reproduction/tf_s2 --torch-run results/reproduction/torch_s2 --output results/reproduction/comparison_s2", language="bash")
-    st.markdown("The original Python reports can be regenerated with `src/save_results.py`, `src/save_predictions.py` and "
-                "`src/plots.py`; those scripts write their original report locations. The README documents S1/S2 selection, "
+    st.markdown("Additional baseline reports can be regenerated with `src/save_results.py`, `src/save_predictions.py` and "
+                "`src/plots.py`; those scripts write under `results/research_20_days/reports`. The README documents S1/S2 selection, "
                 "convergence diagnostics and final exports. Use the committed outputs to read this manuscript without rerunning research.")
     st.markdown("**Declarations and availability gaps.** No verified funding declaration, ethics approval, conflict-of-interest statement "
                 "or additional acknowledgement is supplied here. Those details are undocumented in the inspected research files. "

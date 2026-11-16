@@ -9,7 +9,7 @@ import numpy as np
 from features import TRACK_A_FEATURES, TRACK_B_FEATURES
 from train_ann_torch import predict_torch
 
-MODEL_DIR = Path(__file__).resolve().parents[1] / "results/models"
+MODEL_DIR = Path(__file__).resolve().parents[1] / "results/research_20_days/exports/pytorch"
 
 
 def artifact_names(track):

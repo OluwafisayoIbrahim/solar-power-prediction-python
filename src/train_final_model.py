@@ -15,7 +15,7 @@ from models import create_ann_model
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-MODEL_DIR = PROJECT_ROOT / "results" / "models"
+MODEL_DIR = PROJECT_ROOT / "results/research_20_days/exports/sklearn"
 
 HIDDEN_GRID = [3, 10]
 ALPHA_GRID = [0.1, 1.0, 10.0]

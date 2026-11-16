@@ -6,16 +6,17 @@
   },
   "tensorflow_selection": "S2",
   "full_suite": {
-    "tests": 62,
+    "tests": 64,
     "skipped": 8,
     "result": "passed"
   },
   "current_app_checks": {
-    "tests": 7,
+    "tests": 8,
     "result": "passed",
-    "coverage": "All seven pages and all eleven current predictors"
+    "coverage": "All seven pages, eleven current predictors, and no former 21-day result directories"
   },
   "dependency_check": "passed",
   "pdf_pages": 9,
-  "model_reloads": "All active final exports verified"
+  "model_reloads": "All active final exports verified",
+  "main_results": "results/research_20_days/comparison/comparison.csv"
 }

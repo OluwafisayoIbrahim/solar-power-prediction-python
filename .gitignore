@@ -11,14 +11,3 @@ results/research_20_days/attempt_01/
 results/research_20_days/*.tmp
 manuscript/source/*.log
 tmp/pdfs/
-results/models/*.joblib
-!results/models/track_b_x_scaler.joblib
-!results/models/track_b_y_scaler.joblib
-!results/models/track_a_x_scaler.joblib
-!results/models/track_a_y_scaler.joblib
-!results/models/track_a_ann_final.joblib
-!results/models/track_b_ann_final.joblib
-!results/models/track_a_ann_untuned.joblib
-!results/models/track_b_ann_untuned.joblib
-!results/models/track_a_linear_final.joblib
-!results/models/track_b_linear_final.joblib

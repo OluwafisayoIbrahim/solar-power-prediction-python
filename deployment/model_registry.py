@@ -13,7 +13,7 @@ from predict_tf import load_tf_model, predict_measurements
 from predict_torch import artifact_names, load_torch_model, predict_measurements as predict_torch
 
 ROOT = Path(__file__).resolve().parents[1]
-MODEL_DIR = ROOT / "results/models"
+MODEL_DIR = ROOT / "results/research_20_days/exports"
 
 
 def require_exports(kind):
@@ -100,16 +100,6 @@ for track in ("B", "A"):
         key = f"{track.lower()}_{kind}"
         MODELS[key] = ModelSpec(key, f"Track {track} - {title}", track, kind, f"{prefix}_{suffix}")
 MODELS["a_physics"] = ModelSpec("a_physics", "Track A - Physics (current x voltage)", "A", "physics")
-MODELS["a_tensorflow_historical"] = ModelSpec(
-    "a_tensorflow_historical", "Track A - TensorFlow ANN (historical, 1000 epochs)",
-    "A", "tensorflow", "track_a_ann_final.keras", "results/models",
-    "Historical TensorFlow Track A (1000 epochs)")
-MODELS["b_tensorflow_historical"] = ModelSpec(
-    "b_tensorflow_historical", "Track B - TensorFlow ANN (historical, 82 epochs)",
-    "B", "tensorflow", "track_b_ann_final.keras", "results/models",
-    "Original TensorFlow (300 epochs)")
-
-
 @dataclass
 class LoadedModel:
     spec: ModelSpec

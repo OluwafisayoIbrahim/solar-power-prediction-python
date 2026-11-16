@@ -6,7 +6,7 @@ from pathlib import Path
 import joblib
 import numpy as np
 
-MODEL_DIR = Path(__file__).resolve().parents[1] / "results/models"
+MODEL_DIR = Path(__file__).resolve().parents[1] / "results/research_20_days/exports/tensorflow"
 
 
 def load_tf_model(track="B", model_dir=MODEL_DIR):

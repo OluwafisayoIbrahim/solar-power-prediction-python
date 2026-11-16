@@ -29,7 +29,7 @@ st.caption("Fit a session model with a separate holdout; these experiments do no
 if not (ROOT / "results/research_20_days/completed.json").is_file():
     st.warning("Research models are not available yet. "
                ""
-               "The electrical-product baseline and historical models are available separately.")
+               "The electrical-product baseline remains available.")
 st.info("Track A combines electrical and environmental inputs, including measured current and voltage (P = I × V). "
         "Track B uses irradiance, temperature, humidity and measurement hour without electrical inputs. "
         "Both estimate power from contemporaneous conditions; neither is validated for future forecasting.")

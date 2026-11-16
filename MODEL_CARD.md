@@ -14,7 +14,7 @@ tags:
 
 # Solar Power Prediction: Scikit-learn, TensorFlow and PyTorch
 
-The active models use **180 observations across 20 daily files**. One repeated daily file was excluded before evaluation. Historical 189-row models and results remain stored separately.
+The active models use **180 observations across 20 daily files**. One repeated daily file was excluded before evaluation. The dashboard uses this collection exclusively.
 
 ## Task and intended use
 
@@ -44,7 +44,7 @@ Values are mean +/- population standard deviation across seeds, calculated from 
 
 ## Artifacts and inference
 
-Active exports are under `results/research_20_days/exports/{sklearn,tensorflow,pytorch}`. Each final export passed save/reload prediction equality checks. Metadata records features, settings and dataset provenance. Earlier artifacts under `results/models` and `results/exports` describe historical 189-row models. The Hugging Face repository may retain that earlier release; this change does not publish new Hub artifacts.
+Active exports are under `results/research_20_days/exports/{sklearn,tensorflow,pytorch}`. Each final export passed save/reload prediction equality checks. Metadata records features, settings and dataset provenance. The former 21-day exports have been removed from the repository working tree. The Hugging Face repository may retain that earlier release; this change does not publish new Hub artifacts.
 
 ```python
 import sys

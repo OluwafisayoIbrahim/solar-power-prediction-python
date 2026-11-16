@@ -14,8 +14,8 @@ from model_fixtures import SavedModelFixtures
 
 class DashboardTests(SavedModelFixtures, unittest.TestCase):
     def test_portable_repository_sources(self):
-        expected = "results/tensorflow/20261019T100248937256Z"
-        source = r"C:\Users\user\Documents\fisayo\solar-power-prediction-python\results\tensorflow\20261019T100248937256Z"
+        expected = "results/research_20_days/tensorflow_s2"
+        source = r"C:\Users\user\Documents\fisayo\solar-power-prediction-python\results\research_20_days\tensorflow_s2"
         self.assertEqual(repository_source(source), expected)
         self.assertEqual(repository_source("/home/app/project/" + expected), expected)
         self.assertEqual(repository_source(expected), expected)
@@ -62,9 +62,10 @@ class DashboardTests(SavedModelFixtures, unittest.TestCase):
             self.assertFalse(len(app.exception), str(app.exception))
             self.assertFalse(len(app.error), str(app.error))
         app.radio(key="dashboard_page").set_value("Results Explorer").run()
-        for collection in ["Historical TensorFlow", "Original scikit-learn / baselines", "Matched TensorFlow/PyTorch S2 (historical)"]:
-            next(item for item in app.selectbox if item.label == "Experiment collection").select(collection).run()
-            self.assertFalse(len(app.exception), str(app.exception))
+        self.assertFalse(any(item.label == "Experiment collection" for item in app.selectbox))
+        for framework in ["TensorFlow S2", "PyTorch S2"]:
+            next(item for item in app.selectbox if item.label == "Prediction framework").select(framework).run()
+            self.assertFalse(app.exception, str(app.exception))
         app.radio(key="dashboard_page").set_value("Overview").run()
         next(item for item in app.button if item.label == "Explore the Dataset").click().run()
         self.assertEqual(app.session_state["dashboard_page"], "Dataset Explorer")

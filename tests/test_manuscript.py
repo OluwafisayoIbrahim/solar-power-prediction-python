@@ -89,7 +89,7 @@ class ManuscriptTests(unittest.TestCase):
         self.assertEqual({int(n) for n in re.findall(r"\[\[(\d+)\]\]", prose)}, set(range(1, 7)))
         inventory = json.loads((ROOT / "deployment/manuscript_evidence.json").read_text(encoding="utf-8"))
         self.assertEqual(len(inventory["references"]), 6)
-        self.assertTrue((ROOT / inventory["historical_inventory"]).is_file())
+        self.assertNotIn("historical_inventory", inventory)
         for claim in inventory["claims"]:
             for source in claim["sources"]:
                 self.assertTrue((ROOT / source).exists(), source)

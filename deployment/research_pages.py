@@ -4,8 +4,7 @@ import pandas as pd
 import streamlit as st
 import altair as alt
 from research_data import (ROOT, UNITS, DESCRIPTIONS, RUNS, dataset, csv, config,
-                           summary, errors, metric_values, repository_source, source_links,
-                           historical_dataset)
+                           summary, errors, metric_values, repository_source, source_links)
 from model_registry import MODELS, load_model
 from model_image import predictor_image
 
@@ -40,7 +39,7 @@ def overview():
         st.warning(str(exc))
         st.write(f"Dataset: {len(frame)} observations, {frame.day_id.nunique()} daily groups. "
                  "One repeated daily file was excluded. "
-                 "Historical results are available separately in Results Explorer.")
+                 "The completed 20-day collection is used throughout the dashboard.")
         st.metric("No-fitting current × voltage MAE (W)",
                   f"{(frame.power - frame.current * frame.voltage).abs().mean():.4f}")
         return
@@ -149,37 +148,14 @@ def learning_curves():
 
 def experiments():
     st.title("Results Explorer")
-    st.warning("Historical experiments use 189 observations across 21 daily files. The current collection uses 180 observations across 20 daily files.")
     track_note()
-    with st.expander("Original research summary figures"):
-        st.graphviz_chart('digraph { rankdir=LR; node [shape=box]; "Data collection" -> "Preparation" -> "Feature selection" -> "Training" -> "Grouped cross-validation" -> "Evaluation" -> "Comparison"; }')
-        st.image(str(ROOT / "results/figures/model_comparison_bars.png"), caption="Original baseline/scikit-learn comparison; matched S2 scores are shown separately below.")
-    view = st.selectbox("Experiment collection", ["20-day research", "Matched TensorFlow/PyTorch S2 (historical)", "Historical TensorFlow", "Original scikit-learn / baselines"])
-    run = None
-    if view.startswith("20-day"):
-        from research_protocol import completed_collection
-        try:
-            manifest = completed_collection()
-        except (FileNotFoundError, ValueError) as exc:
-            st.info(str(exc))
-            return
-        table = csv(manifest["comparison"])
-        st.caption("Completed updated runs; pooled per-seed scores, followed by means and population standard deviations.")
-    elif view.startswith("Matched"):
-        table = csv("results/comparisons/parity_s2/comparison.csv")
-        st.caption("Source: results/comparisons/parity_s2/comparison.csv; means and population standard deviations across seeds, not confidence intervals.")
-        with st.expander("Matched experiment settings"):
-            st.json({name: config(name) for name in ("TensorFlow S2", "PyTorch S2")})
-    elif view.startswith("Historical"):
-        run = st.selectbox("Historical run", list(RUNS)[:3])
-        table = csv(f"results/{RUNS[run]}/comparison.csv").assign(source_framework="TensorFlow / sklearn baselines", source_run=RUNS[run])
-        st.json(config(run))
-    else:
-        raw = csv("results/metrics/model_comparison.csv")
-        table = raw.groupby(["track", "model"])[["mae_w", "rmse_w", "mape_percent", "r2"]].agg(["mean", lambda s: s.std(ddof=0)]).reset_index()
-        table.columns = ["track", "model"] + [f"{m}_{s}" for m in ["MAE", "RMSE", "MAPE", "R2"] for s in ["mean", "std"]]
-        table = table.assign(source_framework="scikit-learn / physics", source_run="results/metrics/model_comparison.csv")
-        st.caption("Original reports use grouped outer CV, nested sklearn tuning and seeds 0, 1, 2 for ANNs; deterministic baselines have one recorded row. No separate run configuration was saved with this CSV.")
+    from research_protocol import completed_collection
+    manifest = completed_collection()
+    table = csv(manifest["comparison"])
+    st.caption("Source: " + manifest["comparison"] +
+               "; 180 observations across 20 daily files. Pooled per-seed scores, followed by means and population standard deviations.")
+    with st.expander("Matched experiment settings"):
+        st.json({name: config(name) for name in ("TensorFlow S2", "PyTorch S2")})
     track = st.selectbox("Experimental track", ["All tracks", "A", "B"])
     frameworks = st.multiselect("Frameworks", table.source_framework.unique(), default=list(table.source_framework.unique()))
     shown = table[table.source_framework.isin(frameworks)]
@@ -198,29 +174,17 @@ def experiments():
         st.altair_chart(alt.Chart(bars).mark_bar().encode(x=alt.X(f"{metric}_mean:Q", scale=alt.Scale(zero=True)),
             y="label:N", color="track:N", tooltip=["label", f"{metric}_mean", f"{metric}_std", "source_run"]), width="stretch")
     st.subheader("Saved out-of-fold predictions")
-    if view.startswith("Original"):
-        files = sorted((ROOT / "results/predictions").glob("*.csv"))
-        if not files:
-            st.info("No saved original out-of-fold prediction files are available.")
-            learning_curves()
-            return
-        path = st.selectbox("Prediction file", files, format_func=lambda p: p.name)
-        predictions = csv(str(path.relative_to(ROOT)))
-        st.caption(str(path.relative_to(ROOT)))
-    else:
-        prediction_run = run or st.selectbox("Prediction framework", (
-            ["TensorFlow selected (20-day)", "PyTorch selected (20-day)"] if view.startswith("20-day")
-            else ["TensorFlow S2", "PyTorch S2"]))
-        predictions = csv(f"results/{RUNS[prediction_run]}/predictions.csv")
-        prediction_track = st.selectbox("Prediction track", sorted(predictions.track.unique()))
-        predictions = predictions[predictions.track == prediction_track]
-        model = st.selectbox("Held-out model", sorted(predictions.model.unique()))
-        seed = st.selectbox("Prediction seed", sorted(predictions.seed.unique()))
-        predictions = predictions[(predictions.model == model) & (predictions.seed == seed)]
-        if "hour" not in predictions:
-            reference = dataset() if "research_20_days" in RUNS[prediction_run] else historical_dataset()
-            predictions = predictions.merge(reference[["day_id", "hour"]].assign(row=lambda d: d.index), on=["row", "day_id"], validate="many_to_one")
-        st.caption(f"Source: results/{RUNS[prediction_run]}/predictions.csv; seed {seed}; held-out days only.")
+    prediction_run = st.selectbox("Prediction framework", ["TensorFlow S2", "PyTorch S2"])
+    predictions = csv(f"results/{RUNS[prediction_run]}/predictions.csv")
+    prediction_track = st.selectbox("Prediction track", sorted(predictions.track.unique()))
+    predictions = predictions[predictions.track == prediction_track]
+    model = st.selectbox("Held-out model", sorted(predictions.model.unique()))
+    seed = st.selectbox("Prediction seed", sorted(predictions.seed.unique()))
+    predictions = predictions[(predictions.model == model) & (predictions.seed == seed)]
+    if "hour" not in predictions:
+        predictions = predictions.merge(dataset()[["day_id", "hour"]].assign(row=lambda d: d.index),
+                                        on=["row", "day_id"], validate="many_to_one")
+    st.caption(f"Source: results/{RUNS[prediction_run]}/predictions.csv; seed {seed}; held-out days only.")
     if predictions.empty:
         st.info("No saved predictions for this selection.")
         return

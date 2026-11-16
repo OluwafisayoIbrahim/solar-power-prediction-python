@@ -42,9 +42,12 @@ class ResearchDataTests(unittest.TestCase):
             rows.to_csv(paths[0] / "selected_settings.csv", index=False)
             self.assertEqual(choose_tensorflow(*paths)["selected"], "S1")
 
-    def test_historical_runs_cannot_be_promoted_as_updated(self):
-        with self.assertRaisesRegex(ValueError, "Not a full updated"):
-            verify_run(ROOT / "results/tensorflow/convergence_s2", "TensorFlow selected")
+    def test_nonresearch_dataset_cannot_be_promoted(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory)
+            (path / "config.json").write_text(json.dumps({"rows": 189}))
+            with self.assertRaisesRegex(ValueError, "Not a full updated"):
+                verify_run(path, "TensorFlow selected")
 
     def test_research_prediction_reconciliation_rejects_corruption(self):
         # Synthetic predictions exist only in a temporary test directory.

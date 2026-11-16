@@ -97,7 +97,7 @@ class ModelTests(SavedModelFixtures, unittest.TestCase):
         app = AppTest.from_file(str(ROOT / "deployment/prediction_workspace.py"), default_timeout=90).run()
         app.selectbox(key="prediction_model").select("b_pytorch").run()
         app.selectbox(key="diagram_model").select("b_pytorch").run()
-        self.assertTrue(any("pytorch/parity_s2" in caption.value for caption in app.caption))
+        self.assertTrue(any("research_20_days/pytorch_selected" in caption.value for caption in app.caption))
         app.radio(key="model_source").set_value("Train from uploaded data").run()
         upload = BytesIO(self.frame.to_csv(index=False).encode())
         upload.name = "training.csv"
@@ -126,15 +126,13 @@ class ModelTests(SavedModelFixtures, unittest.TestCase):
         with self.assertRaises(ValueError):
             train_uploaded(self.frame, load_model("a_physics"))
 
-    def test_historical_models_keep_their_own_metrics(self):
+    def test_current_models_use_the_matching_research_metrics(self):
         from model_statistics import research_scores
-        for key, epochs, run in [
-            ("a_tensorflow_historical", 1000, "20261019T100248937256Z"),
-            ("b_tensorflow_historical", 82, "20261014T104851616874Z")]:
+        for key in ["a_tensorflow", "b_tensorflow", "a_pytorch", "b_pytorch"]:
             loaded = load_model(key)
-            self.assertEqual(loaded.metadata["epochs"], epochs)
-            self.assertIn(run, research_scores(loaded.spec).source_run)
-            self.assertEqual(loaded.spec.model_dir, ROOT / "results/models")
+            self.assertEqual(loaded.metadata["rows"], 180)
+            self.assertIn("research_20_days", research_scores(loaded.spec).source_run)
+            self.assertIn("research_20_days/exports", loaded.spec.model_dir.as_posix())
 
     def test_cached_model_without_description(self):
         cached = load_model("a_physics")

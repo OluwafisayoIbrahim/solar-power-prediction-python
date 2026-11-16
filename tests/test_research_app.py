@@ -17,6 +17,17 @@ from manuscript_data import track_summary
 
 
 class ResearchAppTests(unittest.TestCase):
+    def test_only_twenty_day_results_are_exposed(self):
+        from research_data import RUNS
+        self.assertEqual(len(MODELS), 11)
+        for path in RUNS.values():
+            self.assertTrue(path.startswith("research_20_days/"))
+            cfg = json.loads((ROOT / "results" / path / "config.json").read_text())
+            self.assertEqual((cfg["rows"], cfg["groups"]), (180, 20))
+        for old in ["comparisons", "exports", "figures", "metrics", "models",
+                    "predictions", "pytorch", "tensorflow"]:
+            self.assertFalse((ROOT / "results" / old).exists(), old)
+
     def test_all_seven_dashboard_pages_open_without_errors(self):
         app = AppTest.from_file(str(ROOT / "deployment/app.py"), default_timeout=90).run()
         pages = list(app.radio(key="dashboard_page").options)
@@ -31,7 +42,7 @@ class ResearchAppTests(unittest.TestCase):
                 self.assertIsNone(re.search(r"\b(researcher|mistake|accidental|accidentally|corrected|fix)\b",
                                             visible, re.IGNORECASE))
 
-    def test_rankings_follow_evidence_and_inventory_separates_history(self):
+    def test_rankings_follow_current_evidence(self):
         # Temporary in-memory values test ranking behavior, not research results.
         rows = pd.DataFrame([dict(track="A", model="Linear", MAE_mean=2.),
                              dict(track="A", model="TensorFlow selected", MAE_mean=1.)])
@@ -40,13 +51,13 @@ class ResearchAppTests(unittest.TestCase):
         self.assertIn("Linear has the lowest mean MAE", track_summary({"comparison": rows}, "A"))
         inventory = json.loads((ROOT / "deployment/manuscript_evidence.json").read_text(encoding="utf-8"))
         self.assertEqual((inventory["dataset"]["rows"], inventory["dataset"]["groups"]), (180, 20))
-        self.assertTrue((ROOT / inventory["historical_inventory"]).is_file())
+        self.assertNotIn("historical_inventory", inventory)
 
-    def test_registry_uses_fresh_exports_and_labels_history(self):
+    def test_registry_uses_only_current_exports(self):
         for spec in MODELS.values():
-            if spec.research_run:
-                self.assertIn("historical", spec.label)
-            elif spec.kind != "physics":
+            self.assertFalse(spec.research_run)
+            self.assertNotIn("historical", spec.label)
+            if spec.kind != "physics":
                 self.assertIn("research_20_days", spec.model_dir.as_posix())
 
     def test_manuscript_and_overview_do_not_present_partial_results(self):

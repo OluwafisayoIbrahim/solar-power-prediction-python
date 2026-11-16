@@ -1,8 +1,7 @@
 # Streamlit prediction app
 
 The active dataset contains 180 observations across 20 daily files. One repeated
-daily file was excluded before evaluation. Historical experiments use 189
-observations and are available separately. Model exports are stored in
+daily file was excluded before evaluation. The dashboard uses the completed 20-day collection exclusively. Model exports are stored in
 `results/research_20_days/exports`. The completed research collection and all
 final model exports passed prediction, metric and save/reload checks.
 
@@ -10,12 +9,7 @@ final model exports passed prediction, metric and save/reload checks.
 
 All seven views use neutral research names. Overview and Research Manuscript
 present the completed 20-day experiments and reviewed manuscript.
-Results Explorer separates the 20-day collection from superseded historical
-collections. Dataset Explorer reads the active 180-row dataset. Predict, Train /
-Experiment and Model Explorer use the shared registry and show availability
-messages if artifacts are absent or do not match the active dataset.
-The active evidence inventory records completed work separately from
-`manuscript_evidence_historical.json`.
+Results Explorer reads only `results/research_20_days/comparison/comparison.csv` and the corresponding saved predictions. Dataset Explorer reads the 180-row dataset. Predict and Model Explorer load eleven predictors from `results/research_20_days/exports/`. The active evidence inventory identifies the same completed runs.
 
 The sidebar opens **Overview → Research Manuscript → Results Explorer → Predict →
 Train / Experiment**, followed by Dataset Explorer and Model Explorer.
@@ -24,10 +18,8 @@ Train / Experiment**, followed by Dataset Explorer and Model Explorer.
   the manuscript, research motivation, approach, three findings and section links.
 - **Research Manuscript:** the full continuous scientific report with in-page contents,
   methods, results, discussion, limitations, references and reproducibility information.
-- **Results Explorer:** separate original, historical TensorFlow and matched
-  S2 collections; metric filters, saved out-of-fold scatter/residual plots,
-  daily profiles and inner-fold learning curves.
-- **Predict:** the existing thirteen saved predictors, single and spreadsheet
+- **Results Explorer:** the 20-day matched comparison, metric downloads, held-out predictions, daily profiles, residual plots and inner-fold learning curves.
+- **Predict:** the eleven saved predictors, single and spreadsheet
   predictions, optional compatible-model comparison, range warnings, evaluation
   downloads. This page always uses saved project models.
 - **Train / Experiment:** explicit uploaded-data training, held-out evaluation, model
@@ -42,8 +34,8 @@ metric definitions and S1/S2 cap-hit diagnostics are consolidated in the manuscr
 
 The overview summarises the manuscript rather than maintaining a separate research account.
 Its section links route to manuscript anchors using `?view=manuscript#section`.
-The original overview workflow and comparison image are retained in Results Explorer
-under Original research summary figures. Detailed interpretation lives in the manuscript.
+Results Explorer charts the completed 20-day comparison and its saved predictions.
+Detailed interpretation lives in the manuscript.
 The original study preprint is distinguished from the subsequent Python results.
 Prediction form defaults use cached dataset medians when available, with observed
 ranges in input help and warnings for values beyond those ranges. Model inspection
@@ -84,7 +76,7 @@ do not prove 21 unique collection days. The November 13 follow-up checked saved
 TensorFlow and PyTorch S2 predictions: the files occupy outer folds 1 and 7,
 respectively. Identical copies cross training/test boundaries when either fold
 is held out. The effect on reported error remains unmeasured. Intervals range from 35 to 92 minutes;
-measurements are approximately hourly. Data and historical metrics are preserved.
+measurements are approximately hourly. The dashboard presents only the completed 20-day metrics.
 Resolving provenance and publishing a duplicate-aware re-evaluation are separate
 research tasks. No updated performance is claimed in this UI change.
 
@@ -118,14 +110,7 @@ checks before changing claims or the chosen research collection. The current
 manuscript has six numbered tables and seven numbered figures; equations are
 rendered with native LaTeX and references use matching numbered links.
 
-Research pages require `data/processed/solar_data_combined.csv`, original reports
-under `results/metrics` and `results/predictions`, TensorFlow run directories,
-`results/pytorch/parity_s2`, and `results/comparisons/parity_s2`. Keep each run's
-configuration, predictions and learning-curve CSVs with its metrics. Historical
-settings are shown separately; no fitted-model predictions replace held-out records.
-The dataset's 1900 date is a placeholder: profiles use recorded hour and source day.
-Calendar coverage cannot be established from those timestamps. Original prediction
-CSVs do not identify a seed; their filenames are shown without inventing one.
+Research pages require `data/processed/solar_data_combined.csv` and `results/research_20_days/`, including the completed manifest, matched comparison, both selected runs, S1/S2 convergence evidence, and final exports. Keep each run's configuration, predictions and learning-curve CSVs with its metrics. The placeholder date does not establish calendar coverage. Charts use held-out predictions, not fitted-model predictions.
 
 No new packages are required; interactive charts use Streamlit's existing Altair
 dependency. Missing artifacts display an unavailable-view message. Upload metrics
@@ -139,10 +124,7 @@ Run from the repository root:
 .\.venv\Scripts\python.exe -m streamlit run deployment/app.py
 ```
 
-The model selector covers thirteen saved predictors: eleven current predictors
-plus historical TensorFlow Track A (1000 epochs) and Track B (82 epochs).
-Historical models are explicitly labelled in prediction and diagram selectors
-and Model Explorer, and their metrics come from their own saved experiments.
+The model selector covers eleven predictors from the 20-day collection.
 Current predictors include TensorFlow S2, PyTorch S2, tuned/untuned
 scikit-learn ANNs and linear regression for both tracks, plus the Track A
 physics baseline. The Models tab offers a separate diagram selector and PNG
@@ -251,24 +233,19 @@ Include the deployment folder, the full `src/` folder and these artifacts:
 
 | Model family | Active artifact directory | Required files per track |
 |---|---|---|
-| TensorFlow S2 | `results/exports/tf_s2` | `.keras`, x/y scalers, TF metadata |
-| PyTorch S2 | `results/exports/torch_s2` | `.pt` state dictionary, x/y scalers, torch metadata |
-| scikit-learn | `results/models` | tuned ANN, untuned ANN and linear `.joblib` pipelines |
+| TensorFlow S2 | `results/research_20_days/exports/tensorflow` | `.keras`, x/y scalers, TF metadata |
+| PyTorch S2 | `results/research_20_days/exports/pytorch` | `.pt` state dictionary, x/y scalers, torch metadata |
+| scikit-learn | `results/research_20_days/exports/sklearn` | tuned ANN, untuned ANN and linear `.joblib` pipelines |
 
-The registry chooses these directories explicitly. Older TensorFlow files in
-`results/models` are preserved but are no longer the app's default models.
-Both S2 frameworks use hidden layers `(16, 8)`. TensorFlow A/B use 167/5 epochs;
-PyTorch A/B use 124/16. The app shows each network's parameter count, source run
-and diagram. Include `results/tensorflow/convergence_s2/learning_curves` and
-`results/pytorch/parity_s2/learning_curves` to display their comparison curves.
+The registry chooses these directories explicitly. Architecture, epoch counts, parameter counts and source runs are read from each current export's metadata. The app's learning-curve selector uses `tensorflow_s1`, `tensorflow_s2` and `pytorch_selected` within `results/research_20_days`.
 Missing predictors are marked and cannot make predictions. No dataset is
 required for inference/upload training. Only load trusted model/scaler files.
 
 To regenerate missing baseline exports locally, run `python src/export_baseline_models.py`.
 To recreate an S2 TensorFlow model, use the completed comparison and an empty
 output directory:
-`python src/train_final_tf.py --track A --run results/tensorflow/convergence_s2 --output PATH_TO_EMPTY_DIRECTORY`.
-For PyTorch use `src/train_final_torch.py` with `--run results/pytorch/parity_s2`.
+`python src/train_final_tf.py --track A --run results/research_20_days/tensorflow_s2 --output PATH_TO_EMPTY_DIRECTORY`.
+For PyTorch use `src/train_final_torch.py` with `--run results/research_20_days/pytorch_selected`.
 Repeat with `--track B` for Track B. Do not rerun exports into existing folders.
 Existing artifacts are preserved. The initial Track A untuned ANN export reached
 its 5,000-iteration limit and emitted a convergence warning.

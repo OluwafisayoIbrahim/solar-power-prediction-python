@@ -33,24 +33,14 @@ DESCRIPTIONS = {"solar_irradiance": "Incident solar radiation per unit area",
                 "temperature": "Ambient temperature", "humidity": "Relative humidity",
                 "current": "Measured electrical current", "voltage": "Measured electrical voltage",
                 "power": "Measured power output", "hour": "Decimal measurement time of day"}
-RUNS = {"Original TensorFlow (300 epochs)": "tensorflow/20261014T104851616874Z",
-        "Historical TensorFlow Track A (1000 epochs)": "tensorflow/20261019T100248937256Z",
-        "TensorFlow S1": "tensorflow/convergence_s1",
-        "TensorFlow S2": "tensorflow/convergence_s2", "PyTorch S2": "pytorch/parity_s2"}
-_completed = ROOT / "results/research_20_days/completed.json"
-if _completed.is_file():
-    for _framework, _path in json.loads(_completed.read_text(encoding="utf-8"))["runs"].items():
-        RUNS[f"{_framework} selected (20-day)"] = str(PurePosixPath(_path).relative_to("results"))
+RUNS = {"TensorFlow S2": "research_20_days/tensorflow_s2",
+        "PyTorch S2": "research_20_days/pytorch_selected",
+        "TensorFlow S1": "research_20_days/tensorflow_s1"}
 
 @st.cache_data(show_spinner=False)
 def dataset():
     return add_day_id(load_processed_data())
 
-
-@st.cache_data(max_entries=1, show_spinner=False)
-def historical_dataset():
-    """Reference observations for historical predictions."""
-    return add_day_id(pd.read_csv(ROOT / "data/historical/solar_data_combined_189.csv"))
 
 @st.cache_data(show_spinner=False)
 def csv(relative):

@@ -33,7 +33,7 @@ Seven outer grouped folds hold out complete daily files: six test partitions hav
 
 Linear regression has the lowest mean MAE in both tracks. The no-fitting current x voltage baseline has MAE **1.115 W**, RMSE **1.254 W**, MAPE **0.424%**, and R2 **0.997898**. Comparisons remain descriptive; no significance test or external validation is supplied.
 
-The current results are in `results/research_20_days/comparison/`. Earlier outputs under `results/metrics/`, `results/tensorflow/convergence_*`, `results/pytorch/parity_s2`, `results/comparisons/parity_s2`, and `results/models/` are historical 189-row experiments and exports. They remain separate from the active results.
+The main results are in `results/research_20_days/comparison/`. The dashboard uses this collection exclusively. The former 21-day result directories and model exports have been removed from the working tree; earlier commits retain their history.
 
 ## Neural training settings
 
@@ -57,7 +57,7 @@ Use new output directories when reproducing runs. Final inference models are fit
 .\.venv\Scripts\python.exe -m unittest discover -s tests -v
 ```
 
-The app has seven views: Overview, Research Manuscript, Results Explorer, Predict, Train / Experiment, Dataset Explorer and Model Explorer. Eleven current predictors and two explicitly labelled historical TensorFlow predictors are available. Predictions use saved models. Upload training creates an isolated session model and does not alter research artifacts.
+The app has seven views: Overview, Research Manuscript, Results Explorer, Predict, Train / Experiment, Dataset Explorer and Model Explorer. Eleven predictors from the 20-day collection are available. Predictions use saved models. Upload training creates an isolated session model and does not alter research artifacts.
 
 The manuscript uses the supplied edited title and six references. Editable LaTeX, regenerated tables, main figures and supplementary views are under `manuscript/source/`. The PDF and LaTeX bundle are downloadable from the manuscript page. See [deployment documentation](deployment/README.md), [model card](MODEL_CARD.md), and [manuscript files](manuscript/README.md).
 

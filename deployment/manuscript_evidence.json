@@ -155,7 +155,6 @@
     ],
     "qualification": "Records the independently reviewed follow-up supplied for the reference review. Does not claim all six papers were fully read or independently verified in their entirety."
   },
-  "historical_inventory": "deployment/manuscript_evidence_historical.json",
   "pending": [],
   "selection": {
     "selected": "S2",

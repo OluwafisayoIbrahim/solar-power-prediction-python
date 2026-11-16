@@ -45,10 +45,10 @@ def fixture(path, framework, **changes):
 
 
 class ReportTests(unittest.TestCase):
-    def test_historical_convergence_and_tf_defaults(self):
-        for stamp, counts in [("20261014T104851616874Z", [21, 2]),
-                              ("20261019T100248937256Z", [18])]:
-            _, rows = convergence_summary(ROOT / "results/tensorflow" / stamp)
+    def test_current_convergence_and_tf_defaults(self):
+        for candidate, counts in [("s1", [2, 0]), ("s2", [0, 0])]:
+            cfg, rows = convergence_summary(ROOT / "results/research_20_days" / ("tensorflow_" + candidate))
+            self.assertEqual(cfg["rows"], 180)
             self.assertEqual([r["cap_hits"] for r in rows], counts)
         self.assertEqual(parse_args([]).epochs, 300)
 
