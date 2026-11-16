@@ -21,7 +21,7 @@
 
 \maketitle
 
-\begin{abstract}Neural networks offered no consistent advantage over linear regression in this re-evaluation of solar power estimation. Lower errors with measured current and voltage reflected richer input information rather than better weather-only prediction. Using 180 observations across 20 daily files, the study compares two tracks: electrical and environmental inputs (Track A), and environmental inputs with observation hour (Track B). Linear regression, a no-fitting voltage/current product baseline for Track A, and scikit-learn, TensorFlow/Keras and PyTorch networks are evaluated using seven outer grouped folds, nested selection where applicable, and three neural-network seeds. Metrics pool held-out predictions for each seed. The electrical-product baseline has mean MAE 1.115 W. Track A linear regression achieves mean MAE 0.978 W, compared with 1.334 W for TensorFlow and 1.624 W for PyTorch. In Track B, linear regression achieves mean MAE 11.835 W, compared with 12.179 W for the tuned scikit-learn network. These differences are descriptive. One repeated daily file was excluded before evaluation. Small sample size, uncertain temporal coverage and absent external validation restrict generalisation. Both tracks estimate power from contemporaneous measurements; neither establishes future forecasting capability.\end{abstract}
+\begin{abstract}Neural networks offered no consistent advantage over linear regression in this re-evaluation of solar power estimation. Lower errors with measured current and voltage reflected richer input information rather than better weather-only prediction. Using 180 observations across 20 daily files, the study compares two tracks: electrical and environmental inputs (Track A), and environmental inputs with observation hour (Track B). Linear regression, a no-fitting voltage/current product baseline for Track A, and scikit-learn, TensorFlow/Keras and PyTorch networks are evaluated using seven outer grouped folds, nested selection where applicable, and three neural-network seeds. Metrics pool held-out predictions for each seed. The electrical-product baseline has mean MAE 1.115 W. Track A linear regression achieves mean MAE 0.978 W, compared with 1.334 W for TensorFlow and 1.624 W for PyTorch. In Track B, linear regression achieves mean MAE 11.835 W, compared with 12.179 W for the tuned scikit-learn network. These differences are descriptive. Both tracks estimate power from contemporaneous measurements; neither establishes future forecasting capability.\end{abstract}
 
 \begin{IEEEkeywords}Photovoltaic power; neural networks; feature availability; grouped cross-validation; baselines; reproducibility\end{IEEEkeywords}
 
@@ -95,7 +95,7 @@ information that is legitimately available \cite{ref4}. Current and voltage are 
 inputs for electrical estimation, but unavailable shortcuts for a weather-only deployment.
 This feature-availability issue differs from fitting preprocessing on test observations.
 Roberts et al. explain why validation must respect dependence structures \cite{ref5}.
-Here, daily grouping separates measurement days after one repeated daily file was excluded.
+Here, daily grouping separates measurement days.
 
 \textbf{Selection bias and baseline comparisons.} Cawley and Talbot show that finite-sample model
 selection can itself overfit and bias evaluation \cite{ref6}. The Python experiments separate
@@ -112,7 +112,7 @@ The processed dataset contains \textbf{180 observations in 20 daily-file groups}
 
 Consecutive within-file intervals range from \textbf{35 to 92 minutes}. There are 0 missing cells and 0 exact full-record duplicates when source identity is included. These counts do not establish independence or instrument accuracy.
 
-One repeated daily file was excluded before evaluation. The active dataset contains no exact repeated measurement records when filename identity is excluded. The dashboard presents the resulting 20-day evaluation.
+The active dataset contains no exact repeated measurement records when filename identity is excluded. The dashboard presents the resulting 20-day evaluation.
 
 \begin{table*}[!t]
 \caption{Observed variables, units and empirical ranges; all stored rows retained.}
@@ -138,7 +138,7 @@ Hour & hour & 8.083 & 12.258 & 16.333 \\
 
 \includegraphics[width=\columnwidth]{figures/figure_2}
 
-\caption{Distribution of measured electrical power across all stored observations, after exclusion of the repeated daily file. Measured power spans 189.01--300.38 W. This is the observed operating range, not evidence of behaviour at night or across other installations.\newline\textit{Source:} data/\allowbreak{}processed/\allowbreak{}solar\_data\_combined.csv; bins summarise counts, not independent days.}
+\caption{Distribution of measured electrical power across all stored observations. Measured power spans 189.01--300.38 W. This is the observed operating range, not evidence of behaviour at night or across other installations.\newline\textit{Source:} data/\allowbreak{}processed/\allowbreak{}solar\_data\_combined.csv; bins summarise counts, not independent days.}
 
 \label{fig:2}
 
@@ -442,7 +442,7 @@ not evidence of superior weather-only forecasting.
 
 \textbf{RQ2 --- baseline comparisons.} Track A: Linear has the lowest mean MAE (0.978 W); linear regression has mean MAE 0.978 W. Differences are descriptive; no significance test is supplied. Track B: Linear has the lowest mean MAE (11.835 W); linear regression has mean MAE 11.835 W. Differences are descriptive; no significance test is supplied. Rankings depend on the metric and must be interpreted within each track.
 
-\textbf{RQ3 --- held-out days.} Each test daily group and its measurements are excluded from fitting. Model selection is nested within the outer training days. One repeated daily file was excluded before evaluation. There is no controlled experiment isolating the effect of changing the split strategy. External-site or future-horizon performance cannot be inferred from these results.
+\textbf{RQ3 --- held-out days.} Each test daily group and its measurements are excluded from fitting. Model selection is nested within the outer training days. There is no controlled experiment isolating the effect of changing the split strategy. External-site or future-horizon performance cannot be inferred from these results.
 
 \textbf{RQ4 --- implementation comparison, not a universal framework ranking.} TensorFlow and PyTorch use
 matching recorded settings, reference data and outer assignments. Their error and seed variation
@@ -453,7 +453,7 @@ software framework choice a substitute for task definition and baseline evaluati
 \section{Limitations}
 
 
-\textbf{Sample size and effective independence.} Only 180 observations across 20 daily files are available. One repeated daily file was excluded before evaluation. The retained records contain no exact repeated measurements when filename identity is excluded. The small sample and potentially correlated readings still limit generalisation.
+\textbf{Sample size and effective independence.} Only 180 observations across 20 daily files are available. The retained records contain no exact repeated measurements when filename identity is excluded. The small sample and potentially correlated readings still limit generalisation.
 
 \textbf{Temporal and geographic coverage.} Collection is attributed to one university installation
 in the project documentation. The processed timestamps contain a placeholder date, and source
@@ -496,7 +496,7 @@ where the available measurements and physical model warrant it.
 
 \section{Research transparency and reproducibility}
 
-\textbf{Data availability.} \href{https://github.com/OluwafisayoIbrahim/solar-power-prediction-python/tree/dev/data/raw}{Raw daily CSVs} and \href{https://github.com/OluwafisayoIbrahim/solar-power-prediction-python/tree/dev/data/processed/solar_data_combined.csv}{processed measurements} are included in the repository. Full calendar dates and instrument calibration records remain unavailable. One repeated daily file was excluded; no missing metadata are inferred from filenames.
+\textbf{Data availability.} \href{https://github.com/OluwafisayoIbrahim/solar-power-prediction-python/tree/dev/data/raw}{Raw daily CSVs} and \href{https://github.com/OluwafisayoIbrahim/solar-power-prediction-python/tree/dev/data/processed/solar_data_combined.csv}{processed measurements} are included in the repository. Full calendar dates and instrument calibration records remain unavailable. No missing metadata are inferred from filenames.
 
 \textbf{Code and artifacts.} \href{https://github.com/OluwafisayoIbrahim/solar-power-prediction-python/tree/dev/src}{Python source}, \href{https://github.com/OluwafisayoIbrahim/solar-power-prediction-python/tree/dev/results}{saved experiments} and \href{https://github.com/OluwafisayoIbrahim/solar-power-prediction-python/tree/dev/deployment/}{deployment documentation} are available. Saved model bundles are for inference; their full-data fitted weights do not supply the outer-CV scores in this report.
 

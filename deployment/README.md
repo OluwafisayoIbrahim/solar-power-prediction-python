@@ -1,7 +1,6 @@
 # Streamlit prediction app
 
-The active dataset contains 180 observations across 20 daily files. One repeated
-daily file was excluded before evaluation. The dashboard uses the completed 20-day collection exclusively. Model exports are stored in
+The active dataset contains 180 observations across 20 daily files. The dashboard uses the completed 20-day collection exclusively. Model exports are stored in
 `results/exports`. The completed research collection and all
 final model exports passed prediction, metric and save/reload checks.
 

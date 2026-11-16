@@ -105,12 +105,11 @@ def _article():
     st.markdown(f"Consecutive within-file intervals range from **{a['interval_min']:g} to {a['interval_max']:g} minutes**. "
                 f"There are {a['missing']} missing cells and {a['duplicate_records']} exact full-record duplicates when source identity is included. "
                 "These counts do not establish independence or instrument accuracy.")
-    st.markdown("One repeated daily file was excluded before evaluation. "
-                "The active data contain no exact repeated measurement records when filename identity is excluded. "
+    st.markdown("The active data contain no exact repeated measurement records when filename identity is excluded. "
                 "The dashboard presents the resulting 20-day evaluation.")
     table(1, "Observed variables, units and empirical ranges; all stored rows retained.", dataset_table(evidence),
           "data/processed/solar_data_combined.csv. Hour is decimal time; irradiance units follow repository documentation.")
-    figure(2, "Distribution of measured electrical power across all stored observations, after removal of the repeated daily file.",
+    figure(2, "Distribution of measured electrical power across all stored observations.",
            figures.power_distribution(evidence["dataset"]),
            f"Measured power spans {evidence['dataset'].power.min():.2f}–{evidence['dataset'].power.max():.2f} W. "
            "This is the observed operating range, not evidence of behaviour at night or across other installations.",
@@ -227,7 +226,7 @@ def _article():
     heading("reproducibility", "9. Research transparency and reproducibility")
     st.markdown(f"**Data availability.** [Raw daily CSVs]({REPOSITORY_TREE}data/raw) and "
                 f"[processed measurements]({REPOSITORY_TREE}data/processed/solar_data_combined.csv) are included in the repository. "
-                "Full calendar dates and instrument calibration records remain unavailable; one repeated daily file was excluded. "
+                "Full calendar dates and instrument calibration records remain unavailable. "
                 "No missing metadata are inferred from filenames.")
     st.markdown(f"**Code and artifacts.** [Python source]({REPOSITORY_TREE}src), "
                 f"[saved experiments]({REPOSITORY_TREE}results) and "

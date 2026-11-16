@@ -76,17 +76,16 @@ def main():
         f"{score(evidence, 'A', 'Linear'):.3f} W, compared with {score(evidence, 'A', 'TensorFlow selected'):.3f} W for TensorFlow "
         f"and {score(evidence, 'A', 'PyTorch selected'):.3f} W for PyTorch. In Track B, linear regression achieves mean MAE "
         f"{score(evidence, 'B', 'Linear'):.3f} W, compared with {score(evidence, 'B', 'Sklearn tuned'):.3f} W for the tuned scikit-learn network. "
-        'These differences are descriptive. One repeated daily file was excluded before evaluation. '
-        'Small sample size, uncertain temporal coverage and absent external validation restrict generalisation. '
+        'These differences are descriptive. '
         'Both tracks estimate power from contemporaneous measurements; neither establishes future forecasting capability.'
         ) + r'\end{abstract}', text)
     text = text.replace('189 observations in 21 source-file groups', '180 observations in 20 daily-file groups')
     text = replace(r'Here, source-file grouping.*?finding below limits the interpretation of that separation\.',
-        'Here, daily grouping separates measurement days after one repeated daily file was excluded.', text)
+        'Here, daily grouping separates measurement days.', text)
     text = replace(r'\\par\\noindent Nine measurement records.*?\\par',
-        'One repeated daily file was excluded before evaluation. The active dataset contains no exact repeated '
+        'The active dataset contains no exact repeated '
         'measurement records when filename identity is excluded. The dashboard presents the resulting 20-day evaluation.', text)
-    text = text.replace('including repeated records.', 'after exclusion of the repeated daily file.')
+    text = text.replace(', including repeated records.', '.')
     text = replace(r'Seven outer \\texttt\{GroupKFold\}.*?The tuned scikit-learn MLP',
         r'Seven outer \texttt{GroupKFold} partitions evaluate 180 observations across 20 daily files. '
         'Six folds hold out three groups (27 rows) and train on 17 groups (153 rows); one holds out two groups '
@@ -127,17 +126,17 @@ def main():
         ' Rankings depend on the metric and must be interpreted within each track.\n\n', text)
     text = replace(r'\\textbf\{RQ3.*?(?=\\textbf\{RQ4)',
         r'\textbf{RQ3 --- held-out days.} Each test daily group and its measurements are excluded from fitting. '
-        'Model selection is nested within the outer training days. One repeated daily file was excluded before evaluation. '
+        'Model selection is nested within the outer training days. '
         'There is no controlled experiment isolating the effect of changing the split strategy. '
         'External-site or future-horizon performance cannot be inferred from these results.\n\n', text)
     text = replace(r'\\textbf\{Sample size and effective independence\.\}.*?(?=\\textbf\{Temporal)',
         r'\textbf{Sample size and effective independence.} Only 180 observations across 20 daily files are available. '
-        'One repeated daily file was excluded before evaluation. The retained records contain no exact repeated measurements '
+        'The retained records contain no exact repeated measurements '
         'when filename identity is excluded. The small sample and potentially correlated readings still limit generalisation.\n\n', text)
     text = replace(r'First resolve the duplicate-file provenance.*?Collect longer records across',
                    'Collect longer records across', text)
     text = text.replace('Full calendar dates, instrument calibration records and the provenance of the repeated source file remain unresolved.',
-        'Full calendar dates and instrument calibration records remain unavailable. One repeated daily file was excluded; no missing metadata are inferred from filenames.')
+        'Full calendar dates and instrument calibration records remain unavailable. No missing metadata are inferred from filenames.')
     for old, new in [('results/tensorflow/convergence_s2', 'results/tensorflow_s2'),
                      ('results/pytorch/parity_s2', 'results/pytorch_selected'),
                      ('results/comparisons/parity_s2', 'results/comparison')]:

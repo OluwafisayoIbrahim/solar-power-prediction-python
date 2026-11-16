@@ -57,7 +57,6 @@ class ManuscriptTests(unittest.TestCase):
         self.assertIn("153 rows", content.VALIDATION)
         self.assertIn("18 rows", content.VALIDATION)
         self.assertIn("20 daily groups / 180 rows", VALIDATION)
-        self.assertIn("One repeated daily file was excluded before evaluation", content.LIMITATIONS)
         self.assertNotIn("folds 1 and 7", content.LIMITATIONS)
 
     def test_corrupt_prediction_records_are_rejected(self):

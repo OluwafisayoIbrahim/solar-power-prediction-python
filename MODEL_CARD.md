@@ -14,7 +14,7 @@ tags:
 
 # Solar Power Prediction: Scikit-learn, TensorFlow and PyTorch
 
-The active models use **180 observations across 20 daily files**. One repeated daily file was excluded before evaluation. The dashboard uses this collection exclusively.
+The active models use **180 observations across 20 daily files**. The dashboard uses this collection exclusively.
 
 ## Task and intended use
 

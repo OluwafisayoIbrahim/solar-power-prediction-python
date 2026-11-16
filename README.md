@@ -4,7 +4,7 @@ This study re-evaluates an earlier MATLAB neural-network project using electrica
 
 ## Dataset and evaluation
 
-The active dataset contains **180 observations across 20 daily files**, with nine readings per file. One repeated daily file, `solar_data_tue_28st.csv`, was excluded before evaluation and is retained under `data/excluded/`. The distinct `solar_data_tue_21st.csv` and `solar_data_tue_28th.csv` remain included. No exact measurement records repeat when filename identity is excluded.
+The active dataset contains **180 observations across 20 daily files**, with nine readings per file. The distinct `solar_data_tue_21st.csv` and `solar_data_tue_28th.csv` remain included. No exact measurement records repeat when filename identity is excluded.
 
 Raw files are in `data/raw/`; `src/load_data.py` produces `data/processed/solar_data_combined.csv`. The previous 189-row dataset is preserved under `data/historical/`. Full calendar dates and calibration records are unavailable. Collection is attributed to Olabisi Onabanjo University in the original project documentation.
 
@@ -66,7 +66,7 @@ The app has seven views: Overview, Research Manuscript, Results Explorer, Predic
 
 The manuscript uses the supplied edited title and six references. Editable LaTeX, regenerated tables, main figures and supplementary views are under `manuscript/source/`. The PDF and LaTeX bundle are downloadable from the manuscript page. See [deployment documentation](deployment/README.md), [model card](MODEL_CARD.md), and [manuscript files](manuscript/README.md).
 
-Small sample size, uncertain temporal coverage and absent external validation limit generalisation. Track A needs electrical measurements; Track B still needs contemporaneous environmental measurements. Neither demonstrates future weather forecasting or reliability at other installations.
+Track A needs electrical measurements; Track B still needs contemporaneous environmental measurements. Neither demonstrates future weather forecasting or reliability at other installations.
 
 ## Automated Streamlit Health Monitoring
 

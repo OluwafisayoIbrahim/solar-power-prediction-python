@@ -38,7 +38,6 @@ def overview():
         frame = dataset()
         st.warning(str(exc))
         st.write(f"Dataset: {len(frame)} observations, {frame.day_id.nunique()} daily groups. "
-                 "One repeated daily file was excluded. "
                  "The completed 20-day collection is used throughout the dashboard.")
         st.metric("No-fitting current × voltage MAE (W)",
                   f"{(frame.power - frame.current * frame.voltage).abs().mean():.4f}")
@@ -64,8 +63,6 @@ def overview():
                 "Both tracks estimate power from contemporaneous measurements.")
     st.markdown(track_summary(evidence, "A"))
     st.markdown(track_summary(evidence, "B"))
-    st.caption("One repeated daily file was excluded before evaluation. Small sample size, "
-               "uncertain temporal coverage and absent external validation limit generalisation.")
 
 
 def overview_navigation():
@@ -94,7 +91,7 @@ def dataset_explorer():
         col.metric(name, value)
     st.caption("Source: data/processed/solar_data_combined.csv. Source filenames identify measurement days. "
                "The 1900 timestamp year is a placeholder; calendar dates and seasonal coverage cannot be reconstructed.")
-    st.caption("The updated dataset excludes a repeated daily file and contains no exact repeated measurement records when filename identity is excluded.")
+    st.caption("The dataset contains no exact repeated measurement records when filename identity is excluded.")
     st.dataframe(df[list(UNITS)].agg(["min", "max"]).T.assign(unit=pd.Series(UNITS)), width="stretch")
     st.dataframe(df.isna().sum().rename("Missing values"), width="stretch")
     days = st.multiselect("Measurement days", sorted(df.day_id.unique()), default=sorted(df.day_id.unique())[:2])

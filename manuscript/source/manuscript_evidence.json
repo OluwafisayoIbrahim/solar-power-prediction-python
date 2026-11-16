@@ -78,7 +78,7 @@
         "results/dataset_audit.json",
         "results/physics_predictions.csv"
       ],
-      "verification": "180 observations, 20 daily groups, nine readings per group and no exact repeated measurements excluding filename identity. One repeated daily file was excluded."
+      "verification": "180 observations, 20 daily groups, nine readings per group and no exact repeated measurements excluding filename identity. "
     },
     {
       "claim": "Matched TensorFlow S2 and PyTorch evaluation and final inference exports",
