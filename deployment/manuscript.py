@@ -70,7 +70,7 @@ def _article():
     st.markdown(f"[Python code]({content.REPOSITORY}) · [Original MATLAB study]({content.ORIGINAL}) · "
                 "[Original preprint](https://doi.org/10.2139/ssrn.4771898) · "
                 f"[Dataset and preparation]({REPOSITORY_TREE}data)")
-    st.caption("Research manuscript based on saved experiments. Predict uses saved models; Train / Experiment fits session models. Uploads never replace the evidence below.")
+    st.caption("Research manuscript based on saved experiments. Predict supports saved-model inference and session training. Uploads never replace the evidence below.")
     if not (ROOT / "manuscript/publication_ready.json").is_file():
         st.warning("Manuscript results are not available yet.")
         return
@@ -261,8 +261,4 @@ def _article():
         st.json(inventory)
     st.download_button("Download evidence inventory", json.dumps(inventory, indent=2),
                        "manuscript_evidence.json", "application/json")
-    st.download_button("Download manuscript PDF", (ROOT / "manuscript/source/manuscript.pdf").read_bytes(),
-                       "solar_manuscript.pdf", "application/pdf")
-    st.download_button("Download editable LaTeX bundle", (ROOT / "manuscript/solar_manuscript_latex.zip").read_bytes(),
-                       "solar_manuscript_latex.zip", "application/zip")
     st.markdown("[Back to article contents](#abstract)")

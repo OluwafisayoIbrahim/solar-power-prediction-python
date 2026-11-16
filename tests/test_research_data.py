@@ -4,6 +4,7 @@ import sys
 import tempfile
 import unittest
 import json
+from unittest.mock import patch
 
 import numpy as np
 import pandas as pd
@@ -19,6 +20,18 @@ from evaluate import compute_metrics
 
 
 class ResearchDataTests(unittest.TestCase):
+    def test_dataset_fingerprint_is_portable_and_still_detects_content_changes(self):
+        source = (ROOT / "data/processed/solar_data_combined.csv").read_bytes().replace(b"\r\n", b"\n")
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "measurements.csv"
+            with patch("research_protocol.PROCESSED_DATA_PATH", path):
+                path.write_bytes(source)
+                expected = data_digest()
+                path.write_bytes(source.replace(b"\n", b"\r\n"))
+                self.assertEqual(data_digest(), expected)
+                path.write_bytes(source + b"changed")
+                self.assertNotEqual(data_digest(), expected)
+
     def test_selection_uses_cap_hits_then_inner_evidence_without_outer_files(self):
         with tempfile.TemporaryDirectory() as directory:
             paths = [Path(directory) / name for name in ["s1", "s2"]]

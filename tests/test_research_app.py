@@ -28,10 +28,10 @@ class ResearchAppTests(unittest.TestCase):
                     "predictions", "pytorch", "tensorflow"]:
             self.assertFalse((ROOT / "results" / old).exists(), old)
 
-    def test_all_seven_dashboard_pages_open_without_errors(self):
+    def test_all_six_dashboard_pages_open_without_errors(self):
         app = AppTest.from_file(str(ROOT / "deployment/app.py"), default_timeout=90).run()
         pages = list(app.radio(key="dashboard_page").options)
-        self.assertEqual(len(pages), 7)
+        self.assertEqual(len(pages), 6)
         for page in pages:
             with self.subTest(page=page):
                 app.radio(key="dashboard_page").set_value(page).run()
@@ -65,6 +65,8 @@ class ResearchAppTests(unittest.TestCase):
         self.assertFalse(app.exception, str(app.exception))
         self.assertFalse(app.error, str(app.error))
         app.radio(key="dashboard_page").set_value("Research Manuscript").run()
+        self.assertNotIn("Download manuscript PDF", [button.label for button in app.get("download_button")])
+        self.assertNotIn("Download editable LaTeX bundle", [button.label for button in app.get("download_button")])
         self.assertFalse(app.exception, str(app.exception))
         self.assertFalse(app.error, str(app.error))
         if not (ROOT / "manuscript/publication_ready.json").is_file():

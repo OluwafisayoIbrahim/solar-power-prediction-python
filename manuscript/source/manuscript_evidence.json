@@ -2,7 +2,7 @@
   "status": "complete",
   "scope": "20-day research: full grouped evaluation and final inference exports",
   "dataset": {
-    "training_data_sha256": "2c8266628be154f1da7e191ac1c8bfb6da8de15c4183bba8a24a49dcffcd8e1a",
+    "training_data_sha256": "b208f611a76bc08fe47a4b8a5776eb1f9ebf4a7ba8a7b3770c3e8559d88f8ea0",
     "rows": 180,
     "groups": 20,
     "rows_per_group": [
@@ -237,7 +237,7 @@
       }
     },
     "rule": "Fewer total selected-refit cap hits; then lower equal-track mean inner MAE; exact tie S1. No outer scores used.",
-    "training_data_sha256": "2c8266628be154f1da7e191ac1c8bfb6da8de15c4183bba8a24a49dcffcd8e1a"
+    "training_data_sha256": "b208f611a76bc08fe47a4b8a5776eb1f9ebf4a7ba8a7b3770c3e8559d88f8ea0"
   },
   "runs": {
     "TensorFlow": "results/tensorflow_s2",

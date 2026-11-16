@@ -6,12 +6,11 @@ final model exports passed prediction, metric and save/reload checks.
 
 ## Research dashboard navigation
 
-All seven views use neutral research names. Overview and Research Manuscript
+All six views use neutral research names. Overview and Research Manuscript
 present the completed 20-day experiments and reviewed manuscript.
 Results Explorer reads only `results/comparison/comparison.csv` and the corresponding saved predictions. Dataset Explorer reads the 180-row dataset. Predict and Model Explorer load eleven predictors from `results/exports/`. The active evidence inventory identifies the same completed runs.
 
-The sidebar opens **Overview → Research Manuscript → Results Explorer → Predict →
-Train / Experiment**, followed by Dataset Explorer and Model Explorer.
+The sidebar opens **Overview → Research Manuscript → Results Explorer → Predict**, followed by Dataset Explorer and Model Explorer.
 
 - **Overview:** a short introduction with the same title and checked S2 evidence as
   the manuscript, research motivation, approach, three findings and section links.
@@ -20,9 +19,7 @@ Train / Experiment**, followed by Dataset Explorer and Model Explorer.
 - **Results Explorer:** the 20-day matched comparison, metric downloads, held-out predictions, daily profiles, residual plots and inner-fold learning curves.
 - **Predict:** the eleven saved predictors, single and spreadsheet
   predictions, optional compatible-model comparison, range warnings, evaluation
-  downloads. This page always uses saved project models.
-- **Train / Experiment:** explicit uploaded-data training, held-out evaluation, model
-  downloads and single/spreadsheet predictions using the trained session model.
+  downloads, and explicit uploaded-data training with held-out evaluation. Choose Saved models or Train from uploaded data using Model source on the same page.
 - **Dataset Explorer:** source-day and numeric filters, column selection,
   sorting/downloads, measurement profiles, distributions, correlations and units.
 - **Model Explorer:** track/framework/family filters, up to two saved models,
@@ -46,11 +43,7 @@ are changed by this refactor.
 artifact loading and supplies statistics/error transformations. Existing registry,
 batch validation, training and diagram modules remain shared.
 
-The two operational routes reuse `prediction_workspace.py` with an explicit view:
-Predict hides training controls and uses saved models; Train / Experiment opens on
-training and provides session-inference tabs. Switching routes clears stale batch
-outputs, while a compatible trained session model can remain available. Standalone
-execution keeps the combined workspace for existing integrations and regression tests.
+Predict combines saved-model inference and session training in `prediction_workspace.py`. The Model source selector switches modes and clears previous results. Use the Train From Uploaded Data tab to fit and evaluate a session model, then use the prediction tabs with that model.
 
 ### Manuscript evidence and maintenance
 
@@ -98,7 +91,7 @@ classification of Tracks A/B as contemporaneous estimation is this project's
 interpretation of its features and protocol. The README-documented selection
 rule is not independently established as predeclared.
 
-The manuscript includes a downloadable nine-page PDF and editable LaTeX bundle.
+The manuscript page presents the article without PDF or LaTeX download buttons. The source files remain under `manuscript/`.
 All pages were rendered and visually reviewed after the tables and figures were
 regenerated from the completed 20-day experiments. Historical charts, downloads
 and operational views remain available separately.
@@ -130,8 +123,7 @@ physics baseline. The Models tab offers a separate diagram selector and PNG
 download for every saved model. Neural-network images use actual saved layer
 sizes; regression and physics images show their computation structure.
 
-Open **Predict** for saved-model inference, or **Train / Experiment**
-to fit a fresh session model. Changing the selected model clears previous results;
+Open **Predict** and select Saved models or Train from uploaded data. Changing the selected model clears previous results;
 switching workspaces clears batch outputs so saved and session results are not mixed.
 Existing comparison learning curves are shown when available.
 
@@ -180,7 +172,7 @@ Uploaded text beginning with formula characters is escaped in CSV exports.
 
 ## Training from uploads
 
-Open **Train / Experiment**, select a model, and use **Train From Uploaded Data**.
+Open **Predict**, set Model source to Train from uploaded data, select a model, and use **Train From Uploaded Data**.
 CSV/Excel training requires the model's input columns plus measured `power`.
 Training is limited to 10,000 rows, at least 10 valid readings. Invalid inputs
 and missing/nonfinite/negative targets are excluded and listed.
@@ -274,3 +266,5 @@ Streamlit continues deploying independently from its configured branch; a failed
 test does not automatically block Streamlit deployment. Require the
 `Python 3.13 tests` status check in a branch rule if merges should require passing
 tests, and deploy from that protected branch.
+
+Dataset fingerprints use CSV bytes normalised to LF line endings. This keeps model and result verification consistent on Windows and Linux.

@@ -55,7 +55,7 @@ class DashboardTests(SavedModelFixtures, unittest.TestCase):
         app = AppTest.from_file(str(ROOT / "deployment/app.py"), default_timeout=90).run()
         self.assertEqual(app.session_state["dashboard_page"], "Overview")
         options = list(app.radio(key="dashboard_page").options)
-        self.assertEqual(options[:5], ["Overview", "Research Manuscript", "Results Explorer", "Predict", "Train / Experiment"])
+        self.assertEqual(options, ["Overview", "Research Manuscript", "Results Explorer", "Predict", "Dataset Explorer", "Model Explorer"])
         self.assertNotIn("Research Methodology & Limitations", options)
         for page in options:
             app.radio(key="dashboard_page").set_value(page).run()
@@ -86,11 +86,9 @@ class DashboardTests(SavedModelFixtures, unittest.TestCase):
         self.assertEqual(app.session_state["dashboard_page"], "Research Manuscript")
         self.assertEqual(app.title[0].value, TITLE)
         app.radio(key="dashboard_page").set_value("Predict").run()
-        self.assertNotIn("Train From Uploaded Data", [item.label for item in app.tabs])
-        self.assertFalse(any(item.label == "Model source" for item in app.radio))
-        self.assertFalse(any(item.label == "Training measurements" for item in app.get("file_uploader")))
+        self.assertTrue(any(item.label == "Model source" for item in app.radio))
         app.session_state["batch_result"] = pd.DataFrame({"prediction_model": ["stale saved prediction"]})
-        app.radio(key="dashboard_page").set_value("Train / Experiment").run()
+        app.radio(key="model_source").set_value("Train from uploaded data").run()
         self.assertIn("Train From Uploaded Data", [item.label for item in app.tabs])
         self.assertTrue(any(item.label == "Training measurements" for item in app.get("file_uploader")))
         self.assertNotIn("batch_result", app.session_state)
@@ -99,7 +97,8 @@ class DashboardTests(SavedModelFixtures, unittest.TestCase):
 
     def test_training_route_fits_and_predicts_with_session_model(self):
         app = AppTest.from_file(str(ROOT / "deployment/app.py"), default_timeout=90).run()
-        app.radio(key="dashboard_page").set_value("Train / Experiment").run()
+        app.radio(key="dashboard_page").set_value("Predict").run()
+        app.radio(key="model_source").set_value("Train from uploaded data").run()
         app.selectbox(key="prediction_model").select("b_linear").run()
         upload = BytesIO(dataset().head(30).to_csv(index=False).encode())
         upload.name = "training.csv"

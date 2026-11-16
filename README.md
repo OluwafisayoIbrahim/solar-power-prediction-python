@@ -62,9 +62,9 @@ or use the download button in Results Explorer. Regenerate them with
 .\.venv\Scripts\python.exe -m unittest discover -s tests -v
 ```
 
-The app has seven views: Overview, Research Manuscript, Results Explorer, Predict, Train / Experiment, Dataset Explorer and Model Explorer. Eleven predictors from the 20-day collection are available. Predictions use saved models. Upload training creates an isolated session model and does not alter research artifacts.
+The app has six views: Overview, Research Manuscript, Results Explorer, Predict, Dataset Explorer and Model Explorer. Predict combines saved-model inference and uploaded-data training on one page. Eleven predictors from the 20-day collection are available. Predictions use saved models. Upload training creates an isolated session model and does not alter research artifacts.
 
-The manuscript uses the supplied edited title and six references. Editable LaTeX, regenerated tables, main figures and supplementary views are under `manuscript/source/`. The PDF and LaTeX bundle are downloadable from the manuscript page. See [deployment documentation](deployment/README.md), [model card](MODEL_CARD.md), and [manuscript files](manuscript/README.md).
+The manuscript uses the supplied edited title and six references. Editable LaTeX, regenerated tables, main figures and supplementary views are under `manuscript/source/`. The manuscript page presents the article without PDF or LaTeX download buttons. See [deployment documentation](deployment/README.md), [model card](MODEL_CARD.md), and [manuscript files](manuscript/README.md).
 
 Track A needs electrical measurements; Track B still needs contemporaneous environmental measurements. Neither demonstrates future weather forecasting or reliability at other installations.
 
@@ -129,3 +129,5 @@ that the live wake-up flow works.
 ## Original project
 
 [Original MATLAB repository](https://github.com/OluwafisayoIbrahim/ANN-Forecasting-for-Solar-Power) | [Original preprint](https://doi.org/10.2139/ssrn.4771898). Historical findings are distinct from this Python re-evaluation.
+
+Dataset fingerprints normalise CSV line endings to LF, so Windows and Linux verify the same measurement data. The original source-file digest is retained in run metadata.

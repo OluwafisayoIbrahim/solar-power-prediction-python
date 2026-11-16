@@ -72,8 +72,8 @@ class ModelSpec:
         if directory is None and not self.artifact_directory and self.kind != "physics":
             try:
                 require_exports(self.kind)
-            except (FileNotFoundError, ValueError):
-                return ["model exports pending"]
+            except (FileNotFoundError, ValueError) as exc:
+                return [str(exc)]
         directory = self.model_dir if directory is None else Path(directory)
         if self.kind == "physics":
             return []

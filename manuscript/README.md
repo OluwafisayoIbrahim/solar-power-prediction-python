@@ -17,7 +17,7 @@ fold counts, diagrams and charts have been regenerated.
 `source/manuscript.pdf` is the nine-page rendered manuscript. The adjacent
 `manuscript.tex`, seven table CSVs, main and supplementary figure PDFs, and
 Vega-Lite specifications form its editable source. `solar_manuscript_latex.zip`
-packages these files. `publication_ready.json` records the content and visual review.
+packages these files for local use. The dashboard does not offer manuscript downloads. `publication_ready.json` records the content and visual review.
 
 To regenerate, install `vl-convert-python` in addition to the research environment,
 run `python scripts/build_manuscript.py`, then compile `source/manuscript.tex`

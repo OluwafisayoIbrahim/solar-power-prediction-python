@@ -17,7 +17,8 @@ COLLECTION = ROOT / "results"
 
 
 def data_digest():
-    return hashlib.sha256(PROCESSED_DATA_PATH.read_bytes()).hexdigest()
+    """Fingerprint the CSV with LF line endings on every checkout platform."""
+    return hashlib.sha256(PROCESSED_DATA_PATH.read_bytes().replace(b"\r\n", b"\n")).hexdigest()
 
 
 def choose_tensorflow(s1, s2):

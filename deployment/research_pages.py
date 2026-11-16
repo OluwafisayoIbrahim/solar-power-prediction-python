@@ -71,7 +71,7 @@ def overview_navigation():
     with st.container(horizontal=True):
         for label, destination in [
                 ("Read the Manuscript", "Research Manuscript"), ("View Experimental Results", "Results Explorer"),
-                ("Try a Prediction", "Predict"), ("Train / Experiment", "Train / Experiment"),
+                ("Predict or train a model", "Predict"),
                 ("Explore the Dataset", "Dataset Explorer"), ("Explore Models", "Model Explorer")]:
             st.button(label, icon=":material/arrow_forward:",
                       on_click=lambda target=destination: st.session_state.update(dashboard_page=target))

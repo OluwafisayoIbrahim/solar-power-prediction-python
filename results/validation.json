@@ -6,14 +6,14 @@
   },
   "tensorflow_selection": "S2",
   "full_suite": {
-    "tests": 64,
+    "tests": 65,
     "skipped": 8,
     "result": "passed"
   },
   "current_app_checks": {
     "tests": 8,
     "result": "passed",
-    "coverage": "All seven pages, eleven current predictors, and results directly under results/"
+    "coverage": "All six pages, eleven current predictors, combined inference/training, and no manuscript download buttons"
   },
   "dependency_check": "passed",
   "pdf_pages": 9,
@@ -27,5 +27,7 @@
     ],
     "source_metrics": "matched dashboard comparison",
     "verified": true
-  }
+  },
+  "dataset_fingerprint_format": "CSV bytes with LF line endings",
+  "line_ending_regression": "LF and CRLF produce identical fingerprints; changed content is rejected"
 }
