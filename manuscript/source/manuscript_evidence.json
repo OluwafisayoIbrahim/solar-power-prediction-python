@@ -1,0 +1,252 @@
+{
+  "status": "complete",
+  "scope": "20-day research: full grouped evaluation and final inference exports",
+  "dataset": {
+    "training_data_sha256": "b208f611a76bc08fe47a4b8a5776eb1f9ebf4a7ba8a7b3770c3e8559d88f8ea0",
+    "rows": 180,
+    "groups": 20,
+    "rows_per_group": [
+      9
+    ],
+    "repeated_measurements_excluding_filename": 0,
+    "excluded_file": "solar_data_tue_28st.csv",
+    "folds": [
+      {
+        "fold": 1,
+        "training_groups": 17,
+        "training_rows": 153,
+        "test_groups": 3,
+        "test_rows": 27
+      },
+      {
+        "fold": 2,
+        "training_groups": 17,
+        "training_rows": 153,
+        "test_groups": 3,
+        "test_rows": 27
+      },
+      {
+        "fold": 3,
+        "training_groups": 17,
+        "training_rows": 153,
+        "test_groups": 3,
+        "test_rows": 27
+      },
+      {
+        "fold": 4,
+        "training_groups": 17,
+        "training_rows": 153,
+        "test_groups": 3,
+        "test_rows": 27
+      },
+      {
+        "fold": 5,
+        "training_groups": 17,
+        "training_rows": 153,
+        "test_groups": 3,
+        "test_rows": 27
+      },
+      {
+        "fold": 6,
+        "training_groups": 17,
+        "training_rows": 153,
+        "test_groups": 3,
+        "test_rows": 27
+      },
+      {
+        "fold": 7,
+        "training_groups": 18,
+        "training_rows": 162,
+        "test_groups": 2,
+        "test_rows": 18
+      }
+    ],
+    "physics_metrics": {
+      "MAE": 1.1145744444444454,
+      "RMSE": 1.25442755833532,
+      "MAPE": 0.42448323827806156,
+      "R2": 0.9978979628643537
+    },
+    "physics_fitting": "none",
+    "status": "Data and deterministic baseline complete; full neural comparison is separate"
+  },
+  "claims": [
+    {
+      "claim": "Active dataset and no-fitting electrical-product baseline",
+      "sources": [
+        "data/processed/solar_data_combined.csv",
+        "results/dataset_audit.json",
+        "results/physics_predictions.csv"
+      ],
+      "verification": "180 observations, 20 daily groups, nine readings per group and no exact repeated measurements excluding filename identity. "
+    },
+    {
+      "claim": "Matched TensorFlow S2 and PyTorch evaluation and final inference exports",
+      "sources": [
+        "results/comparison/comparison.csv",
+        "results/comparison/protocol.json",
+        "results/selection.json",
+        "results/completed.json"
+      ],
+      "verification": "Seven outer folds, three inner folds, both tracks and seeds 0, 1, 2. All final exports passed prediction equality after reload."
+    }
+  ],
+  "references": [
+    {
+      "number": 1,
+      "url": "https://doi.org/10.2139/ssrn.4771898",
+      "checked_via": "SSRN indexed publisher record: O. Ibrahim, manuscript May 25 2023, posted April 18 2024. Full text blocked with 403; no numerical historical findings imported.",
+      "review_2026_11_13": "Identity and bibliographic record checked at record/abstract level."
+    },
+    {
+      "number": 2,
+      "url": "https://doi.org/10.1016/j.solener.2016.06.069",
+      "checked_via": "ScienceDirect publisher search record, title/authors/volume/pages/year and abstract",
+      "review_2026_11_13": "Identity and bibliographic record checked at record/abstract level."
+    },
+    {
+      "number": 3,
+      "url": "https://doi.org/10.1016/0893-6080(89)90020-8",
+      "checked_via": "ScienceDirect publisher search record, title/authors and abstract; bibliographic volume/pages cross-checked",
+      "review_2026_11_13": "Identity and bibliographic record checked; relevant full-text passages additionally checked."
+    },
+    {
+      "number": 4,
+      "url": "https://doi.org/10.1145/2382577.2382579",
+      "checked_via": "Author institution record https://cris.tau.ac.il/en/publications/leakage-in-data-mining-formulation-detection-and-avoidance/; ACM direct access blocked",
+      "review_2026_11_13": "Identity and bibliographic record checked at record/abstract level."
+    },
+    {
+      "number": 5,
+      "url": "https://doi.org/10.1111/ecog.02881",
+      "checked_via": "Wiley publisher article and bibliographic record; first online December 2016, issue publication 2017",
+      "review_2026_11_13": "Identity and bibliographic record checked; relevant full-text passages additionally checked."
+    },
+    {
+      "number": 6,
+      "url": "https://www.jmlr.org/papers/v11/cawley10a.html",
+      "checked_via": "JMLR publisher article, authors, year and pages",
+      "review_2026_11_13": "Identity and bibliographic record checked; relevant full-text passages additionally checked."
+    }
+  ],
+  "reference_review": {
+    "date": "2026-11-13",
+    "identities_and_bibliographic_records_checked": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "record_abstract_level": [
+      1,
+      2,
+      4
+    ],
+    "additional_relevant_full_text_passages": [
+      3,
+      5,
+      6
+    ],
+    "unverified": [
+      "SSRN full text",
+      "Historical MATLAB numerical results"
+    ],
+    "qualification": "Records the independently reviewed follow-up supplied for the reference review. Does not claim all six papers were fully read or independently verified in their entirety."
+  },
+  "pending": [],
+  "selection": {
+    "selected": "S2",
+    "candidates": {
+      "S1": {
+        "cap_hits": 2,
+        "mean_inner_mae": 6.2167407709892055,
+        "tracks": [
+          {
+            "track": "A",
+            "model": "TensorFlow selected",
+            "selections": 21,
+            "cap": 1000,
+            "cap_hits": 2,
+            "min": 125,
+            "median": 357.0,
+            "max": 1000,
+            "votes": {
+              "(10,)": 10,
+              "(16, 8)": 11
+            },
+            "mean_inner_mae": 1.1894027738307675,
+            "passes_threshold": true
+          },
+          {
+            "track": "B",
+            "model": "TensorFlow selected",
+            "selections": 21,
+            "cap": 1000,
+            "cap_hits": 0,
+            "min": 9,
+            "median": 23.0,
+            "max": 66,
+            "votes": {
+              "(10,)": 7,
+              "(16, 8)": 14
+            },
+            "mean_inner_mae": 11.244078768147643,
+            "passes_threshold": true
+          }
+        ]
+      },
+      "S2": {
+        "cap_hits": 0,
+        "mean_inner_mae": 6.237024601312332,
+        "tracks": [
+          {
+            "track": "A",
+            "model": "TensorFlow selected",
+            "selections": 21,
+            "cap": 1000,
+            "cap_hits": 0,
+            "min": 78,
+            "median": 158.0,
+            "max": 847,
+            "votes": {
+              "(10,)": 10,
+              "(16, 8)": 11
+            },
+            "mean_inner_mae": 1.295935837769776,
+            "passes_threshold": true
+          },
+          {
+            "track": "B",
+            "model": "TensorFlow selected",
+            "selections": 21,
+            "cap": 1000,
+            "cap_hits": 0,
+            "min": 5,
+            "median": 14.0,
+            "max": 56,
+            "votes": {
+              "(10,)": 8,
+              "(16, 8)": 13
+            },
+            "mean_inner_mae": 11.17811336485489,
+            "passes_threshold": true
+          }
+        ]
+      }
+    },
+    "rule": "Fewer total selected-refit cap hits; then lower equal-track mean inner MAE; exact tie S1. No outer scores used.",
+    "training_data_sha256": "b208f611a76bc08fe47a4b8a5776eb1f9ebf4a7ba8a7b3770c3e8559d88f8ea0"
+  },
+  "runs": {
+    "TensorFlow": "results/tensorflow_s2",
+    "PyTorch": "results/pytorch_selected"
+  },
+  "manuscript": {
+    "pdf": "manuscript/source/manuscript.pdf",
+    "latex": "manuscript/source/manuscript.tex",
+    "pages": 9,
+    "visual_review": "All nine rendered pages inspected; tables, diagrams and charts checked."
+  }
+}

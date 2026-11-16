@@ -57,7 +57,6 @@ class ManuscriptTests(unittest.TestCase):
         self.assertIn("153 rows", content.VALIDATION)
         self.assertIn("18 rows", content.VALIDATION)
         self.assertIn("20 daily groups / 180 rows", VALIDATION)
-        self.assertIn("One repeated daily file was excluded before evaluation", content.LIMITATIONS)
         self.assertNotIn("folds 1 and 7", content.LIMITATIONS)
 
     def test_corrupt_prediction_records_are_rejected(self):
@@ -89,7 +88,7 @@ class ManuscriptTests(unittest.TestCase):
         self.assertEqual({int(n) for n in re.findall(r"\[\[(\d+)\]\]", prose)}, set(range(1, 7)))
         inventory = json.loads((ROOT / "deployment/manuscript_evidence.json").read_text(encoding="utf-8"))
         self.assertEqual(len(inventory["references"]), 6)
-        self.assertTrue((ROOT / inventory["historical_inventory"]).is_file())
+        self.assertNotIn("historical_inventory", inventory)
         for claim in inventory["claims"]:
             for source in claim["sources"]:
                 self.assertTrue((ROOT / source).exists(), source)

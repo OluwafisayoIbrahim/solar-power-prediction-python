@@ -85,19 +85,19 @@ class ModelTests(SavedModelFixtures, unittest.TestCase):
                 key = f"{track}_{kind}"
                 with self.subTest(model=key):
                     spec = PRODUCTION_SPECS[key]
-                    self.assertEqual(spec.model_dir, ROOT / "results/research_20_days/exports" / kind)
+                    self.assertEqual(spec.model_dir, ROOT / "results/exports" / kind)
                     self.assertTrue(spec.description)
                     with TemporaryDirectory() as temp:
                         self.assertEqual(len(spec.missing_files(temp)), 4)
                         with self.assertRaises(FileNotFoundError):
                             load_model(key, temp)
-        self.assertEqual(PRODUCTION_SPECS["b_tuned"].model_dir, ROOT / "results/research_20_days/exports/sklearn")
+        self.assertEqual(PRODUCTION_SPECS["b_tuned"].model_dir, ROOT / "results/exports/sklearn")
 
     def test_pytorch_upload_ui_and_session_prediction(self):
         app = AppTest.from_file(str(ROOT / "deployment/prediction_workspace.py"), default_timeout=90).run()
         app.selectbox(key="prediction_model").select("b_pytorch").run()
         app.selectbox(key="diagram_model").select("b_pytorch").run()
-        self.assertTrue(any("pytorch/parity_s2" in caption.value for caption in app.caption))
+        self.assertTrue(any("pytorch_selected" in caption.value for caption in app.caption))
         app.radio(key="model_source").set_value("Train from uploaded data").run()
         upload = BytesIO(self.frame.to_csv(index=False).encode())
         upload.name = "training.csv"
@@ -126,15 +126,13 @@ class ModelTests(SavedModelFixtures, unittest.TestCase):
         with self.assertRaises(ValueError):
             train_uploaded(self.frame, load_model("a_physics"))
 
-    def test_historical_models_keep_their_own_metrics(self):
+    def test_current_models_use_the_matching_research_metrics(self):
         from model_statistics import research_scores
-        for key, epochs, run in [
-            ("a_tensorflow_historical", 1000, "20261019T100248937256Z"),
-            ("b_tensorflow_historical", 82, "20261014T104851616874Z")]:
+        for key in ["a_tensorflow", "b_tensorflow", "a_pytorch", "b_pytorch"]:
             loaded = load_model(key)
-            self.assertEqual(loaded.metadata["epochs"], epochs)
-            self.assertIn(run, research_scores(loaded.spec).source_run)
-            self.assertEqual(loaded.spec.model_dir, ROOT / "results/models")
+            self.assertEqual(loaded.metadata["rows"], 180)
+            self.assertIn("results/", research_scores(loaded.spec).source_run)
+            self.assertIn("exports", loaded.spec.model_dir.as_posix())
 
     def test_cached_model_without_description(self):
         cached = load_model("a_physics")

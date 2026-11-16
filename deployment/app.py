@@ -12,18 +12,23 @@ from manuscript import render_manuscript
 st.set_page_config(page_title="Solar Power Prediction", layout="wide")
 st.html("<style>" + (ROOT / "deployment/button_styles.css").read_text() + "</style>")
 PAGES = ["Overview", "Research Manuscript", "Results Explorer", "Predict",
-         "Train / Experiment", "Dataset Explorer", "Model Explorer"]
+         "Dataset Explorer", "Model Explorer"]
 ALIASES = {"Research Overview": "Overview", "Experiments & Results": "Results Explorer",
-           "Prediction Workspace": "Predict", "Research Methodology & Limitations": "Research Manuscript"}
+           "Prediction Workspace": "Predict", "Train / Experiment": "Predict",
+           "Research Methodology & Limitations": "Research Manuscript"}
 previous = st.session_state.get("dashboard_page")
 if previous in ALIASES:
     st.session_state["dashboard_page"] = ALIASES[previous]
+    if previous == "Train / Experiment":
+        st.session_state["model_source"] = "Train from uploaded data"
 DESTINATIONS = {"manuscript": "Research Manuscript", "results": "Results Explorer",
-                "predict": "Predict", "train": "Train / Experiment",
+                "predict": "Predict", "train": "Predict",
                 "dataset": "Dataset Explorer", "models": "Model Explorer"}
 requested = st.query_params.get("view")
 if requested in DESTINATIONS:
     st.session_state["dashboard_page"] = DESTINATIONS[requested]
+    if requested == "train":
+        st.session_state["model_source"] = "Train from uploaded data"
     del st.query_params["view"]
 with st.sidebar:
     st.title("Solar Power Prediction")
@@ -32,9 +37,8 @@ with st.sidebar:
     st.link_button("GitHub repository", "https://github.com/OluwafisayoIbrahim/solar-power-prediction-python", icon=":material/code:", width="stretch")
     st.link_button("Original study preprint (SSRN)", "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4771898", icon=":material/article:", width="stretch")
 try:
-    if page in ("Predict", "Train / Experiment"):
-        runpy.run_path(str(ROOT / "deployment/prediction_workspace.py"),
-                       init_globals={"WORKSPACE_VIEW": "predict" if page == "Predict" else "train"})
+    if page == "Predict":
+        runpy.run_path(str(ROOT / "deployment/prediction_workspace.py"))
     else:
         {"Research Manuscript": render_manuscript, "Overview": overview,
          "Dataset Explorer": dataset_explorer, "Results Explorer": experiments,

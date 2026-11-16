@@ -86,7 +86,7 @@ information that is legitimately available [[4]](#ref-4). Current and voltage ar
 inputs for electrical estimation, but unavailable shortcuts for a weather-only deployment.
 This feature-availability issue differs from fitting preprocessing on test observations.
 Roberts et al. explain why validation must respect dependence structures [[5]](#ref-5).
-Here, daily grouping separates measurement days after one repeated daily file was excluded.
+Here, daily grouping separates measurement days.
 
 **Selection bias and baseline comparisons.** Cawley and Talbot show that finite-sample model
 selection can itself overfit and bias evaluation [[6]](#ref-6). The Python experiments separate
@@ -180,7 +180,7 @@ settings does not make random initialisations or floating-point operations ident
 
 LIMITATIONS = """
 **Sample size and effective independence.** Only 180 observations across 20 daily files are
-available. One repeated daily file was excluded before evaluation. The retained
+available. The retained
 records contain no exact repeated measurements when filename identity is excluded.
 The small sample and potentially correlated readings still limit generalisation.
 
@@ -224,17 +224,23 @@ where the available measurements and physical model warrant it.
 
 def abstract(evidence):
     a = evidence["audit"]
-    return f"""{track_summary(evidence, 'A')} {track_summary(evidence, 'B')}
-This re-evaluation compares electrical and environmental inputs (Track A) with environmental
-inputs and observation hour (Track B), using {a['rows']} observations across {a['groups']} daily files.
-Linear regression, a no-fitting voltage/current product baseline, and scikit-learn,
-TensorFlow/Keras and PyTorch networks are evaluated using seven outer grouped folds,
-three inner folds where applicable, and seeds 0, 1 and 2. Metrics pool held-out predictions
-per seed before aggregation. The no-fitting V x I baseline has mean MAE
-{a['power_iv_mae']:.3f} W. Electrical-input accuracy reflects richer contemporaneous information.
-Small sample size, uncertain temporal coverage and absent external validation limit
-generalisation. Both tracks estimate power from measurements at the target time;
-neither establishes future-horizon forecasting capability."""
+    return f"""Neural networks offered no consistent advantage over linear regression in this
+re-evaluation of solar power estimation. Lower errors with measured current and voltage
+reflected richer input information rather than better weather-only prediction. Using
+{a['rows']} observations across {a['groups']} daily files, the study compares electrical and
+environmental inputs (Track A), and environmental inputs with observation hour (Track B).
+Linear regression, a no-fitting voltage/current product baseline for Track A, and
+scikit-learn, TensorFlow/Keras and PyTorch networks are evaluated using seven outer grouped
+folds, nested selection where applicable, and three neural-network seeds. Metrics pool
+held-out predictions for each seed. The electrical-product baseline has mean MAE
+{a['power_iv_mae']:.3f} W. Track A linear regression achieves mean MAE
+{score(evidence, 'A', 'Linear'):.3f} W, compared with
+{score(evidence, 'A', 'TensorFlow selected'):.3f} W for TensorFlow and
+{score(evidence, 'A', 'PyTorch selected'):.3f} W for PyTorch. In Track B, linear regression
+achieves mean MAE {score(evidence, 'B', 'Linear'):.3f} W, compared with
+{score(evidence, 'B', 'Sklearn tuned'):.3f} W for the tuned scikit-learn network.
+These differences are descriptive. Both tracks estimate power from contemporaneous measurements; neither
+establishes future forecasting capability."""
 
 
 
@@ -248,8 +254,7 @@ not evidence of superior weather-only forecasting.
 Rankings depend on the metric and must be interpreted within each track's information setting.
 
 **RQ3 - held-out days.** Each test daily group and its measurements are excluded from fitting.
-Model selection is nested within the outer training days. One repeated daily file was excluded
-before evaluation. There is no controlled experiment isolating the effect of changing the
+Model selection is nested within the outer training days. There is no controlled experiment isolating the effect of changing the
 split strategy. External-site or future-horizon performance cannot be inferred from these results.
 
 **RQ4 — implementation comparison, not a universal framework ranking.** TensorFlow and PyTorch use

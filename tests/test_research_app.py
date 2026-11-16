@@ -17,10 +17,21 @@ from manuscript_data import track_summary
 
 
 class ResearchAppTests(unittest.TestCase):
-    def test_all_seven_dashboard_pages_open_without_errors(self):
+    def test_only_twenty_day_results_are_exposed(self):
+        from research_data import RUNS
+        self.assertEqual(len(MODELS), 11)
+        for path in RUNS.values():
+            self.assertIn(path, {"tensorflow_s1", "tensorflow_s2", "pytorch_selected"})
+            cfg = json.loads((ROOT / "results" / path / "config.json").read_text())
+            self.assertEqual((cfg["rows"], cfg["groups"]), (180, 20))
+        for old in ["research_20_days", "comparisons", "figures", "metrics", "models",
+                    "predictions", "pytorch", "tensorflow"]:
+            self.assertFalse((ROOT / "results" / old).exists(), old)
+
+    def test_all_six_dashboard_pages_open_without_errors(self):
         app = AppTest.from_file(str(ROOT / "deployment/app.py"), default_timeout=90).run()
         pages = list(app.radio(key="dashboard_page").options)
-        self.assertEqual(len(pages), 7)
+        self.assertEqual(len(pages), 6)
         for page in pages:
             with self.subTest(page=page):
                 app.radio(key="dashboard_page").set_value(page).run()
@@ -31,7 +42,7 @@ class ResearchAppTests(unittest.TestCase):
                 self.assertIsNone(re.search(r"\b(researcher|mistake|accidental|accidentally|corrected|fix)\b",
                                             visible, re.IGNORECASE))
 
-    def test_rankings_follow_evidence_and_inventory_separates_history(self):
+    def test_rankings_follow_current_evidence(self):
         # Temporary in-memory values test ranking behavior, not research results.
         rows = pd.DataFrame([dict(track="A", model="Linear", MAE_mean=2.),
                              dict(track="A", model="TensorFlow selected", MAE_mean=1.)])
@@ -40,20 +51,22 @@ class ResearchAppTests(unittest.TestCase):
         self.assertIn("Linear has the lowest mean MAE", track_summary({"comparison": rows}, "A"))
         inventory = json.loads((ROOT / "deployment/manuscript_evidence.json").read_text(encoding="utf-8"))
         self.assertEqual((inventory["dataset"]["rows"], inventory["dataset"]["groups"]), (180, 20))
-        self.assertTrue((ROOT / inventory["historical_inventory"]).is_file())
+        self.assertNotIn("historical_inventory", inventory)
 
-    def test_registry_uses_fresh_exports_and_labels_history(self):
+    def test_registry_uses_only_current_exports(self):
         for spec in MODELS.values():
-            if spec.research_run:
-                self.assertIn("historical", spec.label)
-            elif spec.kind != "physics":
-                self.assertIn("research_20_days", spec.model_dir.as_posix())
+            self.assertFalse(spec.research_run)
+            self.assertNotIn("historical", spec.label)
+            if spec.kind != "physics":
+                self.assertTrue(spec.model_dir.is_relative_to(ROOT / "results/exports"))
 
     def test_manuscript_and_overview_do_not_present_partial_results(self):
         app = AppTest.from_file(str(ROOT / "deployment/app.py"), default_timeout=90).run()
         self.assertFalse(app.exception, str(app.exception))
         self.assertFalse(app.error, str(app.error))
         app.radio(key="dashboard_page").set_value("Research Manuscript").run()
+        self.assertNotIn("Download manuscript PDF", [button.label for button in app.get("download_button")])
+        self.assertNotIn("Download editable LaTeX bundle", [button.label for button in app.get("download_button")])
         self.assertFalse(app.exception, str(app.exception))
         self.assertFalse(app.error, str(app.error))
         if not (ROOT / "manuscript/publication_ready.json").is_file():
@@ -81,6 +94,28 @@ class ResearchAppTests(unittest.TestCase):
         from research_protocol import completed_collection
         for framework, path in completed_collection()["runs"].items():
             verify_run(ROOT / path, f"{framework} selected")
+
+    def test_current_exports_predict_all_active_measurements(self):
+        if not (COLLECTION / "completed.json").is_file():
+            self.skipTest("Current inference exports are not complete")
+        import numpy as np
+        from model_registry import load_model
+        from research_data import dataset
+        from research_protocol import data_digest
+        frame = dataset()
+        for key, spec in MODELS.items():
+            if spec.research_run:
+                continue
+            with self.subTest(model=key):
+                self.assertFalse(spec.missing_files())
+                model = load_model(key)
+                predictions = model.predict(frame)
+                self.assertEqual(predictions.shape, (180,))
+                self.assertTrue(np.isfinite(predictions).all())
+                if spec.kind != "physics":
+                    self.assertEqual(model.metadata["rows"], 180)
+                    self.assertEqual(model.metadata.get("research_dataset_sha256",
+                                     model.metadata.get("training_data_sha256")), data_digest())
 
 
 if __name__ == "__main__":

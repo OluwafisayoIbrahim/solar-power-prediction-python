@@ -1,0 +1,39 @@
+{
+  "architectures": [
+    [
+      10
+    ],
+    [
+      16,
+      8
+    ]
+  ],
+  "activation": "tanh",
+  "epochs": 1000,
+  "patience": 30,
+  "batch_size": 16,
+  "learning_rate": 0.01,
+  "l2": 0.0001,
+  "seeds": [
+    0,
+    1,
+    2
+  ],
+  "tracks": [
+    "A",
+    "B"
+  ],
+  "folds": 7,
+  "inner_folds": 3,
+  "output": "results\\pytorch_selected",
+  "smoke_test": false,
+  "python": "3.13.1",
+  "sklearn": "1.9.1",
+  "rows": 180,
+  "groups": 20,
+  "training_data_sha256": "b208f611a76bc08fe47a4b8a5776eb1f9ebf4a7ba8a7b3770c3e8559d88f8ea0",
+  "dataset_status": "repeated_daily_file_excluded",
+  "torch": "2.9.1+cpu",
+  "original_source_csv_sha256": "2c8266628be154f1da7e191ac1c8bfb6da8de15c4183bba8a24a49dcffcd8e1a",
+  "training_data_sha256_format": "CSV bytes with LF line endings"
+}

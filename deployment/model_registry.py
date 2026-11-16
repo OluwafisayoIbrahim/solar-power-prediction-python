@@ -13,7 +13,19 @@ from predict_tf import load_tf_model, predict_measurements
 from predict_torch import artifact_names, load_torch_model, predict_measurements as predict_torch
 
 ROOT = Path(__file__).resolve().parents[1]
-MODEL_DIR = ROOT / "results/models"
+MODEL_DIR = ROOT / "results/exports"
+
+
+def require_exports(kind):
+    if kind in ("tensorflow", "pytorch"):
+        completed_collection()
+        return
+    path = ROOT / "results/sklearn_exports_complete.json"
+    if not path.is_file():
+        raise ValueError("Scikit-learn models are not available yet")
+    metadata = json.loads(path.read_text(encoding="utf-8"))
+    if metadata.get("training_data_sha256") != data_digest():
+        raise ValueError("Model exports do not match the active dataset")
 
 
 @dataclass(frozen=True)
@@ -53,15 +65,15 @@ class ModelSpec:
     def model_dir(self):
         if self.artifact_directory:
             return ROOT / self.artifact_directory
-        return ROOT / "results/research_20_days/exports" / (
+        return ROOT / "results/exports" / (
             self.kind if self.kind in ("tensorflow", "pytorch") else "sklearn")
 
     def missing_files(self, directory=None):
         if directory is None and not self.artifact_directory and self.kind != "physics":
             try:
-                completed_collection()
-            except (FileNotFoundError, ValueError):
-                return ["completed updated research collection (pending)"]
+                require_exports(self.kind)
+            except (FileNotFoundError, ValueError) as exc:
+                return [str(exc)]
         directory = self.model_dir if directory is None else Path(directory)
         if self.kind == "physics":
             return []
@@ -88,16 +100,6 @@ for track in ("B", "A"):
         key = f"{track.lower()}_{kind}"
         MODELS[key] = ModelSpec(key, f"Track {track} - {title}", track, kind, f"{prefix}_{suffix}")
 MODELS["a_physics"] = ModelSpec("a_physics", "Track A - Physics (current x voltage)", "A", "physics")
-MODELS["a_tensorflow_historical"] = ModelSpec(
-    "a_tensorflow_historical", "Track A - TensorFlow ANN (historical, 1000 epochs)",
-    "A", "tensorflow", "track_a_ann_final.keras", "results/models",
-    "Historical TensorFlow Track A (1000 epochs)")
-MODELS["b_tensorflow_historical"] = ModelSpec(
-    "b_tensorflow_historical", "Track B - TensorFlow ANN (historical, 82 epochs)",
-    "B", "tensorflow", "track_b_ann_final.keras", "results/models",
-    "Original TensorFlow (300 epochs)")
-
-
 @dataclass
 class LoadedModel:
     spec: ModelSpec
@@ -126,7 +128,7 @@ def load_model(key, directory=None):
     spec = MODELS[key]
     active_export = directory is None and not spec.artifact_directory and spec.kind != "physics"
     if active_export:
-        completed_collection()
+        require_exports(spec.kind)
     directory = spec.model_dir if directory is None else Path(directory)
     missing = spec.missing_files(directory)
     if missing:

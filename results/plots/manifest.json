@@ -1,0 +1,71 @@
+{
+  "rows": 180,
+  "daily_files": 20,
+  "source_comparison": "results/comparison/comparison.csv",
+  "source_runs": {
+    "TensorFlow": "results/tensorflow_s2",
+    "PyTorch": "results/pytorch_selected"
+  },
+  "plots": [
+    {
+      "name": "power_distribution",
+      "description": "Measured power across all 180 observations.",
+      "png": "power_distribution.png",
+      "svg": "power_distribution.svg"
+    },
+    {
+      "name": "model_comparison_mae",
+      "description": "Mean MAE with one population seed standard deviation. Track panels use independent scales; variation is not a confidence interval.",
+      "png": "model_comparison_mae.png",
+      "svg": "model_comparison_mae.svg"
+    },
+    {
+      "name": "model_comparison_rmse",
+      "description": "Mean RMSE with one population seed standard deviation. Track panels use independent scales; variation is not a confidence interval.",
+      "png": "model_comparison_rmse.png",
+      "svg": "model_comparison_rmse.svg"
+    },
+    {
+      "name": "model_comparison_mape",
+      "description": "Mean MAPE with one population seed standard deviation. Track panels use independent scales; variation is not a confidence interval.",
+      "png": "model_comparison_mape.png",
+      "svg": "model_comparison_mape.svg"
+    },
+    {
+      "name": "track_a_measured_vs_predicted",
+      "description": "Track A, seed 0, all 180 held-out rows per model. Dashed line denotes equality.",
+      "png": "track_a_measured_vs_predicted.png",
+      "svg": "track_a_measured_vs_predicted.svg"
+    },
+    {
+      "name": "track_a_residuals",
+      "description": "Track A, seed 0, all 180 held-out rows per model. Residual is measured minus predicted power.",
+      "png": "track_a_residuals.png",
+      "svg": "track_a_residuals.svg"
+    },
+    {
+      "name": "track_a_daily_mae",
+      "description": "Track A, seed 0, all 180 held-out rows per model. Filename groups are categorical, not chronological.",
+      "png": "track_a_daily_mae.png",
+      "svg": "track_a_daily_mae.svg"
+    },
+    {
+      "name": "track_b_measured_vs_predicted",
+      "description": "Track B, seed 0, all 180 held-out rows per model. Dashed line denotes equality.",
+      "png": "track_b_measured_vs_predicted.png",
+      "svg": "track_b_measured_vs_predicted.svg"
+    },
+    {
+      "name": "track_b_residuals",
+      "description": "Track B, seed 0, all 180 held-out rows per model. Residual is measured minus predicted power.",
+      "png": "track_b_residuals.png",
+      "svg": "track_b_residuals.svg"
+    },
+    {
+      "name": "track_b_daily_mae",
+      "description": "Track B, seed 0, all 180 held-out rows per model. Filename groups are categorical, not chronological.",
+      "png": "track_b_daily_mae.png",
+      "svg": "track_b_daily_mae.svg"
+    }
+  ]
+}

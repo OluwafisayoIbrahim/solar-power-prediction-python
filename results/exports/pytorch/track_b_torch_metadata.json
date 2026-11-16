@@ -1,0 +1,35 @@
+{
+  "research_dataset_sha256": "b208f611a76bc08fe47a4b8a5776eb1f9ebf4a7ba8a7b3770c3e8559d88f8ea0",
+  "track": "B",
+  "features": [
+    "solar_irradiance",
+    "temperature",
+    "humidity",
+    "hour"
+  ],
+  "target": "power",
+  "prediction_unit": "W",
+  "hidden_layers": [
+    16,
+    8
+  ],
+  "epochs": 21,
+  "epoch_cap": 1000,
+  "seed": 0,
+  "architecture_votes": 18,
+  "selection_folds": 21,
+  "source_run": "C:\\Users\\user\\Documents\\fisayo\\solar-power-prediction-python\\results\\pytorch_selected",
+  "rows": 180,
+  "selection": "Most frequent inner-selected architecture; candidate order breaks ties; median epochs for that architecture.",
+  "training_data_sha256": "cb39780fd489924edde8cbc0f76971dc5f31707748d038e8306a2e3cdc81f3c0",
+  "activation": "tanh",
+  "learning_rate": 0.01,
+  "l2": 0.0001,
+  "batch_size": 16,
+  "device": "cpu",
+  "python": "3.13.1",
+  "torch": "2.9.1+cpu",
+  "sklearn": "1.9.1",
+  "numpy": "2.5.3",
+  "created_utc": "2026-11-16T10:58:00.647441+00:00"
+}

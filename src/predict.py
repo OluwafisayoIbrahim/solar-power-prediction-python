@@ -5,7 +5,7 @@ import numpy as np
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-MODEL_DIR = PROJECT_ROOT / "results" / "models"
+MODEL_DIR = PROJECT_ROOT / "results/exports/sklearn"
 
 
 def predict_track_a(

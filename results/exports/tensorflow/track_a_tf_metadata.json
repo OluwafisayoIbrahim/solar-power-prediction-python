@@ -1,0 +1,34 @@
+{
+  "research_dataset_sha256": "b208f611a76bc08fe47a4b8a5776eb1f9ebf4a7ba8a7b3770c3e8559d88f8ea0",
+  "track": "A",
+  "features": [
+    "solar_irradiance",
+    "current",
+    "voltage",
+    "temperature",
+    "humidity"
+  ],
+  "target": "power",
+  "prediction_unit": "W",
+  "hidden_layers": [
+    16,
+    8
+  ],
+  "epochs": 122,
+  "seed": 0,
+  "selection": "Most frequent inner-selected architecture across all seeds/folds; candidate order breaks ties; median epochs for that architecture.",
+  "architecture_votes": 11,
+  "selection_folds": 21,
+  "source_run": "C:\\Users\\user\\Documents\\fisayo\\solar-power-prediction-python\\results\\tensorflow_s2",
+  "rows": 180,
+  "training_data_sha256": "785ff62ca458e447221c036ceb5dea3b00fe2a76f78c87533c98aac9c54f1744",
+  "activation": "tanh",
+  "learning_rate": 0.01,
+  "l2": 0.0001,
+  "batch_size": 16,
+  "python": "3.13.1",
+  "tensorflow": "2.21.0",
+  "sklearn": "1.9.1",
+  "numpy": "2.5.3",
+  "created_utc": "2026-11-16T10:56:48.423038+00:00"
+}

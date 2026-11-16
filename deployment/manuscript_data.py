@@ -14,7 +14,7 @@ from research_protocol import completed_collection, COLLECTION, verify_run
 
 RUN_PATHS = (json.loads((COLLECTION / "completed.json").read_text(encoding="utf-8"))["runs"]
              if (COLLECTION / "completed.json").is_file() else {})
-COMPARISON = "results/research_20_days/comparison/comparison.csv"
+COMPARISON = "results/comparison/comparison.csv"
 METRICS = {"MAE": "W", "RMSE": "W", "MAPE": "%", "R2": "unitless"}
 MEASUREMENTS = ["time", "solar_irradiance", "temperature", "humidity", "current", "voltage", "power"]
 

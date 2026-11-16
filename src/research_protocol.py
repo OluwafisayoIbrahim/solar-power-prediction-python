@@ -13,11 +13,12 @@ from evaluate import compute_metrics
 from sklearn.model_selection import GroupKFold
 
 ROOT = Path(__file__).resolve().parents[1]
-COLLECTION = ROOT / "results/research_20_days"
+COLLECTION = ROOT / "results"
 
 
 def data_digest():
-    return hashlib.sha256(PROCESSED_DATA_PATH.read_bytes()).hexdigest()
+    """Fingerprint the CSV with LF line endings on every checkout platform."""
+    return hashlib.sha256(PROCESSED_DATA_PATH.read_bytes().replace(b"\r\n", b"\n")).hexdigest()
 
 
 def choose_tensorflow(s1, s2):

@@ -1,0 +1,33 @@
+{
+  "dataset": {
+    "rows": 180,
+    "daily_groups": 20,
+    "repeated_measurements": 0
+  },
+  "tensorflow_selection": "S2",
+  "full_suite": {
+    "tests": 65,
+    "skipped": 8,
+    "result": "passed"
+  },
+  "current_app_checks": {
+    "tests": 8,
+    "result": "passed",
+    "coverage": "All six pages, eleven current predictors, combined inference/training, and no manuscript download buttons"
+  },
+  "dependency_check": "passed",
+  "pdf_pages": 9,
+  "model_reloads": "All active final exports verified",
+  "main_results": "results/comparison/comparison.csv",
+  "portfolio_plots": {
+    "charts": 10,
+    "formats": [
+      "PNG",
+      "SVG"
+    ],
+    "source_metrics": "matched dashboard comparison",
+    "verified": true
+  },
+  "dataset_fingerprint_format": "CSV bytes with LF line endings",
+  "line_ending_regression": "LF and CRLF produce identical fingerprints; changed content is rejected"
+}

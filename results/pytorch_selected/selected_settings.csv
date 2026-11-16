@@ -1,0 +1,127 @@
+track,seed,fold,model,hidden,alpha,convergence_warnings,epochs,inner_mae
+A,0,1,Sklearn untuned,10,0.0001,0.0,,
+A,0,1,Sklearn tuned,10,0.1,1.0,,
+A,0,1,PyTorch selected,"(10,)",,,144.0,1.3224139600212192
+A,0,2,Sklearn untuned,10,0.0001,0.0,,
+A,0,2,Sklearn tuned,3,0.1,0.0,,
+A,0,2,PyTorch selected,"(10,)",,,122.0,1.270699446313176
+A,0,3,Sklearn untuned,10,0.0001,0.0,,
+A,0,3,Sklearn tuned,3,0.1,0.0,,
+A,0,3,PyTorch selected,"(10,)",,,122.0,1.378613387496384
+A,0,4,Sklearn untuned,10,0.0001,0.0,,
+A,0,4,Sklearn tuned,10,0.1,1.0,,
+A,0,4,PyTorch selected,"(10,)",,,194.0,1.2848120252821198
+A,0,5,Sklearn untuned,10,0.0001,1.0,,
+A,0,5,Sklearn tuned,10,1.0,0.0,,
+A,0,5,PyTorch selected,"(16, 8)",,,52.0,1.0744914023316963
+A,0,6,Sklearn untuned,10,0.0001,1.0,,
+A,0,6,Sklearn tuned,10,1.0,0.0,,
+A,0,6,PyTorch selected,"(16, 8)",,,88.0,1.1406549765504457
+A,0,7,Sklearn untuned,10,0.0001,1.0,,
+A,0,7,Sklearn tuned,10,1.0,0.0,,
+A,0,7,PyTorch selected,"(10,)",,,146.0,1.1998771422586332
+A,1,1,Sklearn untuned,10,0.0001,1.0,,
+A,1,1,Sklearn tuned,3,0.1,0.0,,
+A,1,1,PyTorch selected,"(16, 8)",,,93.0,1.397364618748797
+A,1,2,Sklearn untuned,10,0.0001,1.0,,
+A,1,2,Sklearn tuned,3,0.1,0.0,,
+A,1,2,PyTorch selected,"(16, 8)",,,82.0,1.3612729514793127
+A,1,3,Sklearn untuned,10,0.0001,0.0,,
+A,1,3,Sklearn tuned,10,0.1,1.0,,
+A,1,3,PyTorch selected,"(10,)",,,170.0,1.5255392064224045
+A,1,4,Sklearn untuned,10,0.0001,1.0,,
+A,1,4,Sklearn tuned,10,0.1,1.0,,
+A,1,4,PyTorch selected,"(16, 8)",,,112.0,1.2858547596872605
+A,1,5,Sklearn untuned,10,0.0001,0.0,,
+A,1,5,Sklearn tuned,10,1.0,0.0,,
+A,1,5,PyTorch selected,"(10,)",,,125.0,1.065534748595439
+A,1,6,Sklearn untuned,10,0.0001,1.0,,
+A,1,6,Sklearn tuned,10,0.1,1.0,,
+A,1,6,PyTorch selected,"(16, 8)",,,91.0,1.1830077831127044
+A,1,7,Sklearn untuned,10,0.0001,1.0,,
+A,1,7,Sklearn tuned,10,0.1,1.0,,
+A,1,7,PyTorch selected,"(16, 8)",,,104.0,1.2727720359519692
+A,2,1,Sklearn untuned,10,0.0001,0.0,,
+A,2,1,Sklearn tuned,10,0.1,1.0,,
+A,2,1,PyTorch selected,"(10,)",,,179.0,1.548496287404756
+A,2,2,Sklearn untuned,10,0.0001,1.0,,
+A,2,2,Sklearn tuned,10,0.1,1.0,,
+A,2,2,PyTorch selected,"(16, 8)",,,162.0,1.2056406709647476
+A,2,3,Sklearn untuned,10,0.0001,0.0,,
+A,2,3,Sklearn tuned,10,0.1,1.0,,
+A,2,3,PyTorch selected,"(16, 8)",,,148.0,1.318638946156443
+A,2,4,Sklearn untuned,10,0.0001,0.0,,
+A,2,4,Sklearn tuned,10,0.1,1.0,,
+A,2,4,PyTorch selected,"(10,)",,,212.0,1.4065730568214725
+A,2,5,Sklearn untuned,10,0.0001,0.0,,
+A,2,5,Sklearn tuned,10,0.1,1.0,,
+A,2,5,PyTorch selected,"(10,)",,,150.0,1.0779270908685392
+A,2,6,Sklearn untuned,10,0.0001,0.0,,
+A,2,6,Sklearn tuned,10,0.1,1.0,,
+A,2,6,PyTorch selected,"(16, 8)",,,189.0,1.146377901807244
+A,2,7,Sklearn untuned,10,0.0001,0.0,,
+A,2,7,Sklearn tuned,10,0.1,1.0,,
+A,2,7,PyTorch selected,"(16, 8)",,,148.0,1.2021166050286949
+B,0,1,Sklearn untuned,10,0.0001,0.0,,
+B,0,1,Sklearn tuned,3,1.0,0.0,,
+B,0,1,PyTorch selected,"(16, 8)",,,7.0,11.30951909345462
+B,0,2,Sklearn untuned,10,0.0001,0.0,,
+B,0,2,Sklearn tuned,3,1.0,0.0,,
+B,0,2,PyTorch selected,"(16, 8)",,,25.0,11.706280549225985
+B,0,3,Sklearn untuned,10,0.0001,0.0,,
+B,0,3,Sklearn tuned,10,10.0,0.0,,
+B,0,3,PyTorch selected,"(10,)",,,37.0,11.318905152120708
+B,0,4,Sklearn untuned,10,0.0001,0.0,,
+B,0,4,Sklearn tuned,10,10.0,0.0,,
+B,0,4,PyTorch selected,"(16, 8)",,,46.0,10.552225469141831
+B,0,5,Sklearn untuned,10,0.0001,1.0,,
+B,0,5,Sklearn tuned,3,0.1,0.0,,
+B,0,5,PyTorch selected,"(16, 8)",,,16.0,10.507981786657263
+B,0,6,Sklearn untuned,10,0.0001,0.0,,
+B,0,6,Sklearn tuned,3,1.0,0.0,,
+B,0,6,PyTorch selected,"(16, 8)",,,28.0,10.64127183852961
+B,0,7,Sklearn untuned,10,0.0001,1.0,,
+B,0,7,Sklearn tuned,3,1.0,0.0,,
+B,0,7,PyTorch selected,"(16, 8)",,,9.0,11.16162671124494
+B,1,1,Sklearn untuned,10,0.0001,0.0,,
+B,1,1,Sklearn tuned,3,10.0,0.0,,
+B,1,1,PyTorch selected,"(16, 8)",,,10.0,11.045926412700135
+B,1,2,Sklearn untuned,10,0.0001,1.0,,
+B,1,2,Sklearn tuned,3,10.0,0.0,,
+B,1,2,PyTorch selected,"(16, 8)",,,35.0,11.62041990303699
+B,1,3,Sklearn untuned,10,0.0001,1.0,,
+B,1,3,Sklearn tuned,10,10.0,0.0,,
+B,1,3,PyTorch selected,"(16, 8)",,,34.0,11.097489127453466
+B,1,4,Sklearn untuned,10,0.0001,0.0,,
+B,1,4,Sklearn tuned,10,10.0,0.0,,
+B,1,4,PyTorch selected,"(16, 8)",,,32.0,10.071951535071856
+B,1,5,Sklearn untuned,10,0.0001,0.0,,
+B,1,5,Sklearn tuned,3,0.1,0.0,,
+B,1,5,PyTorch selected,"(16, 8)",,,15.0,10.222215995129245
+B,1,6,Sklearn untuned,10,0.0001,0.0,,
+B,1,6,Sklearn tuned,10,1.0,0.0,,
+B,1,6,PyTorch selected,"(16, 8)",,,15.0,10.63084427143615
+B,1,7,Sklearn untuned,10,0.0001,1.0,,
+B,1,7,Sklearn tuned,3,10.0,0.0,,
+B,1,7,PyTorch selected,"(16, 8)",,,17.0,11.073397435317808
+B,2,1,Sklearn untuned,10,0.0001,1.0,,
+B,2,1,Sklearn tuned,10,1.0,0.0,,
+B,2,1,PyTorch selected,"(16, 8)",,,16.0,11.302491374451437
+B,2,2,Sklearn untuned,10,0.0001,0.0,,
+B,2,2,Sklearn tuned,10,10.0,0.0,,
+B,2,2,PyTorch selected,"(10,)",,,54.0,11.81438372199918
+B,2,3,Sklearn untuned,10,0.0001,0.0,,
+B,2,3,Sklearn tuned,10,10.0,0.0,,
+B,2,3,PyTorch selected,"(10,)",,,78.0,11.388219832055364
+B,2,4,Sklearn untuned,10,0.0001,0.0,,
+B,2,4,Sklearn tuned,3,10.0,0.0,,
+B,2,4,PyTorch selected,"(16, 8)",,,42.0,10.323063968611352
+B,2,5,Sklearn untuned,10,0.0001,0.0,,
+B,2,5,Sklearn tuned,3,10.0,0.0,,
+B,2,5,PyTorch selected,"(16, 8)",,,40.0,10.181883576569735
+B,2,6,Sklearn untuned,10,0.0001,0.0,,
+B,2,6,Sklearn tuned,3,0.1,0.0,,
+B,2,6,PyTorch selected,"(16, 8)",,,51.0,10.612406803084008
+B,2,7,Sklearn untuned,10,0.0001,0.0,,
+B,2,7,Sklearn tuned,10,10.0,0.0,,
+B,2,7,PyTorch selected,"(16, 8)",,,16.0,11.36408348931207

@@ -153,6 +153,7 @@ def main():
 
 def run_comparison(args, framework, version, label, fit, predict, select):
     """Keep outer splits, sklearn baselines and output schemas identical."""
+    from research_protocol import data_digest
     df = add_day_id(load_processed_data())
     validate_features(df)
     groups = df["day_id"].to_numpy()
@@ -162,7 +163,7 @@ def run_comparison(args, framework, version, label, fit, predict, select):
     if any(len(np.unique(groups[tr])) < max(args.inner_folds, 3) for tr, _ in splits):
         raise SystemExit("Not enough outer training days for inner CV")
     stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ")
-    base = Path(__file__).resolve().parents[1] / "results"
+    base = Path(__file__).resolve().parents[1] / "results/reproductions"
     output = args.output or (base / "smoke" / framework / stamp if args.smoke_test
                              else base / framework / stamp)
     output.mkdir(parents=True, exist_ok=False)
@@ -171,8 +172,8 @@ def run_comparison(args, framework, version, label, fit, predict, select):
     metadata = vars(args).copy()
     metadata.update(output=str(output), python=platform.python_version(),
                     sklearn=sklearn.__version__, rows=len(df), groups=int(df.day_id.nunique()),
-                    training_data_sha256=hashlib.sha256(
-                        (base.parent / 'data/processed/solar_data_combined.csv').read_bytes()).hexdigest(),
+                    training_data_sha256=data_digest(),
+                    training_data_sha256_format="CSV bytes with LF line endings",
                     dataset_status="repeated_daily_file_excluded")
     metadata["torch" if framework == "pytorch" else framework] = version
     (output / "config.json").write_text(json.dumps(metadata, indent=2), encoding="utf-8")

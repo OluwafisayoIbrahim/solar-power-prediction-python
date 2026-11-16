@@ -15,12 +15,7 @@ RESEARCH_LABELS = {
 
 
 def research_scores(spec):
-    if spec.research_run:
-        run = RUNS[spec.research_run]
-        table = csv(f"results/{run}/comparison.csv").assign(
-            source_run=f"results/{run}", source_framework="TensorFlow")
-    else:
-        table = csv(completed_collection()["comparison"])
+    table = csv(completed_collection()["comparison"])
     rows = table[(table.track == spec.track) & (table.model == RESEARCH_LABELS[spec.kind])]
     if len(rows) != 1:
         raise ValueError("A unique matching research result is unavailable.")
@@ -52,16 +47,13 @@ def render_model_statistics(loaded):
         st.dataframe(variation, hide_index=True, width="stretch", column_config={
             name: st.column_config.NumberColumn(format="%.6f")
             for name in ("Mean", "Seed standard deviation")})
-        collection = spec.research_run or "20-day collection"
+        collection = "20-day collection"
         st.caption(f"{collection} grouped cross-validation: metrics pool held-out predictions per seed. "
                    "Seed standard deviations are not confidence intervals. These scores evaluate "
                    "the training procedure, not an independent test of the final saved weights.")
         st.markdown("Metric source runs: " + source_links(scores.source_run))
-        if spec.research_run:
-            cfg = config(spec.research_run)
-        else:
-            framework = "PyTorch" if spec.kind == "pytorch" else "TensorFlow"
-            cfg = json.loads((ROOT / completed_collection()["runs"][framework] / "config.json").read_text(encoding="utf-8"))
+        framework = "PyTorch" if spec.kind == "pytorch" else "TensorFlow"
+        cfg = json.loads((ROOT / completed_collection()["runs"][framework] / "config.json").read_text(encoding="utf-8"))
         st.caption(f"Evaluation: {cfg['rows']} measurements | {cfg['folds']} outer folds | "
                    f"{cfg['inner_folds']} inner folds for selected ANNs | seeds {cfg['seeds']}")
         st.download_button("Download model research metrics", variation.to_csv(index=False),

@@ -15,7 +15,7 @@ from models import create_ann_model
 
 
 def main():
-    directory = Path(__file__).resolve().parents[1] / "results/models"
+    directory = Path(__file__).resolve().parents[1] / "results/exports/sklearn"
     directory.mkdir(parents=True, exist_ok=True)
     df = load_processed_data()
     for track, getter in [("a", get_track_a_data), ("b", get_track_b_data)]:

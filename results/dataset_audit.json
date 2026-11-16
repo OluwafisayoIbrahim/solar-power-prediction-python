@@ -1,0 +1,69 @@
+{
+  "training_data_sha256": "b208f611a76bc08fe47a4b8a5776eb1f9ebf4a7ba8a7b3770c3e8559d88f8ea0",
+  "rows": 180,
+  "groups": 20,
+  "rows_per_group": [
+    9
+  ],
+  "repeated_measurements_excluding_filename": 0,
+  "excluded_file": "solar_data_tue_28st.csv",
+  "folds": [
+    {
+      "fold": 1,
+      "training_groups": 17,
+      "training_rows": 153,
+      "test_groups": 3,
+      "test_rows": 27
+    },
+    {
+      "fold": 2,
+      "training_groups": 17,
+      "training_rows": 153,
+      "test_groups": 3,
+      "test_rows": 27
+    },
+    {
+      "fold": 3,
+      "training_groups": 17,
+      "training_rows": 153,
+      "test_groups": 3,
+      "test_rows": 27
+    },
+    {
+      "fold": 4,
+      "training_groups": 17,
+      "training_rows": 153,
+      "test_groups": 3,
+      "test_rows": 27
+    },
+    {
+      "fold": 5,
+      "training_groups": 17,
+      "training_rows": 153,
+      "test_groups": 3,
+      "test_rows": 27
+    },
+    {
+      "fold": 6,
+      "training_groups": 17,
+      "training_rows": 153,
+      "test_groups": 3,
+      "test_rows": 27
+    },
+    {
+      "fold": 7,
+      "training_groups": 18,
+      "training_rows": 162,
+      "test_groups": 2,
+      "test_rows": 18
+    }
+  ],
+  "physics_metrics": {
+    "MAE": 1.1145744444444454,
+    "RMSE": 1.25442755833532,
+    "MAPE": 0.42448323827806156,
+    "R2": 0.9978979628643537
+  },
+  "physics_fitting": "none",
+  "status": "Data and deterministic baseline complete; full neural comparison is separate"
+}

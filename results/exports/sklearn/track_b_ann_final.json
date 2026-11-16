@@ -1,0 +1,17 @@
+{
+  "track": "B",
+  "features": [
+    "solar_irradiance",
+    "temperature",
+    "humidity",
+    "hour"
+  ],
+  "rows": 180,
+  "groups": 20,
+  "training_data_sha256": "b208f611a76bc08fe47a4b8a5776eb1f9ebf4a7ba8a7b3770c3e8559d88f8ea0",
+  "seed": 0,
+  "sklearn": "1.9.1",
+  "reload_verified": true,
+  "selection": "Original full-data final-fit grid with seven grouped folds for tuned ANN; fixed settings for other baselines",
+  "purpose": "Full-data inference only; held-out research scores come from separate nested evaluation"
+}
