@@ -1,10 +1,10 @@
 # Solar power estimation: Python research and Streamlit app
 
-This study re-evaluates an earlier MATLAB neural-network project using electrical and environmental measurements. Both tracks estimate power from measurements at the target time; no advance forecasting horizon is evaluated.
+This study re-evaluates an earlier MATLAB neural-network project using electrical and environmental measurements. Both tracks estimate power from measurements at the target time; no advance forecasting horizon is evaluated. The models are uploaded on hugging face here: [https://huggingface.co/OluwafisayoIbrahim/solar-power-prediction]
 
 ## Dataset and evaluation
 
-The active dataset contains **180 observations across 20 daily files**, with nine readings per file. The distinct `solar_data_tue_21st.csv` and `solar_data_tue_28th.csv` remain included. No exact measurement records repeat when filename identity is excluded.
+The active dataset contains **180 observations across 20 daily files**, with nine readings per file. 
 
 Raw files are in `data/raw/`; `src/load_data.py` produces `data/processed/solar_data_combined.csv`. The previous 189-row dataset is preserved under `data/historical/`. Full calendar dates and calibration records are unavailable. Collection is attributed to Olabisi Onabanjo University in the original project documentation.
 
