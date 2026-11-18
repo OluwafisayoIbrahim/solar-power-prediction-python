@@ -78,8 +78,8 @@ class DashboardTests(SavedModelFixtures, unittest.TestCase):
         prose = " ".join(item.value for item in app.markdown)
         self.assertNotIn("outer folds 1 and 7", prose)
         self.assertNotIn("cross training/test boundaries", prose)
-        if not (ROOT / "manuscript/publication_ready.json").is_file():
-            self.assertTrue(any("not available yet" in item.value for item in app.warning))
+        if not (ROOT / "results/completed.json").is_file():
+            self.assertTrue(app.warning)
             self.assertTrue(any(metric.label == "No-fitting current × voltage MAE (W)" for metric in app.metric))
         app.query_params["view"] = "manuscript"
         app.run()

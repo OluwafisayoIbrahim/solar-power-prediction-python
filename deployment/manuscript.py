@@ -71,12 +71,11 @@ def _article():
                 "[Original preprint](https://doi.org/10.2139/ssrn.4771898) · "
                 f"[Dataset and preparation]({REPOSITORY_TREE}data)")
     st.caption("Research manuscript based on saved experiments. Predict supports saved-model inference and session training. Uploads never replace the evidence below.")
-    if not (ROOT / "manuscript/publication_ready.json").is_file():
-        st.warning("Manuscript results are not available yet.")
-        return
     with st.expander("Article contents", expanded=False):
         st.markdown("\n\n".join(f"[{label}](#{anchor})" for anchor, label in content.SECTIONS))
     try:
+        # The web article depends on validated research evidence, not the local
+        # PDF publication marker (which is not shipped with the deployment).
         evidence = load_evidence()
     except (FileNotFoundError, ValueError, KeyError, OSError) as exc:
         st.warning(f"Manuscript results are unavailable: {exc}.")

@@ -110,21 +110,64 @@ class ManuscriptTests(unittest.TestCase):
         self.assertIn(f"{evidence['audit']['power_iv_mae']:.3f} W", content.abstract(evidence))
 
     def test_manuscript_route_never_loads_inference_models(self):
-        with patch("model_registry.load_model", side_effect=AssertionError("Inference is separate from manuscript evidence")):
+        original_is_file = Path.is_file
+        def deployed_is_file(path):
+            if path == ROOT / "manuscript/publication_ready.json":
+                return False
+            return original_is_file(path)
+
+        # Match a deployed checkout: the static PDF review marker is absent.
+        with patch.object(Path, "is_file", deployed_is_file), patch(
+            "model_registry.load_model", side_effect=AssertionError("Inference is separate from manuscript evidence")
+        ):
             app = AppTest.from_file(str(ROOT / "deployment/app.py"), default_timeout=90)
             app.session_state["dashboard_page"] = "Research Methodology & Limitations"
             app.run()
             self.assertEqual(app.session_state["dashboard_page"], "Research Manuscript")
             self.assertFalse(app.exception, str(app.exception))
             self.assertFalse(app.error, str(app.error))
-            if not (ROOT / "manuscript/publication_ready.json").is_file():
-                self.assertTrue(any("not available yet" in item.value for item in app.warning))
+            if not (COLLECTION / "completed.json").is_file():
+                self.assertTrue(any("Manuscript results are unavailable" in item.value for item in app.warning))
                 self.assertEqual(len(app.dataframe), 0)
             else:
                 self.assertTrue({label for _, label in content.SECTIONS} <= {item.value for item in app.header})
                 for track in ["A", "B"]:
                     app.selectbox(key="manuscript_track").select(track).run()
                     self.assertFalse(app.exception, str(app.exception))
+
+    def test_manuscript_rejects_unavailable_research_evidence(self):
+        with patch("manuscript.load_evidence", side_effect=ValueError("Research evidence failed validation")):
+            app = AppTest.from_string("from manuscript import render_manuscript\nrender_manuscript()")
+            app.run()
+            self.assertFalse(app.exception, str(app.exception))
+            self.assertTrue(any("Research evidence failed validation" in item.value for item in app.warning))
+            self.assertEqual(len(app.dataframe), 0)
+
+    def test_overview_uses_research_evidence_without_pdf_marker(self):
+        if not (COLLECTION / "completed.json").is_file():
+            self.skipTest("Completed research collection is not present")
+        original_is_file = Path.is_file
+
+        def deployed_is_file(path):
+            if path == ROOT / "manuscript/publication_ready.json":
+                return False
+            return original_is_file(path)
+
+        with patch.object(Path, "is_file", deployed_is_file):
+            app = AppTest.from_string("from research_pages import overview\noverview()", default_timeout=90).run()
+        self.assertFalse(app.exception, str(app.exception))
+        self.assertFalse(app.warning, str(app.warning))
+        self.assertIn("Key findings", [item.value for item in app.subheader])
+        prose = " ".join(item.value for item in app.markdown)
+        self.assertIn("0.978 W", prose)
+        self.assertIn("11.835 W", prose)
+
+    def test_overview_rejects_unavailable_research_evidence(self):
+        with patch("manuscript_data.load_evidence", side_effect=ValueError("Research evidence failed validation")):
+            app = AppTest.from_string("from research_pages import overview\noverview()", default_timeout=90).run()
+        self.assertFalse(app.exception, str(app.exception))
+        self.assertTrue(any("Research evidence failed validation" in item.value for item in app.warning))
+        self.assertNotIn("Key findings", [item.value for item in app.subheader])
 
 
 if __name__ == "__main__":

@@ -31,8 +31,8 @@ def overview():
                 "simple baselines and validation design affect the interpretation of solar power estimates.")
     overview_navigation()
     try:
-        if not (ROOT / "manuscript/publication_ready.json").is_file():
-            raise ValueError("Research results are not available yet.")
+        # Dashboard availability follows validated experiments, independently
+        # of local PDF publication artifacts that are absent from deployments.
         evidence = load_evidence()
     except (FileNotFoundError, ValueError) as exc:
         frame = dataset()

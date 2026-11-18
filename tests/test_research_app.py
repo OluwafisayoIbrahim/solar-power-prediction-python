@@ -69,7 +69,7 @@ class ResearchAppTests(unittest.TestCase):
         self.assertNotIn("Download editable LaTeX bundle", [button.label for button in app.get("download_button")])
         self.assertFalse(app.exception, str(app.exception))
         self.assertFalse(app.error, str(app.error))
-        if not (ROOT / "manuscript/publication_ready.json").is_file():
+        if not (COLLECTION / "completed.json").is_file():
             self.assertTrue(any("manuscript results" in item.value.lower() for item in app.warning))
             self.assertEqual(len(app.dataframe), 0)
         if not (COLLECTION / "completed.json").is_file():
