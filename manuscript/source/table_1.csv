@@ -1,8 +1,0 @@
-Variable,Unit,Minimum,Median,Maximum
-Solar irradiance,W/m2,254.76,894.545,1117.75
-Temperature,deg C,24.0,32.0,36.0
-Humidity,%,24.0,64.0,94.0
-Current,A,6.3,7.93,8.39
-Voltage,V,30.05,34.129999999999995,36.96
-Power,W,189.01,270.15,300.38
-Hour,hour,8.083333333333334,12.258333333333333,16.333333333333332

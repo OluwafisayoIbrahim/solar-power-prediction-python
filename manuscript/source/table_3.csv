@@ -1,7 +1,0 @@
-Model,Architecture / selection,Training
-Physics (A only),P = I × V; no fitted parameters,None
-"Linear (A, B)",Ordinary least squares; no tuning,Training-partition input standardisation
-"scikit-learn untuned (A, B)",10 tanh units; alpha=0.0001,"L-BFGS, max_iter=5000; input scaling"
-"scikit-learn tuned (A, B)","3 or 10 tanh units; alpha ∈ {0.1, 1, 10}",3 inner grouped folds; L-BFGS; input scaling
-"TensorFlow / PyTorch selected (A, B)","[[10], [16, 8]]; tanh; linear output",Adam; lr=0.01; hidden-kernel L2=0.0001; batch=16; cap=1000; patience=30; input/target scaling
-Mean prediction,Metric sanity check only (src/evaluate.py),No saved grouped-CV experiment; excluded from result rankings
