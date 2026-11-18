@@ -6,12 +6,11 @@ This study re-evaluates an earlier MATLAB neural-network project using electrica
 
 The active dataset contains **180 observations across 20 daily files**, with nine readings per file. 
 
-Raw files are in `data/raw/`; `src/load_data.py` produces `data/processed/solar_data_combined.csv`. The previous 189-row dataset is preserved under `data/historical/`. Full calendar dates and calibration records are unavailable. Collection is attributed to Olabisi Onabanjo University in the original project documentation.
 
 | Track | Inputs | Interpretation |
 |---|---|---|
-| A | Irradiance, current, voltage, temperature, humidity | Contemporaneous electrical-input estimation |
-| B | Irradiance, temperature, humidity, observation hour | Contemporaneous environmental/time estimation |
+| A | Irradiance, current, voltage, temperature, humidity | Same-time electrical-input estimation |
+| B | Irradiance, temperature, humidity, observation hour | Same-time environmental/time estimation |
 
 Seven outer grouped folds hold out complete daily files: six test partitions have 27 rows and one has 18. Three inner grouped folds select tuned models within the outer training days. Scaling is fitted on training partitions only. The neural-network seeds are 0, 1 and 2. Metrics pool all 180 held-out predictions per seed, then report mean +/- population seed standard deviation. This variation is descriptive, not a confidence interval.
 
@@ -63,8 +62,6 @@ or use the download button in Results Explorer. Regenerate them with
 ```
 
 The app has six views: Overview, Research Manuscript, Results Explorer, Predict, Dataset Explorer and Model Explorer. Predict combines saved-model inference and uploaded-data training on one page. Eleven predictors from the 20-day collection are available. Predictions use saved models. Upload training creates an isolated session model and does not alter research artifacts.
-
-The manuscript uses the supplied edited title and six references. Editable LaTeX, regenerated tables, main figures and supplementary views are under `manuscript/source/`. The manuscript page presents the article without PDF or LaTeX download buttons. See [deployment documentation](deployment/README.md), [model card](MODEL_CARD.md), and [manuscript files](manuscript/README.md).
 
 Track A needs electrical measurements; Track B still needs contemporaneous environmental measurements. Neither demonstrates future weather forecasting or reliability at other installations.
 

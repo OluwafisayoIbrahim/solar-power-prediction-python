@@ -7,6 +7,13 @@ ORIGINAL_COMMIT = "578401bb0d106c53f0e152380441a8338854ed57"
 ORIGINAL = "https://github.com/OluwafisayoIbrahim/ANN-Forecasting-for-Solar-Power"
 REPOSITORY = "https://github.com/OluwafisayoIbrahim/solar-power-prediction-python"
 KEYWORDS = "Photovoltaic power; neural networks; feature availability; grouped cross-validation; baselines; reproducibility"
+COLLECTION_PERIOD = (
+    "The supplied revised manuscript attributes collection to Olabisi Onabanjo University, Ogun State, Nigeria, "
+    "on 6-10 and 13-17 February and 20-24 and 27-31 March 2023, citing Tables 4.1-4.20 of the undergraduate "
+    "project report [1]. The raw CSVs contain clock times only, and processed dates are placeholders. "
+    "The report and its date-to-file mapping are not included in this repository, so these calendar dates "
+    "are reported from the manuscript rather than independently verified from the data."
+)
 SECTIONS = [
     ("abstract", "Abstract"), ("introduction", "1. Introduction"),
     ("related-work", "2. Related work"), ("methods", "3. Materials and methods"),
@@ -184,10 +191,11 @@ available. The retained
 records contain no exact repeated measurements when filename identity is excluded.
 The small sample and potentially correlated readings still limit generalisation.
 
-**Temporal and geographic coverage.** Collection is attributed to one university installation
-in the project documentation. The processed timestamps contain a placeholder date, and source
-names do not establish a full calendar period. Observations are approximately hourly, with
-irregular intervals. Cross-season, multi-site and changed-installation performance are untested.
+**Temporal and geographic coverage.** The supplied revised manuscript reports four sampled working
+weeks at one university installation in February and March 2023. The underlying report and
+date-to-file mapping are not included here; placeholder timestamps and filenames alone do not
+verify those calendar dates. Observations are approximately hourly, with irregular intervals.
+Cross-season, multi-site and changed-installation performance are untested.
 
 **Measurement uncertainty.** The original project names measurement instruments, but calibration
 records and quantified measurement uncertainty are not available in this repository. Differences
@@ -224,23 +232,49 @@ where the available measurements and physical model warrant it.
 
 def abstract(evidence):
     a = evidence["audit"]
-    return f"""Neural networks offered no consistent advantage over linear regression in this
-re-evaluation of solar power estimation. Lower errors with measured current and voltage
-reflected richer input information rather than better weather-only prediction. Using
-{a['rows']} observations across {a['groups']} daily files, the study compares electrical and
-environmental inputs (Track A), and environmental inputs with observation hour (Track B).
+    return f"""This study re-evaluates an undergraduate neural-network research project on solar-power
+estimation to examine how electrical inputs and validation procedures affect model performance.
+The dataset contains {a['rows']} observations across {a['groups']} daily files. Two experimental
+tracks compare electrical and environmental inputs (Track A) with environmental measurements
+and observation hour (Track B).
 Linear regression, a no-fitting voltage/current product baseline for Track A, and
 scikit-learn, TensorFlow/Keras and PyTorch networks are evaluated using seven outer grouped
 folds, nested selection where applicable, and three neural-network seeds. Metrics pool
-held-out predictions for each seed. The electrical-product baseline has mean MAE
-{a['power_iv_mae']:.3f} W. Track A linear regression achieves mean MAE
-{score(evidence, 'A', 'Linear'):.3f} W, compared with
-{score(evidence, 'A', 'TensorFlow selected'):.3f} W for TensorFlow and
-{score(evidence, 'A', 'PyTorch selected'):.3f} W for PyTorch. In Track B, linear regression
-achieves mean MAE {score(evidence, 'B', 'Linear'):.3f} W, compared with
+held-out predictions for each seed. In Track A, linear regression achieves mean MAE
+{score(evidence, 'A', 'Linear'):.3f} W, compared with {a['power_iv_mae']:.3f} W for the
+electrical-product baseline and {score(evidence, 'A', 'Sklearn tuned'):.3f}-
+{score(evidence, 'A', 'PyTorch selected'):.3f} W across the neural-network variants.
+In Track B, linear regression achieves the lowest mean MAE {score(evidence, 'B', 'Linear'):.3f} W,
+compared with {score(evidence, 'B', 'TensorFlow selected'):.3f} W for TensorFlow,
+{score(evidence, 'B', 'PyTorch selected'):.3f} W for PyTorch and
 {score(evidence, 'B', 'Sklearn tuned'):.3f} W for the tuned scikit-learn network.
-These differences are descriptive. Both tracks estimate power from contemporaneous measurements; neither
+These descriptive results show no consistent advantage from neural-network complexity;
+no significance tests were performed. The small dataset and absence of external validation
+limit generalisation. Both tracks estimate power from contemporaneous measurements; neither
 establishes future forecasting capability."""
+
+
+def results_narrative(evidence, track):
+    """Render the revised article's results from the checked comparison collection."""
+    linear = (f"Linear regression has the lowest mean MAE ({score(evidence, track, 'Linear'):.3f} W) "
+              f"and RMSE ({score(evidence, track, 'Linear', 'RMSE'):.3f} W). ")
+    if track == "A":
+        return (linear +
+                f"The no-fitting electrical-product baseline gives MAE {score(evidence, 'A', 'Physics'):.3f} W "
+                f"and RMSE {score(evidence, 'A', 'Physics', 'RMSE'):.3f} W. "
+                f"Neural-network mean MAEs are {score(evidence, 'A', 'Sklearn tuned'):.3f} W (tuned scikit-learn), "
+                f"{score(evidence, 'A', 'Sklearn untuned'):.3f} W (untuned scikit-learn), "
+                f"{score(evidence, 'A', 'TensorFlow selected'):.3f} W (TensorFlow) and "
+                f"{score(evidence, 'A', 'PyTorch selected'):.3f} W (PyTorch). "
+                "Table 4 reports all four metrics and population seed standard deviations. Differences remain descriptive.")
+    return (linear +
+            f"Mean MAEs are {score(evidence, 'B', 'TensorFlow selected'):.3f} W for TensorFlow, "
+            f"{score(evidence, 'B', 'PyTorch selected'):.3f} W for PyTorch, "
+            f"{score(evidence, 'B', 'Sklearn tuned'):.3f} W for tuned scikit-learn and "
+            f"{score(evidence, 'B', 'Sklearn untuned'):.3f} W for untuned scikit-learn. "
+            f"MAE population seed standard deviations are {score(evidence, 'B', 'TensorFlow selected', stat='std'):.3f} W "
+            f"(TensorFlow) and {score(evidence, 'B', 'PyTorch selected', stat='std'):.3f} W (PyTorch). "
+            "Table 5 gives the complete results; differences remain descriptive.")
 
 
 

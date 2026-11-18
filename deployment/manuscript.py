@@ -100,8 +100,8 @@ def _article():
                 f"with {a['readings_min']}–{a['readings_max']} readings per group. The project README attributes collection "
                 "to Olabisi Onabanjo University, Ogun State, Nigeria, using solar panels and measurement instruments. "
                 "The raw daily CSVs accompany the processed dataset. "
-                "location and completion are not independently institutionally certified here. "
-                "The exact measurement dates cannot be reconstructed from the placeholder 1900 timestamps.")
+                "Location and completion are not independently institutionally certified here.")
+    st.markdown(content.COLLECTION_PERIOD)
     st.markdown(f"Consecutive within-file intervals range from **{a['interval_min']:g} to {a['interval_max']:g} minutes**. "
                 f"There are {a['missing']} missing cells and {a['duplicate_records']} exact full-record duplicates when source identity is included. "
                 "These counts do not establish independence or instrument accuracy.")
@@ -177,12 +177,14 @@ def _article():
         st.subheader(f"4.{number - 2} Track {track}")
         table(number, f"Track {track}: pooled out-of-fold performance, mean ± population standard deviation across seeds.",
               result_table(evidence, track), COMPARISON)
-        st.markdown(track_summary(evidence, track))
+        st.markdown(content.results_narrative(evidence, track))
     # Numbering follows the text's logical figure order: diagnostics introduce Fig. 4 before Fig. 5.
     st.subheader("4.4 Error diagnostics and framework variability")
     st.markdown("Figures 4-7 show prediction agreement, mean error across seeds, signed residuals "
                 "and variation between daily groups. Table 6 reports per-seed framework scores. "
-                "The parity, residual and daily-error plots use all held-out predictions from seed 0.")
+                "The parity, residual and daily-error plots use all 180 held-out predictions per model from seed 0; "
+                "the comparison plot summarises seeds 0, 1 and 2. Seed variation is not a confidence interval "
+                "or evidence of a statistically supported framework ranking.")
     track = st.selectbox("Diagnostic track (Figures 4, 6 and 7)", ["B", "A"], key="manuscript_track")
     predictions = diagnostic_predictions(evidence, track)
     figure(4, f"Measured versus predicted power, Track {track}, seed 0; each model includes every saved outer row. Dashed line: identity.",
@@ -226,8 +228,9 @@ def _article():
     heading("reproducibility", "9. Research transparency and reproducibility")
     st.markdown(f"**Data availability.** [Raw daily CSVs]({REPOSITORY_TREE}data/raw) and "
                 f"[processed measurements]({REPOSITORY_TREE}data/processed/solar_data_combined.csv) are included in the repository. "
-                "Full calendar dates and instrument calibration records remain unavailable. "
-                "No missing metadata are inferred from filenames.")
+                "Instrument calibration records and the report's date-to-file mapping are not included. "
+                "The collection period reported in Section 3.1 is attributed to the supplied revised manuscript; "
+                "no calendar dates are inferred from filenames. Daily-error figures retain categorical filename order.")
     st.markdown(f"**Code and artifacts.** [Python source]({REPOSITORY_TREE}src), "
                 f"[saved experiments]({REPOSITORY_TREE}results) and "
                 f"[deployment documentation]({REPOSITORY_TREE}deployment/README.md) are available. "
