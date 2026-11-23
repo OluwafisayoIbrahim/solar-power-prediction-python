@@ -61,7 +61,9 @@ class ModelTests(SavedModelFixtures, unittest.TestCase):
                 self.assertNotIn("research_dataset_sha256", trained.metadata)
                 self.assertTrue(rejected.empty)
                 heldout = evaluation.index
-                train_frame = self.frame.drop(index=heldout)
+                train_frame = (self.frame.loc[np.array(trained.metadata['fitting_source_rows']) - 2]
+                               if saved.spec.kind in ('tensorflow', 'pytorch')
+                               else self.frame.drop(index=heldout))
                 self.assertFalse(set(train_frame.source_file) & set(evaluation.source_file))
                 scaler = (trained.estimator[1] if saved.spec.kind in ("tensorflow", "pytorch")
                           else trained.estimator.steps[0][1])
@@ -97,22 +99,25 @@ class ModelTests(SavedModelFixtures, unittest.TestCase):
         app = AppTest.from_file(str(ROOT / "deployment/prediction_workspace.py"), default_timeout=90).run()
         app.selectbox(key="prediction_model").select("b_pytorch").run()
         app.selectbox(key="diagram_model").select("b_pytorch").run()
-        self.assertTrue(any("pytorch_selected" in caption.value for caption in app.caption))
+        self.assertTrue(any("Source run:" in caption.value for caption in app.caption), str([error.value for error in app.error]))
         app.radio(key="model_source").set_value("Train from uploaded data").run()
         upload = BytesIO(self.frame.to_csv(index=False).encode())
         upload.name = "training.csv"
-        with patch("streamlit.file_uploader", return_value=upload):
+        with patch("streamlit.file_uploader", side_effect=lambda label, **kwargs: None if label == "Reuse mapping configuration (JSON)" else upload):
             app.run()
+            next(item for item in app.selectbox if item.label == "Model family").select("pytorch").run()
+            next(item for item in app.selectbox if item.label == "Training track").select("B").run()
+            next(item for item in app.checkbox if item.label.startswith("I confirm")).check().run()
             app.number_input(key="training_epochs").set_value(2).run()
             next(button for button in app.button if button.label == "Train selected model").click().run()
             self.assertFalse(len(app.exception), str(app.exception))
-            self.assertFalse(len(app.error), str(app.error))
+            self.assertFalse(len(app.error), str([error.value for error in app.error]))
             self.assertEqual(app.session_state["trained_model"].spec.kind, "pytorch")
             self.assertEqual(app.session_state["trained_model"].metadata["epochs"], 2)
             next(button for button in app.button if button.label == "Predict power").click().run()
             next(button for button in app.button if button.label == "Predict uploaded readings").click().run()
             self.assertFalse(len(app.exception), str(app.exception))
-            self.assertFalse(len(app.error), str(app.error))
+            self.assertFalse(len(app.error), str([error.value for error in app.error]))
             self.assertTrue(app.session_state["batch_result"]["prediction_status"].eq("predicted").all())
             app.radio(key="model_source").set_value("Saved models").run()
             with self.assertRaises(KeyError):
@@ -142,10 +147,10 @@ class ModelTests(SavedModelFixtures, unittest.TestCase):
         app = AppTest.from_file(str(ROOT / "deployment/prediction_workspace.py"), default_timeout=30)
         app.session_state["prediction_model"] = "a_physics"
         app.session_state["diagram_model"] = "a_physics"
-        with patch("model_registry.load_model", return_value=cached):
+        with patch("research_pages.load_model", return_value=cached):
             app.run()
         self.assertFalse(len(app.exception), str(app.exception))
-        self.assertFalse(len(app.error), str(app.error))
+        self.assertFalse(len(app.error), str([error.value for error in app.error]))
         self.assertTrue(any("no training or learned parameters" in item.value for item in app.markdown))
 
     def test_ui_model_switching_and_training(self):
@@ -155,19 +160,27 @@ class ModelTests(SavedModelFixtures, unittest.TestCase):
             app.selectbox(key="diagram_model").select(key).run()
             next(button for button in app.button if button.label == "Predict power").click().run()
             self.assertFalse(len(app.exception), str(app.exception))
-            self.assertFalse(len(app.error), str(app.error))
+            self.assertFalse(len(app.error), str([error.value for error in app.error]))
             self.assertTrue(any(metric.label == "Predicted power" for metric in app.metric))
         app.selectbox(key="prediction_model").select("b_linear").run()
         app.radio(key="model_source").set_value("Train from uploaded data").run()
         upload = BytesIO(self.frame.to_csv(index=False).encode())
         upload.name = "training.csv"
-        with patch("streamlit.file_uploader", return_value=upload):
+        with patch("streamlit.file_uploader", side_effect=lambda label, **kwargs: None if label == "Reuse mapping configuration (JSON)" else upload):
             app.run()
+            next(item for item in app.selectbox if item.label == "Model family").select("linear").run()
+            next(item for item in app.selectbox if item.label == "Training track").select("B").run()
+            next(item for item in app.checkbox if item.label.startswith("I confirm")).check().run()
             next(button for button in app.button if button.label == "Train selected model").click().run()
             self.assertFalse(len(app.exception), str(app.exception))
-            self.assertFalse(len(app.error), str(app.error))
+            self.assertFalse(len(app.error), str([error.value for error in app.error]))
             self.assertIn("rows", app.session_state["trained_model"].metadata)
             app.selectbox(key="prediction_model").select("a_linear").run()
+            self.assertEqual(app.session_state["trained_model"].spec.key, "b_linear")
+            next(button for button in app.button if button.label == "Predict power").click().run()
+            self.assertFalse(len(app.error), str([e.value for e in app.error]))
+            app.selectbox(key="prediction_model").select("b_linear").run()
+            next(item for item in app.selectbox if item.label == "Training track").select("A").run()
             with self.assertRaises(KeyError):
                 app.session_state["trained_model"]
 

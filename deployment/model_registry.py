@@ -37,6 +37,7 @@ class ModelSpec:
     filename: str = ""
     artifact_directory: str = ""
     research_run: str = ""
+    input_features: tuple = ()
 
     @property
     def description(self):
@@ -57,6 +58,8 @@ class ModelSpec:
 
     @property
     def features(self):
+        if self.input_features:
+            return list(self.input_features)
         if self.kind == "physics":
             return ["current", "voltage"]
         return TRACK_A_FEATURES if self.track == "A" else TRACK_B_FEATURES
@@ -107,6 +110,10 @@ class LoadedModel:
     metadata: dict
 
     def predict(self, frame):
+        config = self.metadata.get('feature_config')
+        if config and not set(self.spec.features) <= set(frame.columns):
+            from feature_mapping import map_frame
+            frame = map_frame(frame, config, require_target=False, allow_internal=True)
         X = frame.loc[:, self.spec.features].to_numpy(dtype=float)
         if not len(X) or not np.isfinite(X).all():
             raise ValueError("Provide finite measurements for every required input")
@@ -125,6 +132,8 @@ class LoadedModel:
 
 
 def load_model(key, directory=None):
+    if directory is not None and (Path(directory) / 'session_manifest.json').is_file():
+        return load_session_model(directory)
     spec = MODELS[key]
     active_export = directory is None and not spec.artifact_directory and spec.kind != "physics"
     if active_export:
@@ -148,8 +157,9 @@ def load_model(key, directory=None):
         if estimator.n_features_in_ != len(spec.features):
             raise ValueError("Saved model input count does not match this track")
         metadata = {"features": spec.features}
-        if active_export:
-            metadata = json.loads((Path(directory) / spec.filename).with_suffix(".json").read_text(encoding="utf-8"))
+        metadata_path = (Path(directory) / spec.filename).with_suffix(".json")
+        if metadata_path.is_file():
+            metadata = json.loads(metadata_path.read_text(encoding="utf-8"))
     if active_export:
         digest = metadata.get("research_dataset_sha256", metadata.get("training_data_sha256"))
         if metadata.get("rows") != 180 or digest != data_digest() or metadata.get("features") != spec.features:
@@ -159,3 +169,44 @@ def load_model(key, directory=None):
 
 def predict_selected(model, frame):
     return model.predict(frame)
+
+
+def load_session_model(directory):
+    """Reload a trusted extracted session package, including its dynamic schema."""
+    from feature_mapping import validate_config
+    folder = Path(directory)
+    manifest = json.loads((folder / 'session_manifest.json').read_text(encoding='utf-8'))
+    if manifest.get('schema_version') != 1:
+        raise ValueError('Unsupported session-model package version.')
+    metadata = json.loads((folder / 'metadata.json').read_text(encoding='utf-8'))
+    config = validate_config(metadata['feature_config'])
+    features = [entry['feature_id'] for entry in config['features']]
+    if metadata['features'] != features:
+        raise ValueError('Feature order does not match session metadata.')
+    family = metadata['model_family']
+    spec = ModelSpec('session_' + family, metadata['model_name'], metadata['track'],
+                     family, input_features=tuple(features))
+    if family in ('tensorflow', 'pytorch'):
+        xs, ys = joblib.load(folder / 'x_scaler.joblib'), joblib.load(folder / 'y_scaler.joblib')
+        if xs.n_features_in_ != len(features) or ys.n_features_in_ != 1:
+            raise ValueError('Session scaler dimensions do not match the configured inputs.')
+        if family == 'tensorflow':
+            import tensorflow as tf
+            model = tf.keras.models.load_model(folder / 'model.keras', compile=False)
+            if model.input_shape[-1] != len(features):
+                raise ValueError('Session network input count does not match metadata.')
+        else:
+            import torch
+            from models_torch import TorchANN
+            model = TorchANN(len(features), metadata['hidden_layers'], metadata['activation'],
+                             metadata['learning_rate'], metadata['l2'], metadata['seed'])
+            model.load_state_dict(torch.load(folder / 'model.pt', map_location='cpu', weights_only=True), strict=True)
+            model.eval()
+        estimator = (model, xs, ys, metadata)
+    elif family in ('linear', 'tuned', 'untuned'):
+        estimator = joblib.load(folder / 'model.joblib')
+        if estimator.n_features_in_ != len(features):
+            raise ValueError('Session estimator input count does not match metadata.')
+    else:
+        raise ValueError('Unsupported session model family.')
+    return LoadedModel(spec, estimator, metadata)

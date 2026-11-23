@@ -106,12 +106,48 @@ class DashboardTests(SavedModelFixtures, unittest.TestCase):
             return upload if label == "Training measurements" else None
         with patch("streamlit.file_uploader", side_effect=uploaded):
             app.run()
+            next(item for item in app.selectbox if item.label == "Model family").select("linear").run()
+            next(item for item in app.selectbox if item.label == "Training track").select("B").run()
+            next(item for item in app.checkbox if item.label.startswith("I confirm")).check().run()
             next(item for item in app.button if item.label == "Train selected model").click().run()
             self.assertEqual(app.session_state["trained_model"].spec.key, "b_linear")
             next(item for item in app.button if item.label == "Predict power").click().run()
-            self.assertTrue(any(item.label == "Predicted power" for item in app.metric))
             self.assertFalse(len(app.exception), str(app.exception))
             self.assertFalse(len(app.error), str(app.error))
+            trained = app.session_state["trained_model"]
+            target = trained.metadata["feature_config"]["target"]
+            metric = next(item for item in app.metric if item.label == "Predicted " + target["display_name"])
+            inputs = pd.DataFrame([{feature: app.number_input(key="input_" + feature).value
+                                    for feature in trained.spec.features}])
+            expected = trained.predict(inputs)[0]
+            self.assertEqual(metric.value, f"{expected:.2f} {target['unit']}")
+
+    def test_continued_training_ui_and_configuration_reset(self):
+        app = AppTest.from_file(str(ROOT / "deployment/prediction_workspace.py"), default_timeout=90).run()
+        app.radio(key="model_source").set_value("Train from uploaded data").run()
+        app.radio(key="training_mode").set_value("Continue Training an Existing Model").run()
+        next(item for item in app.selectbox if item.label == "Existing trained model").select("b_pytorch").run()
+        self.assertEqual(app.number_input(key="training_epochs").value, 200)
+        self.assertEqual(app.number_input(key="training_epochs").proto.max, 1000)
+        self.assertTrue(app.checkbox(key="training_early_stopping").value)
+        self.assertEqual(app.number_input(key="training_patience").value, 30)
+        self.assertEqual(app.number_input(key="training_min_delta").value, .0001)
+        upload = BytesIO(dataset().to_csv(index=False).encode())
+        upload.name = "adaptation.csv"
+        with patch("streamlit.file_uploader", side_effect=lambda label, **kwargs: upload if label == "Training measurements" else None):
+            app.run()
+            app.number_input(key="training_epochs").set_value(1).run()
+            next(item for item in app.checkbox if item.label.startswith("I confirm")).check().run()
+            next(item for item in app.button if item.label == "Train selected model").click().run()
+            self.assertFalse(len(app.exception), str(app.exception))
+            self.assertFalse(len(app.error), str([e.value for e in app.error]))
+            self.assertEqual(app.session_state["trained_model"].metadata['training_mode'], 'continue')
+            self.assertEqual(app.session_state["trained_model"].metadata['completed_epochs'], 1)
+            labels = {item.label for item in app.metric}
+            self.assertTrue({'Requested maximum epochs', 'Completed epochs', 'Best epoch', 'Early stopping occurred'} <= labels)
+            app.number_input(key="training_epochs").set_value(2).run()
+            with self.assertRaises(KeyError):
+                app.session_state["trained_model"]
 
     def test_observed_prediction_defaults_and_both_tracks(self):
         app = AppTest.from_file(str(ROOT / "deployment/prediction_workspace.py"), default_timeout=90).run()
