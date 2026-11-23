@@ -77,9 +77,7 @@ def overview_navigation():
                       on_click=lambda target=destination: st.session_state.update(dashboard_page=target))
     st.markdown(f"**Research resources:** [GitHub]({REPOSITORY}) · "
                 f"[Dataset documentation]({REPOSITORY}/tree/dev/data) · "
-                f"[Original MATLAB research]({ORIGINAL}) · "
-                "[Original SSRN preprint](https://doi.org/10.2139/ssrn.4771898). "
-                "The preprint concerns the original study; the Python re-evaluation is documented in the manuscript.")
+    )
 
 
 

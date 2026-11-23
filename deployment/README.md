@@ -268,3 +268,150 @@ test does not automatically block Streamlit deployment. Require the
 tests, and deploy from that protected branch.
 
 Dataset fingerprints use CSV bytes normalised to LF line endings. This keeps model and result verification consistent on Windows and Linux.
+
+### Uploaded training experiments
+
+The Predict page's training tab separates **Train a New Model** (fresh weights,
+training-only scalers; no saved model required) from **Continue Training an
+Existing Model** (independent copy of TensorFlow/Keras or PyTorch weights, original
+input/target scalers and architecture preserved). Continuation starts a new Adam
+optimizer; it does not resume optimizer momentum. Saved scikit-learn pipelines
+are excluded from continuation because end-to-end incremental training is not
+supported reliably. All artifacts stay in session memory or temporary export
+folders. Nothing is written into research export or publication directories.
+
+CSV/XLSX uploads accept up to 50,000 observations and 20 MB. Required features
+follow Track A/B plus measured `power` in watts. The interface previews data,
+reports rejected observations, retains and warns about duplicates, and requires
+confirmation of the displayed units. It cannot infer units reliably from numeric
+values. Use complete ISO timestamps (naive timestamps are interpreted as UTC).
+
+Choose random, grouped by day_id/source_file/calendar day, or chronological
+holdout (20% default). Group identifiers must represent complete measurement
+days. Chronological splitting requires timestamps and keeps calendar days intact.
+Preprocessing and model fitting use training rows only; the held-out partition is
+not used for early stopping. Optional linear regression uses exactly the same
+features and partitions. MAE/RMSE/MAPE/WAPE/R2 use raw outputs, including negative
+predictions. MAPE omits zero targets and becomes unstable near zero; WAPE is
+undefined if all targets are zero. Repeated tuning against the same holdout biases
+evaluation. This workflow estimates contemporaneous power, not future horizons.
+
+Downloads contain weights/pipeline, neural preprocessing, run metadata, held-out
+predictions, evaluation summary and rejected rows where applicable. Extract a
+trusted package into a separate directory and use
+`model_registry.load_model('<track>_<family>', directory)` with the corresponding
+registry key (for example `b_tuned`, `a_pytorch`, `b_tensorflow`, or `a_linear`).
+Never extract a session package over the research model directory.
+
+Keep the Romanian dataset outside version control and use it as an interface
+acceptance case: check units/feature mapping first, then run grouped and
+chronological evaluations and reload the downloaded model. No Romanian file is
+bundled with this change. `tests/test_uploaded_training.py` includes a synthetic
+12,000-observation installation to exercise uploads larger than the research data.
+The original Nigerian study remains its own reproducible research record.
+
+
+#### Uploaded ANN epochs and early stopping
+
+TensorFlow/Keras and PyTorch session ANNs default to a maximum of 200 epochs,
+configurable from 1 to 1,000, for both fresh and continued training. Early stopping
+is enabled by default with patience 30 and min_delta 0.0001. These controls do
+not change the published 20-day cross-validation experiments or saved models.
+
+After the outer evaluation split, 20% of the training partition is reserved for
+internal validation. Random splitting uses random rows; grouped splitting keeps
+the selected day/source groups disjoint; chronological splitting reserves later
+complete UTC days, after the fitting days and before the outer evaluation days.
+Insufficient groups/days produce an explicit error rather than a random fallback.
+Fresh-model input and target scalers fit only on the fitting subset. Continued
+training retains copied source-model scalers. The optional linear baseline uses
+the same fitting rows and outer evaluation rows as the ANN.
+
+Validation loss is scaled-target MSE plus hidden-kernel L2 regularisation.
+Patience counts consecutive epochs without an improvement greater than min_delta,
+relative to the last significant improvement. The absolute lowest-validation-loss
+checkpoint is restored even when the maximum epoch budget is reached. Disabling
+early stopping runs all requested epochs; internal validation and best-checkpoint
+restoration remain active. Chronological runs do not shuffle training batches.
+No outer held-out measurements enter fitting, scaling or checkpoint selection.
+
+Results show requested maximum epochs, actual completed epochs, best epoch,
+whether training stopped early, and training/validation loss curves. Existing ZIP
+formats and model filenames remain compatible; run metadata now also records
+these settings, curves, fitting/validation/evaluation source-row numbers and the
+internal split details. `rows` counts fitting rows; `validation_rows` retains its
+existing meaning of outer held-out evaluation rows; the separate
+`early_stopping_validation_rows` field counts internal validation observations.
+
+
+The Predict page loads its upload-training backend by local source version. This
+prevents a Streamlit hot rerun from retaining an older `train_uploaded` signature
+while displaying newer training controls. In-progress runs keep their original
+module instance. For deployments, publish the page and training modules together;
+restart/reboot the app if a running server still uses an older deployed release.
+
+#### Column mappings, custom inputs and reusable JSON
+
+In **Train a New Model**, choose Track A, Track B, or Custom Features. Upload a
+CSV/XLSX with its original headers. Select and name the target, specify its unit,
+and assign optional grouping and timestamp columns. Track presets suggest known
+aliases (for example GHI, AmbientTemp, RH and AC_Power); review these suggestions.
+For Custom Features, add/remove numerical source columns and edit their display
+names, stable internal identifiers and units. Standard definitions keep their
+established units. For other units, use a separate custom identifier. No values
+are converted, and the original uploaded frame is never renamed in place.
+
+**Download mapping configuration** produces a portable `column_mapping.json`.
+In a later session, upload a dataset with compatible headers, upload that JSON,
+and click **Apply mapping configuration**. It restores input order, source names,
+display labels, identifiers, units, target and grouping/timestamp roles. Model
+hyperparameters are configured separately. Invalid/missing/duplicate mappings
+are rejected; a malformed imported JSON does not replace an applied valid mapping.
+**Restore feature preset** resets mapping controls. Actual mapping edits clear
+stale trained-model and prediction results while preserving other UI settings.
+
+Target and grouping/timestamp columns cannot be inputs. Raw datetime/categorical
+inputs require explicit external preprocessing into suitable numerical columns.
+Invalid measurements retain rejection reasons. Inputs that duplicate the target
+and current/voltage combinations produce leakage/methodology warnings. Adding
+inputs is not a guarantee of better accuracy. Confirm all units before training.
+
+The existing training-only scalers, internal validation, early stopping and
+held-out evaluation rules apply unchanged to custom feature matrices. The linear
+baseline receives the same selected features, target and fitting/evaluation rows.
+Charts and metric summaries use the configured target name/unit. For non-watt
+outputs, downloaded predictions use generic `predicted_value`/`target_value`
+columns and explicitly include the target unit; no watt conversion is implied.
+
+Single Prediction automatically follows the active session model's input schema.
+Spreadsheet Prediction suggests its saved source columns and lets you explicitly
+map alternatives, once per required input. No restart or selection of a matching
+saved research model is needed. Continuing a saved ANN also allows source-column
+mapping, but preserves its input identifiers/order, units, architecture and scalers.
+Choose a new model to change the input structure.
+
+Mapped session ZIPs include `feature_config.json`, `metadata.json`, a
+`session_manifest.json`, weights/estimator, neural scalers, evaluation summary and
+held-out predictions. The complete uploaded training dataset is not embedded.
+Extract a trusted package to a separate directory and call
+`model_registry.load_session_model(directory)`. Its `predict(frame)` accepts the
+saved source headers or an internally mapped frame; use
+`feature_mapping.map_frame(..., require_target=False, overrides={...})` to map
+alternative prediction headers explicitly. Legacy model downloads/loaders remain
+supported, and no research artifacts are overwritten.
+
+The upload spreadsheet reader is also loaded by source version, together with the
+session trainer. This avoids stale `read_sheet(..., preserve_columns=True)`
+signature errors during hot reruns; export helpers use the matching reader module.
+After deploying changes to several application modules, reboot the running app
+once to load the complete updated release.
+
+
+`session_runtime.py` loads the registry, feature mappings, spreadsheet reader,
+trainer and mapping UI as one immutable source snapshot. Imports within that
+snapshot resolve to the matching versions, even when Streamlit retains older
+modules in `sys.modules`. New source versions do not reload or mutate an active
+training run. Legacy cached source-model specifications are copied into the
+current specification before applying input mappings. Deploy all workflow files
+together, including `session_runtime.py`; `training_runtime.py` remains a
+compatibility entrypoint for existing callers.

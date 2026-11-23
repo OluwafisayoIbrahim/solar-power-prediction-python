@@ -58,7 +58,6 @@ def render_manuscript():
             fill: currentColor;
         }
     </style>""")
-    # Fixed maximum reading width shrinks to the parent on narrow screens.
     with st.container(horizontal_alignment="center"):
         with st.container(width=940, key="research_manuscript"):
             _article()
@@ -67,15 +66,13 @@ def render_manuscript():
 def _article():
     st.title(content.TITLE)
     st.markdown(f"**{content.AUTHOR}** · Engineering / applied machine learning")
-    st.markdown(f"[Python code]({content.REPOSITORY}) · [Original MATLAB study]({content.ORIGINAL}) · "
-                "[Original preprint](https://doi.org/10.2139/ssrn.4771898) · "
+    st.markdown(f"[Python code]({content.REPOSITORY}) · "
+                "[Download preprint](https://doi.org/10.5281/zenodo.24320496) · "
                 f"[Dataset and preparation]({REPOSITORY_TREE}data)")
     st.caption("Research manuscript based on saved experiments. Predict supports saved-model inference and session training. Uploads never replace the evidence below.")
     with st.expander("Article contents", expanded=False):
         st.markdown("\n\n".join(f"[{label}](#{anchor})" for anchor, label in content.SECTIONS))
     try:
-        # The web article depends on validated research evidence, not the local
-        # PDF publication marker (which is not shipped with the deployment).
         evidence = load_evidence()
     except (FileNotFoundError, ValueError, KeyError, OSError) as exc:
         st.warning(f"Manuscript results are unavailable: {exc}.")

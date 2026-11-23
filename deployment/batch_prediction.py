@@ -23,20 +23,21 @@ def normalize_columns(columns):
     return names
 
 
-def read_sheet(data, filename, sheet=0, features=FEATURES):
+def read_sheet(data, filename, sheet=0, features=FEATURES, preserve_columns=False):
     if len(data) > MAX_BYTES:
         raise ValueError("Upload a file of 20 MB or less.")
     suffix = Path(filename).suffix.lower()
     if suffix == ".csv":
         text = data.decode("utf-8-sig")
-        names = normalize_columns(next(csv.reader(StringIO(text)), []))
+        raw_names = next(csv.reader(StringIO(text)), [])
+        names = raw_names if preserve_columns else normalize_columns(raw_names)
         frame = pd.read_csv(StringIO(text), nrows=MAX_ROWS + 1)
     elif suffix == ".xlsx":
         with pd.ExcelFile(BytesIO(data), engine="openpyxl") as book:
             header = book.parse(sheet_name=sheet, header=None, nrows=1)
             if header.empty:
                 raise ValueError("The worksheet is empty.")
-            names = normalize_columns(header.iloc[0])
+            names = header.iloc[0].tolist() if preserve_columns else normalize_columns(header.iloc[0])
             frame = book.parse(sheet_name=sheet, nrows=MAX_ROWS + 1)
     else:
         raise ValueError("Use a UTF-8 CSV or an Excel .xlsx workbook.")
@@ -46,6 +47,8 @@ def read_sheet(data, filename, sheet=0, features=FEATURES):
         raise ValueError(f"Limit each upload to {MAX_ROWS:,} data rows.")
     if len(names) != len(frame.columns):
         raise ValueError("The header does not match the data columns.")
+    if any(not isinstance(name, str) or not name.strip() for name in names) or len(set(names)) != len(names):
+        raise ValueError("Column headers must be nonempty, unique strings.")
     frame.columns = names
     if not isinstance(frame.index, pd.RangeIndex):
         raise ValueError("Some rows have more fields than the CSV header.")
@@ -53,7 +56,7 @@ def read_sheet(data, filename, sheet=0, features=FEATURES):
     if missing:
         raise ValueError(f"Missing required columns: {', '.join(sorted(missing))}.")
     reserved = RESULT_COLUMNS & set(frame.columns)
-    if reserved:
+    if reserved and not preserve_columns:
         raise ValueError(f"Rename these reserved output columns: {', '.join(sorted(reserved))}.")
     return frame.reset_index(drop=True)
 
@@ -127,6 +130,12 @@ def chart_data(result, timestamp=None):
 
 def download_csv(result):
     safe = result.copy()
+    config = result.attrs.get('feature_config')
+    if config and config['target'].get('unit') != 'W':
+        safe = safe.rename(columns={'predicted_power_w': 'predicted_value', 'power': 'target_value',
+                                    'linear_prediction_w': 'baseline_prediction'})
+        safe['target_name'] = config['target']['display_name']
+        safe['target_unit'] = config['target'].get('unit', '') or 'unit unspecified'
     for name in safe.select_dtypes(include=["object", "string"]).columns:
         safe[name] = safe[name].map(
             lambda value: "'" + value if isinstance(value, str) and
