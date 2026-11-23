@@ -112,9 +112,15 @@ class DashboardTests(SavedModelFixtures, unittest.TestCase):
             next(item for item in app.button if item.label == "Train selected model").click().run()
             self.assertEqual(app.session_state["trained_model"].spec.key, "b_linear")
             next(item for item in app.button if item.label == "Predict power").click().run()
-            self.assertTrue(any(item.label == "Predicted power" for item in app.metric))
             self.assertFalse(len(app.exception), str(app.exception))
             self.assertFalse(len(app.error), str(app.error))
+            trained = app.session_state["trained_model"]
+            target = trained.metadata["feature_config"]["target"]
+            metric = next(item for item in app.metric if item.label == "Predicted " + target["display_name"])
+            inputs = pd.DataFrame([{feature: app.number_input(key="input_" + feature).value
+                                    for feature in trained.spec.features}])
+            expected = trained.predict(inputs)[0]
+            self.assertEqual(metric.value, f"{expected:.2f} {target['unit']}")
 
     def test_continued_training_ui_and_configuration_reset(self):
         app = AppTest.from_file(str(ROOT / "deployment/prediction_workspace.py"), default_timeout=90).run()
